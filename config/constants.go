@@ -5,6 +5,7 @@ import (
 )
 
 const (
+
 	// Deployment types
 	DeploymentType = "deployment_type"
 
