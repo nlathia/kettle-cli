@@ -115,11 +115,21 @@ func runCreate(cmd *cobra.Command, args []string) error {
 		// Create the target path
 		targetPath := strings.Replace(assetName, templateRoot, "", 1)
 		targetPath = path.Join(functionPath, targetPath)
-		fmt.Println("🎯  Creating: ", targetPath)
 
 		// Create the parent directory
 		parentDir, _ := path.Split(targetPath)
-		_ = os.MkdirAll(parentDir, os.ModePerm)
+		exists, err := pathExists(parentDir)
+		if err != nil {
+			return err
+		}
+		if !exists {
+			fmt.Println("🎯  Creating: ", parentDir)
+		}
+
+		err = os.MkdirAll(parentDir, os.ModePerm)
+		if err != nil {
+			return err
+		}
 
 		f, err := os.Create(targetPath)
 		if err != nil {

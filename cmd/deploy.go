@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -77,25 +76,6 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 		return err
 	}
 	os.Chdir(functionPath)
-
-	if strings.Contains(templateConfig.Runtime, "go") {
-		modExists, err := pathExists("go.mod")
-		if err != nil {
-			return err
-		}
-		if !modExists {
-			fmt.Println("📦  Generating go.mod file.")
-			os.Setenv("GO111MODULE", "on")
-			err = executeCommand("go", []string{"mod", "init"})
-			if err != nil {
-				return err
-			}
-			err = executeCommand("go", []string{"mod", "tidy"})
-			if err != nil {
-				return err
-			}
-		}
-	}
 
 	fmt.Println("🚢  Deploying ", templateConfig.DirectoryName, fmt.Sprintf("as an %s function", templateConfig.Type))
 	fmt.Println("⏭  Entry point: ", templateConfig.FunctionName, fmt.Sprintf("(%s)", templateConfig.Runtime))
