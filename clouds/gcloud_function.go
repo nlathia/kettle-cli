@@ -8,11 +8,6 @@ import (
 
 type GoogleCloudFunction struct{}
 
-func (GoogleCloudFunction) Build(directory string, config *config.TemplateConfig) error {
-	fmt.Println("ℹ️  Google Cloud Functions do not need to be built.")
-	return nil
-}
-
 func (GoogleCloudFunction) Deploy(directory string, config *config.TemplateConfig) error {
 	// Construct the gcloud command
 	commandArgs := []string{
