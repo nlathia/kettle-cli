@@ -82,6 +82,8 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 
 	// Return to the original root directory
 	os.Chdir(rootDir)
+
+	fmt.Println("✅  Deployed!")
 	return nil
 }
 
