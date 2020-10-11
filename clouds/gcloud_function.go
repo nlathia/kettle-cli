@@ -9,19 +9,21 @@ import (
 type GoogleCloudFunction struct{}
 
 func (GoogleCloudFunction) Build(directory string, config *config.TemplateConfig) error {
+	fmt.Println("ℹ️  Google Cloud Functions do not need to be built.")
 	return nil
 }
 
 func (GoogleCloudFunction) Deploy(directory string, config *config.TemplateConfig) error {
-
 	// Construct the gcloud command
 	commandArgs := []string{
 		"functions",
 		"deploy",
-		config.DirectoryName,
+		config.DirectoryName, // The cloud function is named the same as the directory
 		"--runtime", config.Runtime,
-		fmt.Sprintf("--trigger-%s", config.Type),
+		"--trigger-http", // We only currently support http triggers
 		fmt.Sprintf("--entry-point=%s", config.FunctionName),
+
+		// @TODO these should be configurable
 		"--region=europe-west2",
 		"--allow-unauthenticated",
 		// "--ignore-file=IGNORE_FILE",
@@ -36,8 +38,7 @@ func (GoogleCloudFunction) Deploy(directory string, config *config.TemplateConfi
 		// "--env-vars-file=FILE_PATH",
 		// "--max-instances=MAX_INSTANCES",
 	}
-
-	fmt.Println("🚢  Deploying ", templateConfig.DirectoryName, fmt.Sprintf("as an %s function", templateConfig.Type))
-	fmt.Println("⏭  Entry point: ", templateConfig.FunctionName, fmt.Sprintf("(%s)", templateConfig.Runtime))
+	fmt.Println("🚢  Deploying ", config.DirectoryName, fmt.Sprintf("as an %s function", config.Type))
+	fmt.Println("⏭  Entry point: ", config.FunctionName, fmt.Sprintf("(%s)", config.Runtime))
 	return executeCommand("gcloud", commandArgs)
 }

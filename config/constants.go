@@ -17,7 +17,7 @@ const (
 
 	// Supported languages (just Python right now)
 	Runtime = "runtime"
-	Python  = "python"
+	Python  = "python37"
 
 	// Service config file name
 	DeploymentConfig = "operator.config"
@@ -43,5 +43,5 @@ var Runtimes = mapset.NewSetWith(
 )
 
 var RuntimeNames = map[string]string{
-	"Python": Python,
+	"Python (3.7)": Python,
 }
