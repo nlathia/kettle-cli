@@ -14,5 +14,5 @@ test:
 clean:
 	@./bin/cleanup.sh
 
-localhost: docker
+localhost:
 	@./bin/launch.sh
