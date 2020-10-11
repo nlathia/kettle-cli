@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import Flask, jsonify
 
 from model.model import predict, load_model
 
@@ -8,7 +8,7 @@ app = Flask(__name__)
 model = load_model()
 
 
-@app.route('/predict')
+@app.route('/')
 def {{ .FunctionName }}(request):
     request_json = request.get_json()
     # @TODO add any request validations that you need

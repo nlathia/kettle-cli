@@ -8,7 +8,6 @@ import (
 )
 
 type Cloud interface {
-	Build(directory string, config *config.TemplateConfig) error
 	Deploy(directory string, config *config.TemplateConfig) error
 }
 
