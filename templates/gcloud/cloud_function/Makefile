@@ -1,6 +1,6 @@
 VIRTUALENV_NAME=$(shell pwd | rev | cut -d '/' -f 1 | rev)-dev
 
-.PHONY: install uninstall test clean
+.PHONY: install uninstall test clean localhost
 
 uninstall:
 	@./bin/remove_pyenv.sh
@@ -14,5 +14,5 @@ test:
 clean:
 	@./bin/cleanup.sh
 
-localhost:
+localhost: docker
 	@./bin/launch.sh

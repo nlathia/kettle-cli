@@ -1,6 +1,7 @@
 VIRTUALENV_NAME=$(shell pwd | rev | cut -d '/' -f 1 | rev)-dev
+IMAGE_URL=gcr.io/{{ .ProjectID }}/{{ .FunctionName }}:latest
 
-.PHONY: install uninstall test clean
+.PHONY: install uninstall test clean docker localhost
 
 uninstall:
 	@./bin/remove_pyenv.sh
@@ -14,5 +15,8 @@ test:
 clean:
 	@./bin/cleanup.sh
 
-localhost:
-	@./bin/launch.sh
+docker:
+	docker build -f Dockerfile -t $(IMAGE_URL) .
+
+localhost: docker
+	@./bin/launch.sh $(IMAGE_URL)

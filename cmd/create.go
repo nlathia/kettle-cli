@@ -40,6 +40,9 @@ func init() {
 	configValues = &config.TemplateConfig{}
 	createCmd.Flags().StringVar(&configValues.Runtime, "runtime", viper.GetString(config.Runtime), "The function's runtime language")
 	createCmd.Flags().StringVar(&configValues.Type, "type", viper.GetString(config.DeploymentType), "The type of deployment to create")
+
+	// Google Cloud specific flags
+	createCmd.Flags().StringVar(&configValues.ProjectID, "project-id", viper.GetString(config.ProjectID), "The gcloud project use")
 }
 
 func validateCreateArgs(cmd *cobra.Command, args []string) error {

@@ -2,6 +2,9 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"os/exec"
+	"strings"
 
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
@@ -68,6 +71,15 @@ func runInit(cmd *cobra.Command, args []string) {
 		return
 	}
 	viper.Set(config.CloudProvider, cloud)
+	if cloud == config.GoogleCloud {
+		// gcloud config get-value project
+		projectID, err := getGoogleCloudProject()
+		if err != nil {
+			fmt.Printf("Unable to query for active project: %v", err)
+			return
+		}
+		viper.Set(config.ProjectID, projectID)
+	}
 
 	// Does not use SafeWrite - overwrites everything
 	config.Write()
@@ -90,4 +102,34 @@ func getValue(label string, values map[string]string) (string, error) {
 	}
 
 	return values[result], nil
+}
+
+func getGoogleCloudProject() (string, error) {
+	// Construct the gcloud command
+	// gcloud config get-value project
+	commandArgs := []string{
+		"config",
+		"get-value",
+		"project",
+	}
+
+	fmt.Println("🔍  Querying for active gcloud project...")
+	output, err := executeCommandWithResult("gcloud", commandArgs)
+	if err != nil {
+		return "", err
+	}
+
+	projectID := string(output)
+	fmt.Println(fmt.Sprintf("✅  Using project: %s", projectID))
+	return strings.Trim(string(output), "\n"), nil
+}
+
+func executeCommandWithResult(command string, args []string) ([]byte, error) {
+	osCmd := exec.Command(command, args...)
+	osCmd.Stderr = os.Stderr
+	output, err := osCmd.Output()
+	if err != nil {
+		return nil, err
+	}
+	return output, nil
 }

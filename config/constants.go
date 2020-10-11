@@ -5,19 +5,21 @@ import (
 )
 
 const (
-	// Cloud providers
-	CloudProvider = "cloud_provider"
-	GoogleCloud   = "gcloud"
+	// viper config keys
+	CloudProvider  = "cloud_provider"
+	DeploymentType = "deployment_type"
+	Runtime        = "runtime"
+
+	// Google Cloud deployments
+	GoogleCloud = "gcloud"
+	ProjectID   = "project_id"
 
 	// Deployment types
-	DeploymentType = "deployment_type"
-
 	GoogleCloudFunction = "cloud_function"
 	GoogleCloudRun      = "cloud_run"
 
 	// Supported languages (just Python right now)
-	Runtime = "runtime"
-	Python  = "python37"
+	Python = "python37"
 
 	// Service config file name
 	DeploymentConfig = "operator.config"

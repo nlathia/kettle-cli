@@ -1,5 +1,5 @@
 # Makefile command: `make localhost` 
-# This script launches the function locally
+# This script launches the docker container locally
 
 echo "\n ⏱  Launching locally (use ctrl+c to exit)..."
 
