@@ -1,12 +1,14 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
 
 	"github.com/operatorai/operator/config"
+	"github.com/operatorai/operator/templates"
 )
 
 var deployCmd = &cobra.Command{
@@ -20,20 +22,27 @@ var deployCmd = &cobra.Command{
 	RunE: runDeploy,
 }
 
-var templateConfig *config.TemplateConfig
+var deploymentConfig *config.TemplateConfig
+var deploymentPath string
 
 func init() {
 	rootCmd.AddCommand(deployCmd)
 }
 
 func deployArgs(cmd *cobra.Command, args []string) error {
-	functionPath, err := getDirectoryPath(args)
+	// Validate that args exist
+	if len(args) == 0 {
+		return errors.New("please specify a directory name")
+	}
+
+	var err error
+	deploymentPath, err = templates.GetRelativeDirectory(args[0])
 	if err != nil {
 		return err
 	}
 
-	// Validate that the function path argument exists
-	exists, err := pathExists(functionPath)
+	// Validate that the function path exists
+	exists, err := templates.PathExists(deploymentPath)
 	if err != nil {
 		return err
 	}
@@ -42,17 +51,17 @@ func deployArgs(cmd *cobra.Command, args []string) error {
 	}
 
 	// Validate that a config file exists
-	configFilePath := config.GetConfigFilePath(functionPath)
-	exists, err = pathExists(configFilePath)
+	configFilePath := config.GetConfigFilePath(deploymentPath)
+	exists, err = templates.PathExists(configFilePath)
 	if err != nil {
 		return err
 	}
 	if !exists {
-		return fmt.Errorf("operator.config file is missing")
+		return fmt.Errorf("%s file is missing", config.DeploymentConfig)
 	}
 
 	// Read the config
-	err = config.ReadConfig(configFilePath, templateConfig)
+	err = config.ReadConfig(configFilePath, deploymentConfig)
 	if err != nil {
 		return err
 	}
@@ -71,44 +80,11 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 
 	// Change to the directory where the function to deploy is implemented
 	// `gcloud functions deploy` assumes we are in this directory
-	functionPath, err := getDirectoryPath(args)
-	if err != nil {
-		return err
-	}
-	os.Chdir(functionPath)
-
-	fmt.Println("🚢  Deploying ", templateConfig.DirectoryName, fmt.Sprintf("as an %s function", templateConfig.Type))
-	fmt.Println("⏭  Entry point: ", templateConfig.FunctionName, fmt.Sprintf("(%s)", templateConfig.Runtime))
-
-	// @TODO this needs to differentiate between a Cloud Function and Cloud Run
-	// @Future support for other clouds/AWS
-	// Construct the gcloud command
-	commandArgs := []string{
-		"functions",
-		"deploy",
-		templateConfig.DirectoryName,
-		"--runtime", templateConfig.Runtime,
-		fmt.Sprintf("--trigger-%s", templateConfig.Type),
-		fmt.Sprintf("--entry-point=%s", templateConfig.FunctionName),
-		"--region=europe-west2",
-		"--allow-unauthenticated",
-		// "--ignore-file=IGNORE_FILE",
-		// "--egress-settings=EGRESS_SETTINGS",
-		// "--ingress-settings=INGRESS_SETTINGS",
-		// "--memory=MEMORY",
-		// "--service-account=SERVICE_ACCOUNT",
-		// "--source=SOURCE",
-		// "--stage-bucket=STAGE_BUCKET",
-		// "--timeout=TIMEOUT",
-		// "--update-labels=[KEY=VALUE,…]",
-		// "--env-vars-file=FILE_PATH",
-		// "--max-instances=MAX_INSTANCES",
-	}
-
-	err = executeCommand("gcloud", commandArgs)
-	if err != nil {
-		return err
-	}
+	// functionPath, err := getDirectoryPath(args)
+	// if err != nil {
+	// 	return err
+	// }
+	// os.Chdir(functionPath)
 
 	// Return to the original root directory
 	os.Chdir(rootDir)

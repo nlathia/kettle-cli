@@ -8,7 +8,6 @@ import (
 	"path"
 	"strings"
 
-	"github.com/iancoleman/strcase"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
@@ -19,35 +18,56 @@ import (
 // createCmd represents the create command
 var createCmd = &cobra.Command{
 	Use:   "create",
-	Short: "Create a new directory with boiler plate.",
+	Short: "Create a new directory with boiler plate code to deploy.",
 	Long: `The operator CLI tool can automatically create a directory
  with all of the boiler plate that you need to get started.
 	
 	The create command will create a directory with all the code to get you started.`,
-	Args: createArgs,
+	Args: validateCreateArgs,
 	RunE: runCreate,
 }
 
-var runTimeLanguage string
-var serviceType string
+// When we create a deployment, we store everything in a yaml config file
+// we will need this later to deploy the function
+var configValues *config.TemplateConfig
+var directoryPath string
 
 func init() {
 	rootCmd.AddCommand(createCmd)
 	config.Read()
 
-	// Flag to flip between golang and python runtime
-	createCmd.Flags().StringVar(&runTimeLanguage, "runtime", viper.GetString(config.Runtime), "The function's runtime language")
-	createCmd.Flags().StringVar(&serviceType, "type", viper.GetString(config.DeploymentType), "The type of deployment to create")
+	// Set up the config for this template
+	configValues = &config.TemplateConfig{}
+	createCmd.Flags().StringVar(&configValues.Runtime, "runtime", viper.GetString(config.Runtime), "The function's runtime language")
+	createCmd.Flags().StringVar(&configValues.Type, "type", viper.GetString(config.DeploymentType), "The type of deployment to create")
 }
 
-func createArgs(cmd *cobra.Command, args []string) error {
+func validateCreateArgs(cmd *cobra.Command, args []string) error {
 	// Validate that args exist
 	if len(args) == 0 {
 		return errors.New("please specify a name")
 	}
 
+	// Set the directory and function name
+	configValues.DirectoryName = templates.CreateFunctionName(args)
+	configValues.FunctionName = templates.CreateEntryFunctionName(args, configValues.Runtime)
+
+	// Set the cloud provider
+	cloudProvider, exists := config.CloudProviders[configValues.Type]
+	if !exists {
+		return fmt.Errorf("unknown cloud provider for: %v", configValues.Type)
+	}
+	configValues.CloudName = cloudProvider
+
+	// Construct the path where we are going to generate the boiler plate
+	var err error
+	directoryPath, err = templates.GetRelativeDirectory(configValues.DirectoryName)
+	if err != nil {
+		return err
+	}
+
 	// Validate that the function path does *not* already exist
-	exists, err := getDirectoryExists(args)
+	exists, err = templates.PathExists(directoryPath)
 	if err != nil {
 		return err
 	}
@@ -56,53 +76,35 @@ func createArgs(cmd *cobra.Command, args []string) error {
 	}
 
 	// Validate the selected runtime is supported
-	exists = config.Runtimes.Contains(runTimeLanguage)
+	exists = config.Runtimes.Contains(configValues.Runtime)
 	if !exists {
-		return fmt.Errorf("runtime (%v) needs to be one of (%v)", runTimeLanguage, config.Runtimes.ToSlice())
+		return fmt.Errorf("runtime (%v) needs to be one of (%v)", configValues.Runtime, config.Runtimes.ToSlice())
 	}
 
 	// Validate the selected type of deployment
-	exists = config.DeploymentTypes.Contains(serviceType)
+	exists = config.DeploymentTypes.Contains(configValues.Type)
 	if !exists {
-		return fmt.Errorf("type (%v) needs to be one of (%v)", serviceType, config.DeploymentTypes.ToSlice())
+		return fmt.Errorf("type (%v) needs to be one of (%v)", configValues.Type, config.DeploymentTypes.ToSlice())
 	}
 	return nil
 }
 
 func runCreate(cmd *cobra.Command, args []string) error {
 	// Print out the config
-	fmt.Println("🎇  Type: ", serviceType)
-	fmt.Println("🎇  Language: ", runTimeLanguage)
-
-	// Populate the template values
-	configValues := &config.TemplateConfig{
-		CloudName:     "gcloud",
-		DirectoryName: getFunctionName(args),
-		FunctionName:  getEntryFunctionName(args, runTimeLanguage),
-		Runtime:       runTimeLanguage,
-		Type:          serviceType,
-	}
-	if configValues.Runtime == config.GoLang {
-		configValues.PackageName = strings.ToLower(
-			strcase.ToLowerCamel(configValues.FunctionName),
-		)
-	}
+	fmt.Println("🎇  Type: ", configValues.Type)
+	fmt.Println("🎇  Language: ", configValues.Runtime)
 
 	// Create a directory with the function name
-	functionPath, err := getDirectoryPath(args)
-	if err != nil {
-		return err
-	}
-
-	err = os.Mkdir(functionPath, os.ModePerm)
+	err := os.Mkdir(directoryPath, os.ModePerm)
 	if err != nil {
 		return err
 	}
 
 	// Iterate on all of the template files
 	templateRoot := fmt.Sprintf(
-		"templates/gcloud/%s/",
-		serviceType,
+		"templates/%s/%s/",
+		configValues.CloudName,
+		configValues.Type,
 	)
 	assetNames := templates.AssetNames()
 	for _, assetName := range assetNames {
@@ -114,34 +116,27 @@ func runCreate(cmd *cobra.Command, args []string) error {
 
 		// Create the target path
 		targetPath := strings.Replace(assetName, templateRoot, "", 1)
-		targetPath = path.Join(functionPath, targetPath)
+		targetPath = path.Join(directoryPath, targetPath)
 
 		// Create the parent directory
 		parentDir, _ := path.Split(targetPath)
-		exists, err := pathExists(parentDir)
-		if err != nil {
-			return err
-		}
-		if !exists {
-			fmt.Println("🎯  Creating: ", parentDir)
-		}
-
 		err = os.MkdirAll(parentDir, os.ModePerm)
 		if err != nil {
 			return err
 		}
-
-		f, err := os.Create(targetPath)
-		if err != nil {
-			return err
-		}
-		defer f.Close()
 
 		// Read the asset out of go-bindata
 		content, err := templates.Asset(assetName)
 		if err != nil {
 			return err
 		}
+
+		// Create the file itself
+		f, err := os.Create(targetPath)
+		if err != nil {
+			return err
+		}
+		defer f.Close()
 
 		// Render the template into the target file
 		tmpl, err := template.New(assetName).Parse(string(content))
@@ -162,10 +157,10 @@ func runCreate(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	err = config.WriteConfig(configValues, functionPath)
+	err = config.WriteConfig(configValues, directoryPath)
 	if err != nil {
 		return err
 	}
-	fmt.Println("\n✅  Created: ", functionPath)
+	fmt.Println("\n✅  Created: ", directoryPath)
 	return nil
 }

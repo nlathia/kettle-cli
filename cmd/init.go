@@ -26,9 +26,10 @@ func init() {
 }
 
 func runInit(cmd *cobra.Command, args []string) {
-	// A configChoice is defined as the label (shown in the prompt),
-	// the values (keys are shown in the prompt, values are stored in config)
-	// and the key (the selection will be stored in viper using this)
+	// A configChoice is defined as:
+	// 1. The label, which is shown in the prompt
+	// 2. The values (keys are shown in the prompt, values are stored in config)
+	// 3. The config key (the selection will be stored in viper using this)
 	type configChoice struct {
 		label  string
 		values map[string]string
@@ -59,6 +60,14 @@ func runInit(cmd *cobra.Command, args []string) {
 		}
 		viper.Set(choice.key, value)
 	}
+
+	// Set the derived settings
+	cloud, exists := config.CloudProviders[viper.GetString(config.DeploymentType)]
+	if !exists {
+		fmt.Printf("Unknown provider for: %v\n", viper.GetString(config.DeploymentType))
+		return
+	}
+	viper.Set(config.CloudProvider, cloud)
 
 	// Does not use SafeWrite - overwrites everything
 	config.Write()

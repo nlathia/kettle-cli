@@ -1,4 +1,4 @@
-package cmd
+package clouds
 
 import (
 	"os"
@@ -14,8 +14,8 @@ func getEntryFunctionName(args []string, runtime string) string {
 	switch {
 	case strings.Contains(runtime, config.Python):
 		return strcase.ToSnake(args[0])
-	case strings.Contains(runtime, config.GoLang):
-		return strcase.ToCamel(args[0])
+	// case strings.Contains(runtime, config.GoLang):
+	// return strcase.ToCamel(args[0])
 	default:
 		// Currently unreachable, as the `runtime` args
 		// is checked before starting

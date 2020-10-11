@@ -17,7 +17,7 @@ type TemplateConfig struct {
 }
 
 func GetConfigFilePath(directoryPath string) string {
-	return path.Join(directoryPath, "operator.config")
+	return path.Join(directoryPath, DeploymentConfig)
 }
 
 func WriteConfig(config *TemplateConfig, directoryPath string) error {

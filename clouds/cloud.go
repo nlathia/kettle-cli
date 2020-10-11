@@ -8,8 +8,8 @@ import (
 )
 
 type Cloud interface {
-	Build(directory string) error
-	Deploy(directory string) error
+	Build(directory string, config *config.TemplateConfig) error
+	Deploy(directory string, config *config.TemplateConfig) error
 }
 
 func GetCloudProvider(cloudType string) (Cloud, error) {
