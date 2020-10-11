@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -45,8 +46,7 @@ func validateDeployArgs(cmd *cobra.Command, args []string) error {
 	}
 
 	// Read the config
-	configFilePath := config.GetConfigFilePath(deploymentPath)
-	err = config.ReadConfig(configFilePath, deploymentConfig)
+	deploymentConfig, err = config.ReadConfig(deploymentPath)
 	if err != nil {
 		return err
 	}
@@ -77,7 +77,7 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 	}
 
 	// Store that this function has been deployed
-	deploymentConfig.Deployed = time.Now().UTC()
+	deploymentConfig.Deployed = time.Now().UTC().String()
 	config.WriteConfig(deploymentConfig, deploymentPath)
 
 	// Return to the original root directory
@@ -92,6 +92,7 @@ func getDeploymentPath(args []string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	rootDir = path.Clean(rootDir)
 	exists, err := directoryHasConfigFile(rootDir)
 	if err != nil {
 		return "", err

@@ -3,19 +3,18 @@ package config
 import (
 	"io/ioutil"
 	"path"
-	"time"
 
 	"gopkg.in/yaml.v2"
 )
 
 type TemplateConfig struct {
-	CloudName     string    `yaml:"cloud"`
-	DirectoryName string    `yaml:"name"`
-	FunctionName  string    `yaml:"entrypoint"`
-	Runtime       string    `yaml:"runtime"`
-	Type          string    `yaml:"type"`
-	Deployed      time.Time `yaml:"deployed_utc,omitempty"`
-	PackageName   string    `yaml:"package,omitempty"`
+	CloudName     string `yaml:"cloud"`
+	DirectoryName string `yaml:"name"`
+	FunctionName  string `yaml:"entrypoint"`
+	Runtime       string `yaml:"runtime"`
+	Type          string `yaml:"type"`
+	Deployed      string `yaml:"deployed_utc,omitempty"`
+	PackageName   string `yaml:"package,omitempty"`
 }
 
 func GetConfigFilePath(directoryPath string) string {
@@ -36,15 +35,16 @@ func WriteConfig(config *TemplateConfig, directoryPath string) error {
 	return nil
 }
 
-func ReadConfig(directoryPath string, values *TemplateConfig) error {
+func ReadConfig(directoryPath string) (*TemplateConfig, error) {
 	filePath := GetConfigFilePath(directoryPath)
 	contents, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	if err := yaml.Unmarshal(contents, values); err != nil {
-		return err
+	values := TemplateConfig{}
+	if err := yaml.Unmarshal(contents, &values); err != nil {
+		return nil, err
 	}
-	return nil
+	return &values, nil
 }
