@@ -67,6 +67,16 @@ Launch it locally:
 ❯ operator deploy .
 ```
 
+## Limitations
+
+There are many! This is a version 0.
+
+* All deployments go to `region=europe-west2`
+* Only http-triggered cloud functions are supported
+* This assumes that GCP APIs have been enabled and may not fail gracefully
+* The templates/ directory has two templates which have high level of duplication
+* There is no support for AWS yet
+
 ## Notes
 
 This tool has been built using the [Cobra Generator](https://github.com/spf13/cobra/blob/master/cobra/README.md#cobra-generator).
