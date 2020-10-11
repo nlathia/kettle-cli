@@ -16,6 +16,11 @@
 // templates/gcloud/cloud_function/model/model.py
 // templates/gcloud/cloud_function/requirements-dev.txt
 // templates/gcloud/cloud_function/requirements.txt
+// templates/gcloud/cloud_function/tests/__init__.py
+// templates/gcloud/cloud_function/tests/model/__init__.py
+// templates/gcloud/cloud_function/tests/model/artifacts/__init__.py
+// templates/gcloud/cloud_function/tests/model/artifacts/test_files.py
+// templates/gcloud/cloud_function/tests/model/test_model.py
 // templates/gcloud/cloud_run/Dockerfile
 // templates/gcloud/cloud_run/Makefile
 // templates/gcloud/cloud_run/README.md
@@ -344,12 +349,12 @@ func templatesGcloudCloud_functionModelArtifactsFilesPy() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/gcloud/cloud_function/model/artifacts/files.py", size: 438, mode: os.FileMode(420), modTime: time.Unix(1602337106, 0)}
+	info := bindataFileInfo{name: "templates/gcloud/cloud_function/model/artifacts/files.py", size: 438, mode: os.FileMode(420), modTime: time.Unix(1602418675, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
-var _templatesGcloudCloud_functionModelModelPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x54\x90\xc1\x4a\xc4\x40\x0c\x86\xef\x7d\x8a\xdf\xf1\xb2\x0b\xba\x0f\xd0\x83\xb8\xe0\xd9\x05\xd9\xbb\x0c\x9d\x74\x67\x70\x4c\x96\x74\x4a\x29\xe2\xbb\xcb\xa4\x5d\xad\x3d\x95\x49\xfe\xef\x4b\x12\xa8\x47\x16\x1f\xde\x3f\x25\x50\xde\xed\xdb\x06\x00\x94\xca\xa8\x8c\x57\x61\x02\xee\xf1\x7c\x3e\xbd\x9c\xac\x0d\x9e\xc3\xad\x3a\xcb\xa8\xb0\x18\x22\x29\x35\x4d\x53\x61\x57\xa5\x90\xba\xb2\xb3\xc2\x03\x12\x5f\xc7\xd2\xa2\x3e\xed\xf1\xf8\x64\x3f\x8b\xc3\x39\x77\x8e\x69\x40\x1a\x50\x22\xfd\xe6\xf6\xe8\x47\xee\x4a\x12\x46\x2f\xba\x4a\x7c\x17\x13\x13\x32\x79\xe5\xc4\x97\xc5\x7a\x30\xcc\x51\x2f\xc3\x02\xac\x9f\xe9\xb0\x33\x5d\x8b\xa3\xe9\x92\xb0\xd7\x19\x9d\x70\xf1\xc9\xe2\xd5\xb7\x0c\x6e\xfd\xc3\x42\x7a\xb3\xb5\x36\xb0\x7f\xf1\x29\x95\xb8\x5d\x79\x9d\xb7\xce\x59\x6f\xe2\x79\x86\x94\x48\x8a\xe0\x8b\xaf\x8d\x98\x64\xcc\x01\x39\x7d\x10\x8a\xac\x47\x3b\xdc\x56\xdf\x9e\xf9\xcb\xfd\xc1\x5c\x0b\x17\x29\x67\xc1\x24\x9a\xc3\x9d\xfb\x6e\x7e\x02\x00\x00\xff\xff\xf4\xc0\x21\x96\xa3\x01\x00\x00")
+var _templatesGcloudCloud_functionModelModelPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x54\x50\xcd\x4a\xc3\x40\x10\xbe\xe7\x29\x3e\xd7\x4b\x0b\xda\x07\xc8\x41\x2c\x78\xb6\x20\xbd\xcb\x92\x9d\x74\x17\xb7\x3b\x65\x32\xa1\x04\xf1\xdd\x65\x27\xd1\xa6\x39\x85\x9d\xef\x3f\x50\x8f\xcc\x3e\x7c\x9e\x39\x50\xde\x6c\xdb\x06\x00\x1e\xf1\x7a\x3c\xbc\x1d\xec\x02\x5f\x02\x84\x74\x94\x82\x89\x47\x81\x21\x11\x49\xc8\xb0\xcb\xe9\x9d\x0b\x35\x4d\x53\xf5\x2e\x42\x21\x75\xba\x31\xe0\x13\x52\xb9\x8c\xda\xa2\x3e\x6d\xf1\xfc\x62\x3f\xb3\x8d\x73\xee\x18\xd3\x80\x34\x40\x23\xfd\xf3\xb6\xe8\xc7\xd2\x69\xe2\x82\x9e\x65\x31\xf5\x5d\x4c\x85\x90\xc9\x4b\x49\xe5\x34\xa7\xd8\x99\xcc\x5e\x4e\xc3\x2c\x58\x3f\xb3\xc3\xc6\xec\x5a\xec\xcd\x2e\x71\xf1\x32\xa1\xe3\xa2\x3e\x19\xbd\xfa\xcd\x45\x0c\x3f\xcc\x4a\x1f\xd6\x65\x25\x76\x47\xbf\x26\x8d\xeb\x09\x96\xbc\x35\x67\xdd\xc8\x97\x09\xac\x91\x04\xc1\xab\xaf\x40\x5c\x79\xcc\x01\x39\x7d\x11\x94\x97\xa5\x76\x7f\xd5\xef\x96\xbe\x75\xaf\x52\x3d\xcb\xd9\xab\x85\x14\x1a\xc6\xac\x48\x45\x19\x7e\x95\x66\xbd\xfd\xb7\xbb\x45\x71\x2d\x5c\xa4\x9c\x19\x57\x96\x1c\x1e\xdc\x4f\xf3\x1b\x00\x00\xff\xff\x7b\x7e\xf8\x44\xe4\x01\x00\x00")
 
 func templatesGcloudCloud_functionModelModelPyBytes() ([]byte, error) {
 	return bindataRead(
@@ -364,12 +369,12 @@ func templatesGcloudCloud_functionModelModelPy() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/gcloud/cloud_function/model/model.py", size: 419, mode: os.FileMode(420), modTime: time.Unix(1602340414, 0)}
+	info := bindataFileInfo{name: "templates/gcloud/cloud_function/model/model.py", size: 484, mode: os.FileMode(420), modTime: time.Unix(1602418777, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
-var _templatesGcloudCloud_functionRequirementsDevTxt = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x4a\x2b\xcd\x4b\x2e\xc9\xcc\xcf\x2b\xd6\x4d\x2b\x4a\xcc\x4d\x2d\xcf\x2f\xca\xb6\xb5\x35\xd2\x33\xd0\x33\xe0\x02\x04\x00\x00\xff\xff\x7b\xc3\x7d\x23\x1b\x00\x00\x00")
+var _templatesGcloudCloud_functionRequirementsDevTxt = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x4a\x2b\xcd\x4b\x2e\xc9\xcc\xcf\x2b\xd6\x4d\x2b\x4a\xcc\x4d\x2d\xcf\x2f\xca\xb6\xb5\x35\xd2\x33\xd0\x33\xe0\x2a\xa8\x2c\x49\x2d\x2e\xb1\xb5\x35\xd3\x33\xd4\x33\xe4\x02\x04\x00\x00\xff\xff\x22\x44\xc8\x37\x29\x00\x00\x00")
 
 func templatesGcloudCloud_functionRequirementsDevTxtBytes() ([]byte, error) {
 	return bindataRead(
@@ -384,7 +389,7 @@ func templatesGcloudCloud_functionRequirementsDevTxt() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/gcloud/cloud_function/requirements-dev.txt", size: 27, mode: os.FileMode(420), modTime: time.Unix(1602339303, 0)}
+	info := bindataFileInfo{name: "templates/gcloud/cloud_function/requirements-dev.txt", size: 41, mode: os.FileMode(420), modTime: time.Unix(1602418377, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -405,6 +410,106 @@ func templatesGcloudCloud_functionRequirementsTxt() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "templates/gcloud/cloud_function/requirements.txt", size: 13, mode: os.FileMode(420), modTime: time.Unix(1602012713, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _templatesGcloudCloud_functionTests__init__Py = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x01\x00\x00\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00")
+
+func templatesGcloudCloud_functionTests__init__PyBytes() ([]byte, error) {
+	return bindataRead(
+		_templatesGcloudCloud_functionTests__init__Py,
+		"templates/gcloud/cloud_function/tests/__init__.py",
+	)
+}
+
+func templatesGcloudCloud_functionTests__init__Py() (*asset, error) {
+	bytes, err := templatesGcloudCloud_functionTests__init__PyBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "templates/gcloud/cloud_function/tests/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1602418521, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _templatesGcloudCloud_functionTestsModel__init__Py = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x01\x00\x00\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00")
+
+func templatesGcloudCloud_functionTestsModel__init__PyBytes() ([]byte, error) {
+	return bindataRead(
+		_templatesGcloudCloud_functionTestsModel__init__Py,
+		"templates/gcloud/cloud_function/tests/model/__init__.py",
+	)
+}
+
+func templatesGcloudCloud_functionTestsModel__init__Py() (*asset, error) {
+	bytes, err := templatesGcloudCloud_functionTestsModel__init__PyBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "templates/gcloud/cloud_function/tests/model/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1602418537, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _templatesGcloudCloud_functionTestsModelArtifacts__init__Py = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x01\x00\x00\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00")
+
+func templatesGcloudCloud_functionTestsModelArtifacts__init__PyBytes() ([]byte, error) {
+	return bindataRead(
+		_templatesGcloudCloud_functionTestsModelArtifacts__init__Py,
+		"templates/gcloud/cloud_function/tests/model/artifacts/__init__.py",
+	)
+}
+
+func templatesGcloudCloud_functionTestsModelArtifacts__init__Py() (*asset, error) {
+	bytes, err := templatesGcloudCloud_functionTestsModelArtifacts__init__PyBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "templates/gcloud/cloud_function/tests/model/artifacts/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1602418543, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _templatesGcloudCloud_functionTestsModelArtifactsTest_filesPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x44\x8f\x41\x6e\xc5\x20\x0c\x44\xf7\x9c\x62\xf4\xbb\xf9\xd9\x70\x80\x4a\x3d\xcb\x17\x0d\x26\xb1\x44\x62\x84\x5d\xb5\xdc\xbe\x8a\x13\xfd\xec\x86\x19\x78\x33\xf0\xd6\xa4\x1b\x44\x43\x28\x5d\x36\x6c\x92\xa9\xc6\xd4\x8d\x4b\x9a\x4d\x71\xe5\x85\x2b\x69\x08\x21\x53\x81\x91\xda\x6b\x21\x7b\xb5\x64\xeb\x73\xfa\x0c\x00\xf0\x81\xdb\x41\x27\xfb\xe9\xbb\xc2\x56\xc2\x61\x41\x0a\x92\x33\xc0\xbb\xbb\x77\x41\xe6\x4e\xb3\x49\x1f\x17\xe6\x97\xbc\x00\xb6\xb2\xe2\x7b\xa0\x4a\xca\xbc\x2f\x37\xcb\xc4\x75\x6c\xe3\x22\x9a\x52\x2d\xfe\xda\xf3\xaf\x73\x6c\x7c\xef\x79\x9c\xe7\x36\x1e\x93\xdf\x4a\xaa\xe4\x5f\x8e\x47\x1c\xe9\x8f\xd5\xf4\x79\xe8\xe9\x3f\x00\x00\xff\xff\xdd\x33\x63\xee\x0e\x01\x00\x00")
+
+func templatesGcloudCloud_functionTestsModelArtifactsTest_filesPyBytes() ([]byte, error) {
+	return bindataRead(
+		_templatesGcloudCloud_functionTestsModelArtifactsTest_filesPy,
+		"templates/gcloud/cloud_function/tests/model/artifacts/test_files.py",
+	)
+}
+
+func templatesGcloudCloud_functionTestsModelArtifactsTest_filesPy() (*asset, error) {
+	bytes, err := templatesGcloudCloud_functionTestsModelArtifactsTest_filesPyBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "templates/gcloud/cloud_function/tests/model/artifacts/test_files.py", size: 270, mode: os.FileMode(420), modTime: time.Unix(1602418708, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _templatesGcloudCloud_functionTestsModelTest_modelPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x64\x90\xcd\x6a\xe3\x40\x10\x84\xef\xf3\x14\xb5\xda\x8b\x04\x83\x1f\xc0\x60\xf0\x61\xf1\x71\x0d\x66\x6f\x4b\x30\x83\xa6\x15\x0f\x9e\x3f\x7a\x5a\xc4\x89\xf1\xbb\x07\x8f\xa5\xc8\x21\x3a\x08\xa6\xbb\xbe\x2a\xba\x5c\xc8\x89\x05\xf9\x5d\xa8\x88\x1a\x38\x05\x84\x64\xc9\x63\x5a\xd4\x87\x52\x6a\xfb\x50\xac\x06\x77\x91\x91\x49\x59\x1a\x70\x1f\x1c\xab\xa0\xed\xd6\x0a\x00\x98\x64\xe4\xf8\x80\x56\x3e\x19\x3b\xaf\x95\x5a\x88\xa7\xf9\xe2\x30\x19\xfc\xc6\xf6\xdf\xfe\xcf\x1e\x63\xb6\x46\x08\x72\x72\xa5\x42\x90\x84\xfe\x44\xfd\x79\x52\xed\x12\x83\x2e\x26\x64\x4f\x1a\xa6\x14\x62\x81\x2b\x2e\x16\x31\xb1\xa7\xb6\xf7\x83\xc6\xc1\x44\x9b\xc2\x2e\x31\x15\x39\xd0\x2b\x53\x29\x89\xbb\x6a\x30\x11\x4b\x3c\x5c\xc1\xdf\x14\xe9\xe9\xd2\x60\xf8\xbc\xca\x86\x4d\x20\x61\xf7\x41\x6d\x25\x1b\x17\xf3\x28\x47\xeb\x7a\xd1\x74\xc9\xd4\x0b\xd9\x46\xd7\xd5\xff\xfa\xbf\x7f\xed\xf5\xa6\x71\x6d\x32\xd3\x5d\xe7\x52\x6c\xd6\x68\x4e\xe4\x7d\xc2\x5b\x62\x6f\x7f\x35\xb7\xee\xc1\xbc\x68\xd5\x2d\xcd\x4c\x40\xfb\x94\x81\x39\x44\xe3\x47\x59\x4c\x65\xf4\x82\xcd\xd4\xf7\x4c\x2f\x3a\x8d\xc5\xe9\xdb\xe1\x33\xb9\xf9\xb2\xff\x0c\x00\x00\xff\xff\x59\x5f\xc0\x4e\x08\x02\x00\x00")
+
+func templatesGcloudCloud_functionTestsModelTest_modelPyBytes() ([]byte, error) {
+	return bindataRead(
+		_templatesGcloudCloud_functionTestsModelTest_modelPy,
+		"templates/gcloud/cloud_function/tests/model/test_model.py",
+	)
+}
+
+func templatesGcloudCloud_functionTestsModelTest_modelPy() (*asset, error) {
+	bytes, err := templatesGcloudCloud_functionTestsModelTest_modelPyBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "templates/gcloud/cloud_function/tests/model/test_model.py", size: 520, mode: os.FileMode(420), modTime: time.Unix(1602419722, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -689,7 +794,7 @@ func templatesGcloudCloud_runModelModelPy() (*asset, error) {
 	return a, nil
 }
 
-var _templatesGcloudCloud_runRequirementsDevTxt = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x4a\x2b\xcd\x4b\x2e\xc9\xcc\xcf\x2b\xd6\x4d\x2b\x4a\xcc\x4d\x2d\xcf\x2f\xca\xb6\xb5\x35\xd2\x33\xd0\x33\xe0\x02\x04\x00\x00\xff\xff\x7b\xc3\x7d\x23\x1b\x00\x00\x00")
+var _templatesGcloudCloud_runRequirementsDevTxt = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x4a\x2b\xcd\x4b\x2e\xc9\xcc\xcf\x2b\xd6\x4d\x2b\x4a\xcc\x4d\x2d\xcf\x2f\xca\xb6\xb5\x35\xd2\x33\xd0\x33\xe0\x2a\xa8\x2c\x49\x2d\x2e\xb1\xb5\x35\xd3\x33\xd4\x33\xe4\x02\x04\x00\x00\xff\xff\x22\x44\xc8\x37\x29\x00\x00\x00")
 
 func templatesGcloudCloud_runRequirementsDevTxtBytes() ([]byte, error) {
 	return bindataRead(
@@ -704,7 +809,7 @@ func templatesGcloudCloud_runRequirementsDevTxt() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/gcloud/cloud_run/requirements-dev.txt", size: 27, mode: os.FileMode(420), modTime: time.Unix(1602339341, 0)}
+	info := bindataFileInfo{name: "templates/gcloud/cloud_run/requirements-dev.txt", size: 41, mode: os.FileMode(420), modTime: time.Unix(1602418385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -801,38 +906,43 @@ func AssetNames() []string {
 
 // _bindata is a table, holding each asset generator, mapped to its name.
 var _bindata = map[string]func() (*asset, error){
-	"templates/gcloud/cloud_function/Makefile":                    templatesGcloudCloud_functionMakefile,
-	"templates/gcloud/cloud_function/README.md":                   templatesGcloudCloud_functionReadmeMd,
-	"templates/gcloud/cloud_function/bin/_config.sh":              templatesGcloudCloud_functionBin_configSh,
-	"templates/gcloud/cloud_function/bin/cleanup.sh":              templatesGcloudCloud_functionBinCleanupSh,
-	"templates/gcloud/cloud_function/bin/launch.sh":               templatesGcloudCloud_functionBinLaunchSh,
-	"templates/gcloud/cloud_function/bin/remove_pyenv.sh":         templatesGcloudCloud_functionBinRemove_pyenvSh,
-	"templates/gcloud/cloud_function/bin/setup_pyenv.sh":          templatesGcloudCloud_functionBinSetup_pyenvSh,
-	"templates/gcloud/cloud_function/main.py":                     templatesGcloudCloud_functionMainPy,
-	"templates/gcloud/cloud_function/model/__init__.py":           templatesGcloudCloud_functionModel__init__Py,
-	"templates/gcloud/cloud_function/model/artifacts/README.md":   templatesGcloudCloud_functionModelArtifactsReadmeMd,
-	"templates/gcloud/cloud_function/model/artifacts/__init__.py": templatesGcloudCloud_functionModelArtifacts__init__Py,
-	"templates/gcloud/cloud_function/model/artifacts/files.py":    templatesGcloudCloud_functionModelArtifactsFilesPy,
-	"templates/gcloud/cloud_function/model/model.py":              templatesGcloudCloud_functionModelModelPy,
-	"templates/gcloud/cloud_function/requirements-dev.txt":        templatesGcloudCloud_functionRequirementsDevTxt,
-	"templates/gcloud/cloud_function/requirements.txt":            templatesGcloudCloud_functionRequirementsTxt,
-	"templates/gcloud/cloud_run/Dockerfile":                       templatesGcloudCloud_runDockerfile,
-	"templates/gcloud/cloud_run/Makefile":                         templatesGcloudCloud_runMakefile,
-	"templates/gcloud/cloud_run/README.md":                        templatesGcloudCloud_runReadmeMd,
-	"templates/gcloud/cloud_run/bin/_config.sh":                   templatesGcloudCloud_runBin_configSh,
-	"templates/gcloud/cloud_run/bin/cleanup.sh":                   templatesGcloudCloud_runBinCleanupSh,
-	"templates/gcloud/cloud_run/bin/launch.sh":                    templatesGcloudCloud_runBinLaunchSh,
-	"templates/gcloud/cloud_run/bin/remove_pyenv.sh":              templatesGcloudCloud_runBinRemove_pyenvSh,
-	"templates/gcloud/cloud_run/bin/setup_pyenv.sh":               templatesGcloudCloud_runBinSetup_pyenvSh,
-	"templates/gcloud/cloud_run/main.py":                          templatesGcloudCloud_runMainPy,
-	"templates/gcloud/cloud_run/model/__init__.py":                templatesGcloudCloud_runModel__init__Py,
-	"templates/gcloud/cloud_run/model/artifacts/README.md":        templatesGcloudCloud_runModelArtifactsReadmeMd,
-	"templates/gcloud/cloud_run/model/artifacts/__init__.py":      templatesGcloudCloud_runModelArtifacts__init__Py,
-	"templates/gcloud/cloud_run/model/artifacts/files.py":         templatesGcloudCloud_runModelArtifactsFilesPy,
-	"templates/gcloud/cloud_run/model/model.py":                   templatesGcloudCloud_runModelModelPy,
-	"templates/gcloud/cloud_run/requirements-dev.txt":             templatesGcloudCloud_runRequirementsDevTxt,
-	"templates/gcloud/cloud_run/requirements.txt":                 templatesGcloudCloud_runRequirementsTxt,
-	"templates/helpers.go":                                        templatesHelpersGo,
+	"templates/gcloud/cloud_function/Makefile":                            templatesGcloudCloud_functionMakefile,
+	"templates/gcloud/cloud_function/README.md":                           templatesGcloudCloud_functionReadmeMd,
+	"templates/gcloud/cloud_function/bin/_config.sh":                      templatesGcloudCloud_functionBin_configSh,
+	"templates/gcloud/cloud_function/bin/cleanup.sh":                      templatesGcloudCloud_functionBinCleanupSh,
+	"templates/gcloud/cloud_function/bin/launch.sh":                       templatesGcloudCloud_functionBinLaunchSh,
+	"templates/gcloud/cloud_function/bin/remove_pyenv.sh":                 templatesGcloudCloud_functionBinRemove_pyenvSh,
+	"templates/gcloud/cloud_function/bin/setup_pyenv.sh":                  templatesGcloudCloud_functionBinSetup_pyenvSh,
+	"templates/gcloud/cloud_function/main.py":                             templatesGcloudCloud_functionMainPy,
+	"templates/gcloud/cloud_function/model/__init__.py":                   templatesGcloudCloud_functionModel__init__Py,
+	"templates/gcloud/cloud_function/model/artifacts/README.md":           templatesGcloudCloud_functionModelArtifactsReadmeMd,
+	"templates/gcloud/cloud_function/model/artifacts/__init__.py":         templatesGcloudCloud_functionModelArtifacts__init__Py,
+	"templates/gcloud/cloud_function/model/artifacts/files.py":            templatesGcloudCloud_functionModelArtifactsFilesPy,
+	"templates/gcloud/cloud_function/model/model.py":                      templatesGcloudCloud_functionModelModelPy,
+	"templates/gcloud/cloud_function/requirements-dev.txt":                templatesGcloudCloud_functionRequirementsDevTxt,
+	"templates/gcloud/cloud_function/requirements.txt":                    templatesGcloudCloud_functionRequirementsTxt,
+	"templates/gcloud/cloud_function/tests/__init__.py":                   templatesGcloudCloud_functionTests__init__Py,
+	"templates/gcloud/cloud_function/tests/model/__init__.py":             templatesGcloudCloud_functionTestsModel__init__Py,
+	"templates/gcloud/cloud_function/tests/model/artifacts/__init__.py":   templatesGcloudCloud_functionTestsModelArtifacts__init__Py,
+	"templates/gcloud/cloud_function/tests/model/artifacts/test_files.py": templatesGcloudCloud_functionTestsModelArtifactsTest_filesPy,
+	"templates/gcloud/cloud_function/tests/model/test_model.py":           templatesGcloudCloud_functionTestsModelTest_modelPy,
+	"templates/gcloud/cloud_run/Dockerfile":                               templatesGcloudCloud_runDockerfile,
+	"templates/gcloud/cloud_run/Makefile":                                 templatesGcloudCloud_runMakefile,
+	"templates/gcloud/cloud_run/README.md":                                templatesGcloudCloud_runReadmeMd,
+	"templates/gcloud/cloud_run/bin/_config.sh":                           templatesGcloudCloud_runBin_configSh,
+	"templates/gcloud/cloud_run/bin/cleanup.sh":                           templatesGcloudCloud_runBinCleanupSh,
+	"templates/gcloud/cloud_run/bin/launch.sh":                            templatesGcloudCloud_runBinLaunchSh,
+	"templates/gcloud/cloud_run/bin/remove_pyenv.sh":                      templatesGcloudCloud_runBinRemove_pyenvSh,
+	"templates/gcloud/cloud_run/bin/setup_pyenv.sh":                       templatesGcloudCloud_runBinSetup_pyenvSh,
+	"templates/gcloud/cloud_run/main.py":                                  templatesGcloudCloud_runMainPy,
+	"templates/gcloud/cloud_run/model/__init__.py":                        templatesGcloudCloud_runModel__init__Py,
+	"templates/gcloud/cloud_run/model/artifacts/README.md":                templatesGcloudCloud_runModelArtifactsReadmeMd,
+	"templates/gcloud/cloud_run/model/artifacts/__init__.py":              templatesGcloudCloud_runModelArtifacts__init__Py,
+	"templates/gcloud/cloud_run/model/artifacts/files.py":                 templatesGcloudCloud_runModelArtifactsFilesPy,
+	"templates/gcloud/cloud_run/model/model.py":                           templatesGcloudCloud_runModelModelPy,
+	"templates/gcloud/cloud_run/requirements-dev.txt":                     templatesGcloudCloud_runRequirementsDevTxt,
+	"templates/gcloud/cloud_run/requirements.txt":                         templatesGcloudCloud_runRequirementsTxt,
+	"templates/helpers.go":                                                templatesHelpersGo,
 }
 
 // AssetDir returns the file names below a certain
@@ -900,6 +1010,17 @@ var _bintree = &bintree{nil, map[string]*bintree{
 				}},
 				"requirements-dev.txt": &bintree{templatesGcloudCloud_functionRequirementsDevTxt, map[string]*bintree{}},
 				"requirements.txt":     &bintree{templatesGcloudCloud_functionRequirementsTxt, map[string]*bintree{}},
+				"tests": &bintree{nil, map[string]*bintree{
+					"__init__.py": &bintree{templatesGcloudCloud_functionTests__init__Py, map[string]*bintree{}},
+					"model": &bintree{nil, map[string]*bintree{
+						"__init__.py": &bintree{templatesGcloudCloud_functionTestsModel__init__Py, map[string]*bintree{}},
+						"artifacts": &bintree{nil, map[string]*bintree{
+							"__init__.py":   &bintree{templatesGcloudCloud_functionTestsModelArtifacts__init__Py, map[string]*bintree{}},
+							"test_files.py": &bintree{templatesGcloudCloud_functionTestsModelArtifactsTest_filesPy, map[string]*bintree{}},
+						}},
+						"test_model.py": &bintree{templatesGcloudCloud_functionTestsModelTest_modelPy, map[string]*bintree{}},
+					}},
+				}},
 			}},
 			"cloud_run": &bintree{nil, map[string]*bintree{
 				"Dockerfile": &bintree{templatesGcloudCloud_runDockerfile, map[string]*bintree{}},

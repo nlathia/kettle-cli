@@ -1,5 +1,6 @@
 def load_model():
-    return None  # @TODO load and return your model here
+    # @TODO load and return your model here
+    return None
 
 
 def predict(model, input: dict) -> dict:
@@ -9,4 +10,5 @@ def predict(model, input: dict) -> dict:
     Returns:
         A dictionary with your model prediction and any other data you would like to return.
     """
+    # @TODO predict() and format the result into a dictionary
     return {"prediction": "hello world!"}
