@@ -28,6 +28,7 @@ Clone this repo and run:
 
 ```bash
 ❯ cd ~/src/github.com/operatorai/operator
+❯ go get https://github.com/go-bindata/go-bindata
 ❯ make install
 ```
 
