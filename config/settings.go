@@ -2,14 +2,26 @@ package config
 
 import (
 	"fmt"
+	"log"
 	"os"
+	"path"
 
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 )
 
+func getConfigPath() string {
+	// Find the home directory.
+	home, err := homedir.Dir()
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	return path.Join(home, ".operator.yaml")
+}
+
 func setConfigPath() {
-	// Find home directory.
+	// Find the home directory.
 	home, err := homedir.Dir()
 	if err != nil {
 		fmt.Println(err)
@@ -35,6 +47,12 @@ func Read() {
 }
 
 func Write() {
-	setConfigPath()
-	viper.WriteConfig()
+	configPath := getConfigPath()
+	if err := viper.SafeWriteConfigAs(configPath); err != nil {
+		if os.IsNotExist(err) {
+			log.Println("Creating new config file")
+			err = viper.WriteConfigAs(configPath)
+		}
+	}
+	viper.WriteConfigAs(configPath)
 }
