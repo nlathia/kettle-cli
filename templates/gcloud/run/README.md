@@ -1,4 +1,4 @@
-# {{ .DirectoryName }}
+# {{ .Name }}
 
 Add a description of your cloud run container!
 

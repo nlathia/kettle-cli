@@ -9,7 +9,7 @@ import (
 
 type TemplateConfig struct {
 	ProjectID        string `yaml:"project_id"`
-	DirectoryName    string `yaml:"name"`
+	Name             string `yaml:"name"`
 	FunctionName     string `yaml:"entrypoint"`
 	Runtime          string `yaml:"runtime"`
 	Type             string `yaml:"type"`

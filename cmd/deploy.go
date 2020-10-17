@@ -42,6 +42,7 @@ func validateDeployArgs(cmd *cobra.Command, args []string) error {
 	var err error
 	deploymentPath, err = getDeploymentPath(args)
 	if err != nil {
+		fmt.Println("Can't get deployment path")
 		return err
 	}
 
@@ -110,7 +111,7 @@ func getDeploymentPath(args []string) (string, error) {
 		return "", err
 	}
 	if exists {
-		return rootDir, nil
+		return args[0], nil
 	}
 
 	// operator deploy some-directory
@@ -121,7 +122,7 @@ func getDeploymentPath(args []string) (string, error) {
 		return "", err
 	}
 	if exists {
-		return rootDir, nil
+		return deploymentPath, nil
 	}
 
 	return "", fmt.Errorf("could not find %s file", config.DeploymentConfig)

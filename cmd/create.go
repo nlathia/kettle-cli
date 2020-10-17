@@ -56,12 +56,12 @@ func validateCreateArgs(cmd *cobra.Command, args []string) error {
 	}
 
 	// Set the directory and function name
-	configValues.DirectoryName = templates.CreateFunctionName(args)
+	configValues.Name = templates.CreateFunctionName(args)
 	configValues.FunctionName = templates.CreateEntryFunctionName(args, configValues.Runtime)
 
 	// Construct the path where we are going to generate the boiler plate
 	var err error
-	directoryPath, err = templates.GetRelativeDirectory(configValues.DirectoryName)
+	directoryPath, err = templates.GetRelativeDirectory(args[0])
 	if err != nil {
 		return err
 	}
@@ -122,45 +122,53 @@ func runCreate(cmd *cobra.Command, args []string) error {
 		parentDir, _ := path.Split(targetPath)
 		err = os.MkdirAll(parentDir, os.ModePerm)
 		if err != nil {
-			return err
+			return cleanUp(directoryPath, err)
 		}
 
 		// Read the asset out of go-bindata
 		content, err := templates.Asset(assetName)
 		if err != nil {
-			return err
+			return cleanUp(directoryPath, err)
 		}
 
 		// Create the file itself
 		f, err := os.Create(targetPath)
 		if err != nil {
-			return err
+			return cleanUp(directoryPath, err)
 		}
 		defer f.Close()
 
 		// Render the template into the target file
 		tmpl, err := template.New(assetName).Parse(string(content))
 		if err != nil {
-			return err
+			return cleanUp(directoryPath, err)
 		}
 
 		err = tmpl.Execute(f, configValues)
 		if err != nil {
-			return err
+			return cleanUp(directoryPath, err)
 		}
 
 		// If it is a .sh file, chmod u+x it
 		if strings.HasSuffix(targetPath, ".sh") {
 			if err := os.Chmod(targetPath, 0700); err != nil {
-				return err
+				return cleanUp(directoryPath, err)
 			}
 		}
 	}
 
 	err = config.WriteConfig(configValues, directoryPath)
 	if err != nil {
-		return err
+		return cleanUp(directoryPath, err)
 	}
 	fmt.Println("\n✅  Created: ", directoryPath)
 	return nil
+}
+
+func cleanUp(directoryPath string, err error) error {
+	cleanupErr := os.RemoveAll(directoryPath)
+	if cleanupErr != nil {
+		fmt.Println("\n⚠️  Failed to clean up: ", directoryPath, cleanupErr)
+	}
+	return err
 }
