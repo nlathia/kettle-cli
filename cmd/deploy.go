@@ -42,7 +42,6 @@ func validateDeployArgs(cmd *cobra.Command, args []string) error {
 	var err error
 	deploymentPath, err = getDeploymentPath(args)
 	if err != nil {
-		fmt.Println("Can't get deployment path")
 		return err
 	}
 
