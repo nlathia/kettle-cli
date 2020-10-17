@@ -11,6 +11,17 @@ Warning: this is a pre-release alpha version of this tool. Please send any bugs 
 
 ## Installing
 
+### Installing using brew
+
+You can install `operator` using `brew` and [the operatorai tap](https://github.com/operatorai/homebrew-tap).
+
+```bash
+❯ brew tap operatorai/tap
+❯ brew install operator
+```
+
+### Installing from source
+
 Install the requirements, if you do not already have them:
 
 1. [Download and install Go](https://golang.org/doc/install).
@@ -40,7 +51,7 @@ Use the arrow keys to navigate: ↓ ↑ → ←
 Create a new deployment with `operator create`:
 
 ```bash
-❯ operator create hello-world 
+❯ operator create service.hello-world
 ```
 
 ... and set it up:
@@ -68,8 +79,9 @@ There are many! This is a version 0.
 
 * Only http-triggered cloud functions are supported
 * This assumes that GCP APIs have been enabled and may not fail gracefully
-* The templates/ directory has two templates which have high level of duplication
 * There is no support for AWS yet
+
+Please report any bugs or issues to me (neal.lathia@gmail.com) or by raising an issue in this repo.
 
 ## Notes
 
