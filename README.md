@@ -66,7 +66,6 @@ Launch it locally:
 
 There are many! This is a version 0.
 
-* All deployments go to `region=europe-west2`
 * Only http-triggered cloud functions are supported
 * This assumes that GCP APIs have been enabled and may not fail gracefully
 * The templates/ directory has two templates which have high level of duplication
