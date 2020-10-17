@@ -8,14 +8,14 @@ import (
 )
 
 type TemplateConfig struct {
-	CloudName     string `yaml:"cloud"`
-	ProjectID     string `yaml:"project_id"`
-	DirectoryName string `yaml:"name"`
-	FunctionName  string `yaml:"entrypoint"`
-	Runtime       string `yaml:"runtime"`
-	Type          string `yaml:"type"`
-	Deployed      string `yaml:"deployed_utc,omitempty"`
-	PackageName   string `yaml:"package,omitempty"`
+	ProjectID        string `yaml:"project_id"`
+	Name             string `yaml:"name"`
+	FunctionName     string `yaml:"entrypoint"`
+	Runtime          string `yaml:"runtime"`
+	Type             string `yaml:"type"`
+	DeploymentRegion string `yaml:"region"`
+	Deployed         string `yaml:"deployed_utc,omitempty"`
+	PackageName      string `yaml:"package,omitempty"`
 }
 
 func GetConfigFilePath(directoryPath string) string {

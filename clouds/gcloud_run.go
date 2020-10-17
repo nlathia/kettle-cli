@@ -22,9 +22,9 @@ func (g GoogleCloudRun) Deploy(directory string, cfg *config.TemplateConfig) err
 	commandArgs := []string{
 		"builds",
 		"submit",
-		"--tag", fmt.Sprintf("gcr.io/%s/%s", projectID, cfg.DirectoryName),
+		"--tag", fmt.Sprintf("gcr.io/%s/%s", projectID, cfg.Name),
 	}
-	fmt.Println("🏭  Building: ", cfg.DirectoryName, fmt.Sprintf("as a %s function", cfg.Type))
+	fmt.Println("🏭  Building: ", cfg.Name, "as a Cloud Run container")
 	err := executeCommand("gcloud", commandArgs)
 	if err != nil {
 		return err
@@ -34,12 +34,12 @@ func (g GoogleCloudRun) Deploy(directory string, cfg *config.TemplateConfig) err
 	commandArgs = []string{
 		"run",
 		"deploy",
-		cfg.DirectoryName, // The cloud run service is named the same as the directory
-		"--image", fmt.Sprintf("gcr.io/%s/%s", projectID, cfg.DirectoryName),
+		cfg.Name, // The cloud run service is named the same as the directory
+		"--image", fmt.Sprintf("gcr.io/%s/%s", projectID, cfg.Name),
 		"--platform", "managed",
 		"--allow-unauthenticated",
 		"--region=europe-west2",
 	}
-	fmt.Println("🚢  Deploying ", cfg.DirectoryName, fmt.Sprintf("as a %s function", cfg.Type))
+	fmt.Println("🚢  Deploying ", cfg.Name, fmt.Sprintf("as a %s function", cfg.Type))
 	return executeCommand("gcloud", commandArgs)
 }

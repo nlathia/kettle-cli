@@ -34,16 +34,17 @@ func setConfigPath() {
 	viper.SetConfigType("yaml")
 }
 
-func Read() {
+func Read() error {
 	setConfigPath()
 	viper.SetDefault(DeploymentType, GoogleCloudRun)
 	viper.SetDefault(Runtime, Python)
 	viper.AutomaticEnv() // read in environment variables that match
 
 	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		// fmt.Println("Using config file:", viper.ConfigFileUsed())
+	if err := viper.ReadInConfig(); err != nil {
+		return err
 	}
+	return nil
 }
 
 func Write() {

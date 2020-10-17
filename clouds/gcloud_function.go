@@ -13,14 +13,14 @@ func (GoogleCloudFunction) Deploy(directory string, config *config.TemplateConfi
 	commandArgs := []string{
 		"functions",
 		"deploy",
-		config.DirectoryName, // The cloud function is named the same as the directory
+		config.Name, // The cloud function is named the same as the directory
 		"--runtime", config.Runtime,
 		"--trigger-http", // We only currently support http triggers
 		fmt.Sprintf("--entry-point=%s", config.FunctionName),
-
-		// @TODO these should be configurable
-		"--region=europe-west2",
+		fmt.Sprintf("--region=%s", config.DeploymentRegion),
 		"--allow-unauthenticated",
+
+		// @TODO these could be configurable
 		// "--ignore-file=IGNORE_FILE",
 		// "--egress-settings=EGRESS_SETTINGS",
 		// "--ingress-settings=INGRESS_SETTINGS",
@@ -33,7 +33,7 @@ func (GoogleCloudFunction) Deploy(directory string, config *config.TemplateConfi
 		// "--env-vars-file=FILE_PATH",
 		// "--max-instances=MAX_INSTANCES",
 	}
-	fmt.Println("🚢  Deploying ", config.DirectoryName, fmt.Sprintf("as an %s function", config.Type))
+	fmt.Println("🚢  Deploying ", config.Name, "as a Google Cloud function")
 	fmt.Println("⏭  Entry point: ", config.FunctionName, fmt.Sprintf("(%s)", config.Runtime))
 	return executeCommand("gcloud", commandArgs)
 }

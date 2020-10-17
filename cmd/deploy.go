@@ -110,7 +110,7 @@ func getDeploymentPath(args []string) (string, error) {
 		return "", err
 	}
 	if exists {
-		return rootDir, nil
+		return args[0], nil
 	}
 
 	// operator deploy some-directory
@@ -121,7 +121,7 @@ func getDeploymentPath(args []string) (string, error) {
 		return "", err
 	}
 	if exists {
-		return rootDir, nil
+		return deploymentPath, nil
 	}
 
 	return "", fmt.Errorf("could not find %s file", config.DeploymentConfig)

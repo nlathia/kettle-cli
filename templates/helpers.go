@@ -1,21 +1,34 @@
 package templates
 
 import (
+	"log"
 	"os"
 	"path"
+	"regexp"
 	"strings"
 
 	"github.com/iancoleman/strcase"
 	"github.com/operatorai/operator/config"
 )
 
+func removePunctuation(input, replaceWith string) (string, error) {
+	reg, err := regexp.Compile("[^a-zA-Z0-9]+")
+	if err != nil {
+		return "", err
+	}
+	return reg.ReplaceAllString(input, replaceWith), nil
+}
+
 // The entry function's case will vary based on the language;
 // Right now, we're only supporting Python so we use ToSnake()
-// But, for example, for Go we could use ToCamel()
 func CreateEntryFunctionName(args []string, runtime string) string {
 	switch {
 	case strings.Contains(runtime, config.Python):
-		return strcase.ToSnake(args[0])
+		entryName, err := removePunctuation(args[0], "_")
+		if err != nil {
+			log.Fatal(err)
+		}
+		return strcase.ToSnake(entryName)
 	default:
 		// Currently unreachable, as the `runtime` args
 		// is checked before starting
@@ -25,7 +38,11 @@ func CreateEntryFunctionName(args []string, runtime string) string {
 
 // The cloud function name is derived from the directory name
 func CreateFunctionName(args []string) string {
-	return strcase.ToKebab(args[0])
+	functionName, err := removePunctuation(args[0], "-")
+	if err != nil {
+		log.Fatal(err)
+	}
+	return strcase.ToKebab(functionName)
 }
 
 // Returns a path that is relative to the current working directory
