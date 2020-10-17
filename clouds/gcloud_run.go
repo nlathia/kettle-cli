@@ -24,7 +24,7 @@ func (g GoogleCloudRun) Deploy(directory string, cfg *config.TemplateConfig) err
 		"submit",
 		"--tag", fmt.Sprintf("gcr.io/%s/%s", projectID, cfg.Name),
 	}
-	fmt.Println("🏭  Building: ", cfg.Name, fmt.Sprintf("as a %s function", cfg.Type))
+	fmt.Println("🏭  Building: ", cfg.Name, "as a Cloud Run container")
 	err := executeCommand("gcloud", commandArgs)
 	if err != nil {
 		return err

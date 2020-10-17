@@ -33,7 +33,7 @@ func (GoogleCloudFunction) Deploy(directory string, config *config.TemplateConfi
 		// "--env-vars-file=FILE_PATH",
 		// "--max-instances=MAX_INSTANCES",
 	}
-	fmt.Println("🚢  Deploying ", config.Name, fmt.Sprintf("as an %s function", config.Type))
+	fmt.Println("🚢  Deploying ", config.Name, "as a Google Cloud function")
 	fmt.Println("⏭  Entry point: ", config.FunctionName, fmt.Sprintf("(%s)", config.Runtime))
 	return executeCommand("gcloud", commandArgs)
 }
