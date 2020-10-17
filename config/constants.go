@@ -5,6 +5,8 @@ import (
 )
 
 const (
+	Version = "v0.0.1-alpha"
+
 	// viper config keys
 	CloudProvider  = "cloud_provider"
 	DeploymentType = "deployment_type"
