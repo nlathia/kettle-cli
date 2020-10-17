@@ -11,12 +11,13 @@ const (
 	Runtime        = "runtime"
 
 	// Google Cloud deployments
-	GoogleCloud = "gcloud"
-	ProjectID   = "project_id"
+	GoogleCloud      = "gcloud"
+	ProjectID        = "project_id"
+	DeploymentRegion = "region"
 
 	// Deployment types
-	GoogleCloudFunction = "cloud_function"
-	GoogleCloudRun      = "cloud_run"
+	GoogleCloudFunction = "functions"
+	GoogleCloudRun      = "run"
 
 	// Supported languages (just Python right now)
 	Python = "python37"
@@ -33,11 +34,6 @@ var DeploymentTypes = mapset.NewSetWith(
 var DeploymentNames = map[string]string{
 	"Google Cloud Function": GoogleCloudFunction,
 	"Google Cloud Run":      GoogleCloudRun,
-}
-
-var CloudProviders = map[string]string{
-	GoogleCloudFunction: GoogleCloud,
-	GoogleCloudRun:      GoogleCloud,
 }
 
 var Runtimes = mapset.NewSetWith(

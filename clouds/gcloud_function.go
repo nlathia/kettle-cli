@@ -17,10 +17,10 @@ func (GoogleCloudFunction) Deploy(directory string, config *config.TemplateConfi
 		"--runtime", config.Runtime,
 		"--trigger-http", // We only currently support http triggers
 		fmt.Sprintf("--entry-point=%s", config.FunctionName),
-
-		// @TODO these should be configurable
-		"--region=europe-west2",
+		fmt.Sprintf("--region=%s", config.DeploymentRegion),
 		"--allow-unauthenticated",
+
+		// @TODO these could be configurable
 		// "--ignore-file=IGNORE_FILE",
 		// "--egress-settings=EGRESS_SETTINGS",
 		// "--ingress-settings=INGRESS_SETTINGS",

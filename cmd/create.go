@@ -40,6 +40,7 @@ func init() {
 	configValues = &config.TemplateConfig{}
 	createCmd.Flags().StringVar(&configValues.Runtime, "runtime", viper.GetString(config.Runtime), "The function's runtime language")
 	createCmd.Flags().StringVar(&configValues.Type, "type", viper.GetString(config.DeploymentType), "The type of deployment to create")
+	createCmd.Flags().StringVar(&configValues.Type, "region", viper.GetString(config.DeploymentRegion), "The region to deploy to")
 
 	// Google Cloud specific flags
 	createCmd.Flags().StringVar(&configValues.ProjectID, "project-id", viper.GetString(config.ProjectID), "The gcloud project use")
@@ -55,13 +56,6 @@ func validateCreateArgs(cmd *cobra.Command, args []string) error {
 	configValues.DirectoryName = templates.CreateFunctionName(args)
 	configValues.FunctionName = templates.CreateEntryFunctionName(args, configValues.Runtime)
 
-	// Set the cloud provider
-	cloudProvider, exists := config.CloudProviders[configValues.Type]
-	if !exists {
-		return fmt.Errorf("unknown cloud provider for: %v", configValues.Type)
-	}
-	configValues.CloudName = cloudProvider
-
 	// Construct the path where we are going to generate the boiler plate
 	var err error
 	directoryPath, err = templates.GetRelativeDirectory(configValues.DirectoryName)
@@ -70,7 +64,7 @@ func validateCreateArgs(cmd *cobra.Command, args []string) error {
 	}
 
 	// Validate that the function path does *not* already exist
-	exists, err = templates.PathExists(directoryPath)
+	exists, err := templates.PathExists(directoryPath)
 	if err != nil {
 		return err
 	}
@@ -106,7 +100,7 @@ func runCreate(cmd *cobra.Command, args []string) error {
 	// Iterate on all of the template files
 	templateRoot := fmt.Sprintf(
 		"templates/%s/%s/",
-		configValues.CloudName,
+		"gcloud",
 		configValues.Type,
 	)
 	assetNames := templates.AssetNames()

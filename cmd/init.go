@@ -1,11 +1,12 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"os/exec"
-	"strings"
 
+	"github.com/janeczku/go-spinner"
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -39,7 +40,41 @@ func runInit(cmd *cobra.Command, args []string) {
 		key    string
 	}
 
+	s := spinner.StartNew("Collecting Google Cloud projects...")
+	cloudProjects, err := getGoogleCloudProjects()
+	if err != nil {
+		fmt.Printf("Unable to query for active projects: %v", err)
+		return
+	}
+	if len(cloudProjects) == 0 {
+		fmt.Printf("Could not find any active Google projects")
+		return
+	}
+	s.Stop()
+
+	deploymentRegions, err := getGoogleCloudRegions()
+	if err != nil {
+		fmt.Printf("Unable to query for deployment regions: %v", err)
+		return
+	}
+	if len(deploymentRegions) == 0 {
+		fmt.Printf("Could not find any active Google projects")
+		return
+	}
+
 	configChoices := []configChoice{
+		{
+			// Pick a Google Cloud Project
+			label:  "Google Cloud Project",
+			values: cloudProjects,
+			key:    config.ProjectID,
+		},
+		{
+			// Pick a deployment region
+			label:  "Deployment Region",
+			values: deploymentRegions,
+			key:    config.DeploymentRegion,
+		},
 		{
 			// Pick the default deployment type
 			label:  "Deployment type",
@@ -64,23 +99,6 @@ func runInit(cmd *cobra.Command, args []string) {
 		viper.Set(choice.key, value)
 	}
 
-	// Set the derived settings
-	cloud, exists := config.CloudProviders[viper.GetString(config.DeploymentType)]
-	if !exists {
-		fmt.Printf("Unknown provider for: %v\n", viper.GetString(config.DeploymentType))
-		return
-	}
-	viper.Set(config.CloudProvider, cloud)
-	if cloud == config.GoogleCloud {
-		// gcloud config get-value project
-		projectID, err := getGoogleCloudProject()
-		if err != nil {
-			fmt.Printf("Unable to query for active project: %v", err)
-			return
-		}
-		viper.Set(config.ProjectID, projectID)
-	}
-
 	// Does not use SafeWrite - overwrites everything
 	config.Write()
 }
@@ -100,28 +118,69 @@ func getValue(label string, values map[string]string) (string, error) {
 		fmt.Printf("Prompt failed %v\n", err)
 		return "", err
 	}
-
 	return values[result], nil
 }
 
-func getGoogleCloudProject() (string, error) {
+func getGoogleCloudProjects() (map[string]string, error) {
 	// Construct the gcloud command
-	// gcloud config get-value project
+	// gcloud projects list --format="json"
 	commandArgs := []string{
-		"config",
-		"get-value",
-		"project",
+		"projects",
+		"list",
+		"--format=\"json\"",
 	}
 
-	fmt.Println("🔍  Querying for active gcloud project...")
 	output, err := executeCommandWithResult("gcloud", commandArgs)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	projectID := string(output)
-	fmt.Println(fmt.Sprintf("✅  Using project: %s", projectID))
-	return strings.Trim(string(output), "\n"), nil
+	type gcloudResults struct {
+		ProjectID string `json:"projectId"`
+		Name      string `json:"name"`
+	}
+	var results []gcloudResults
+	if err := json.Unmarshal(output, &results); err != nil {
+		return nil, err
+	}
+
+	projectIDs := map[string]string{}
+	for _, project := range results {
+		projectIDs[project.Name] = project.ProjectID
+	}
+	return projectIDs, nil
+}
+
+func getGoogleCloudRegions() (map[string]string, error) {
+	// Construct the gcloud command
+	// gcloud functions regions list --format="json"
+	commandArgs := []string{
+		"functions",
+		"regions",
+		"list",
+		"--format=\"json\"",
+	}
+
+	output, err := executeCommandWithResult("gcloud", commandArgs)
+	if err != nil {
+		return nil, err
+	}
+
+	type gcloudResults struct {
+		DisplayName string `json:"displayName"`
+		LocationID  string `json:"locationId"`
+	}
+	var results []gcloudResults
+	if err := json.Unmarshal(output, &results); err != nil {
+		return nil, err
+	}
+
+	regions := map[string]string{}
+	for _, region := range results {
+		displayName := fmt.Sprintf("%s (%s)", region.DisplayName, region.LocationID)
+		regions[displayName] = region.LocationID
+	}
+	return regions, nil
 }
 
 func executeCommandWithResult(command string, args []string) ([]byte, error) {
