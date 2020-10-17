@@ -1,8 +1,10 @@
 package templates
 
 import (
+	"log"
 	"os"
 	"path"
+	"regexp"
 	"strings"
 
 	"github.com/iancoleman/strcase"
@@ -15,7 +17,12 @@ import (
 func CreateEntryFunctionName(args []string, runtime string) string {
 	switch {
 	case strings.Contains(runtime, config.Python):
-		return strcase.ToSnake(args[0])
+		reg, err := regexp.Compile("[^a-zA-Z0-9]+")
+		if err != nil {
+			log.Fatal(err)
+		}
+		functionName := reg.ReplaceAllString(args[0], "_")
+		return strcase.ToSnake(functionName)
 	default:
 		// Currently unreachable, as the `runtime` args
 		// is checked before starting
