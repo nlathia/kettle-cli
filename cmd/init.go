@@ -40,7 +40,7 @@ func runInit(cmd *cobra.Command, args []string) {
 		key    string
 	}
 
-	s := spinner.StartNew("Collecting Google Cloud projects...")
+	s := spinner.StartNew("Collecting Google Cloud projects and regions...")
 	cloudProjects, err := getGoogleCloudProjects()
 	if err != nil {
 		fmt.Printf("Unable to query for active projects: %v", err)
@@ -50,7 +50,6 @@ func runInit(cmd *cobra.Command, args []string) {
 		fmt.Printf("Could not find any active Google projects")
 		return
 	}
-	s.Stop()
 
 	deploymentRegions, err := getGoogleCloudRegions()
 	if err != nil {
@@ -61,6 +60,7 @@ func runInit(cmd *cobra.Command, args []string) {
 		fmt.Printf("Could not find any active Google projects")
 		return
 	}
+	s.Stop()
 
 	configChoices := []configChoice{
 		{
