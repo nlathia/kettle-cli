@@ -26,19 +26,6 @@ You can install `operator` using `brew` and [the operatorai tap](https://github.
 ❯ brew install operator
 ```
 
-### Installing with Go
-
-Install the requirements, if you do not already have them:
-
-1. [Download and install Go](https://golang.org/doc/install).
-
-Install `go-bindata` and `operator` with:
-
-```bash
-❯ go get -u github.com/go-bindata/go-bindata/...
-❯ go get -u github.com/operatorai/operator/...
-```
-
 ## Usage
 
 Set up the CLI tool using `operator init`. It will take you through a one-off set up:
