@@ -110,7 +110,7 @@ func runInit(cmd *cobra.Command, args []string) {
 		},
 	}
 
-	// Iterate on all of the choices
+	// Iterate on the flags first, which are quicker to validate
 	for _, choice := range configChoices {
 		if choice.flagValue != "" {
 			// The user has input a value as a flag; so we validate & store it
@@ -119,7 +119,13 @@ func runInit(cmd *cobra.Command, args []string) {
 				return
 			}
 			viper.Set(choice.key, choice.flagValue)
-		} else {
+		}
+	}
+
+	// Iterate on all of the remaining choices second, since
+	// it is slower to collect their values
+	for _, choice := range configChoices {
+		if choice.flagValue == "" {
 			// The user has not input a value as a flag; we collect the
 			// available values and show them as a prompt
 			values, err := choice.collectValuesFunc()
