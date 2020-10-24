@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -25,78 +26,119 @@ The init command allows you to set up your preferences.`,
 	Run: runInit,
 }
 
+var initValues *config.TemplateConfig
+
 func init() {
 	rootCmd.AddCommand(initCmd)
+
+	// Enable operator init to also work with flags
+	initValues = &config.TemplateConfig{}
+	initCmd.Flags().StringVar(&initValues.Type, "type", "", "The type of deployment to create")
+	initCmd.Flags().StringVar(&initValues.Runtime, "runtime", "", "The function's runtime language")
+	initCmd.Flags().StringVar(&initValues.DeploymentRegion, "region", "", "The region to deploy to")
+
+	// Google Cloud specific flags
+	initCmd.Flags().StringVar(&initValues.ProjectID, "project-id", "", "The gcloud project use")
 }
 
 func runInit(cmd *cobra.Command, args []string) {
+
 	// A configChoice is defined as:
-	// 1. The label, which is shown in the prompt
-	// 2. The values (keys are shown in the prompt, values are stored in config)
-	// 3. The config key (the selection will be stored in viper using this)
 	type configChoice struct {
-		label  string
-		values map[string]string
-		key    string
-	}
+		// The label, which is shown in the prompt to the end user
+		label string
 
-	s := spinner.StartNew("Collecting Google Cloud projects and regions...")
-	cloudProjects, err := getGoogleCloudProjects()
-	if err != nil {
-		fmt.Printf("Unable to query for active projects: %v", err)
-		return
-	}
-	if len(cloudProjects) == 0 {
-		fmt.Printf("Could not find any active Google projects")
-		return
-	}
+		// The config key: the selection will be stored in viper using this
+		key string
 
-	deploymentRegions, err := getGoogleCloudRegions()
-	if err != nil {
-		fmt.Printf("Unable to query for deployment regions: %v", err)
-		return
+		// The flagValue, which has optionally been added by the user
+		flagValue string
+
+		// A function to collect values if the user does not provide one via a flag
+		collectValuesFunc func() (map[string]string, error)
+
+		// A function to validate the choice
+		validationFunc func(string) error
 	}
-	if len(deploymentRegions) == 0 {
-		fmt.Printf("Could not find any active Google projects")
-		return
-	}
-	s.Stop()
 
 	configChoices := []configChoice{
 		{
 			// Pick a Google Cloud Project
-			label:  "Google Cloud Project",
-			values: cloudProjects,
-			key:    config.ProjectID,
+			label:             "Google Cloud Project",
+			key:               config.ProjectID,
+			flagValue:         initValues.ProjectID,
+			collectValuesFunc: getGoogleCloudProjects,
+			validationFunc:    isActiveGoogleCloudProject,
 		},
 		{
 			// Pick a deployment region
-			label:  "Deployment Region",
-			values: deploymentRegions,
-			key:    config.DeploymentRegion,
+			label:             "Deployment Region",
+			key:               config.DeploymentRegion,
+			flagValue:         initValues.DeploymentRegion,
+			collectValuesFunc: getGoogleCloudRegions,
+			validationFunc:    isValidGoogleCloudRegion,
 		},
 		{
 			// Pick the default deployment type
-			label:  "Deployment type",
-			values: config.DeploymentNames,
-			key:    config.DeploymentType,
+			label:     "Deployment type",
+			key:       config.DeploymentType,
+			flagValue: initValues.Type,
+			collectValuesFunc: func() (map[string]string, error) {
+				return config.DeploymentNames, nil
+			},
+			validationFunc: func(v string) error {
+				if !config.DeploymentTypes.Contains(v) {
+					return errors.New(fmt.Sprintf("unknown type: %s (%s)", v, config.DeploymentTypes))
+				}
+				return nil
+			},
 		},
 		{
 			// Pick the default programming language
-			label:  "Programming language",
-			values: config.RuntimeNames,
-			key:    config.Runtime,
+			label:     "Programming language",
+			key:       config.Runtime,
+			flagValue: initValues.Runtime,
+			collectValuesFunc: func() (map[string]string, error) {
+				return config.RuntimeNames, nil
+			},
+			validationFunc: func(v string) error {
+				if !config.Runtimes.Contains(v) {
+					return errors.New(fmt.Sprintf("unknown runtime: %s (%s)", v, config.Runtimes))
+				}
+				return nil
+			},
 		},
 	}
 
-	// Iterate on all of the choices
+	// Iterate on the flags first, which are quicker to validate
 	for _, choice := range configChoices {
-		value, err := getValue(choice.label, choice.values)
-		if err != nil {
-			fmt.Printf("Unknown value: %v\n", value)
-			return
+		if choice.flagValue != "" {
+			// The user has input a value as a flag; so we validate & store it
+			if err := choice.validationFunc(choice.flagValue); err != nil {
+				fmt.Printf("Error: %v", err)
+				return
+			}
+			viper.Set(choice.key, choice.flagValue)
 		}
-		viper.Set(choice.key, value)
+	}
+
+	// Iterate on all of the remaining choices second, since
+	// it is slower to collect their values
+	for _, choice := range configChoices {
+		if choice.flagValue == "" {
+			// The user has not input a value as a flag; we collect the
+			// available values and show them as a prompt
+			values, err := choice.collectValuesFunc()
+			if err != nil {
+				fmt.Printf("Error: %v", err)
+				return
+			}
+			value, err := getValue(choice.label, values)
+			if err != nil {
+				return
+			}
+			viper.Set(choice.key, value)
+		}
 	}
 
 	// Does not use SafeWrite - overwrites everything
@@ -121,13 +163,25 @@ func getValue(label string, values map[string]string) (string, error) {
 	return values[result], nil
 }
 
+func getString(label string, validation func(string) error) (string, error) {
+	prompt := promptui.Prompt{
+		Label:    label,
+		Validate: validation,
+	}
+	return prompt.Run()
+}
+
 func getGoogleCloudProjects() (map[string]string, error) {
-	// Construct the gcloud command
+	s := spinner.StartNew("Collecting Google Cloud projects...")
+	defer s.Stop()
+
 	// gcloud projects list --format="json"
+	projectListLimit := 25
 	commandArgs := []string{
 		"projects",
 		"list",
 		"--format=\"json\"",
+		fmt.Sprintf("--limit=%d", projectListLimit),
 	}
 
 	output, err := executeCommandWithResult("gcloud", commandArgs)
@@ -143,16 +197,55 @@ func getGoogleCloudProjects() (map[string]string, error) {
 	if err := json.Unmarshal(output, &results); err != nil {
 		return nil, err
 	}
+	if len(results) == projectListLimit {
+		// Bail if the user has too many projects to 'reasonably' display
+		return nil, errors.New(fmt.Sprintf("you have %d or more Google Cloud projects. "+
+			"Please use operator init --project-id <id> to specify a project.", projectListLimit))
+	}
 
 	projectIDs := map[string]string{}
 	for _, project := range results {
-		projectIDs[project.Name] = project.ProjectID
+		displayName := fmt.Sprintf("%s (%s)", project.Name, project.ProjectID)
+		projectIDs[displayName] = project.Name
 	}
 	return projectIDs, nil
 }
 
+func isActiveGoogleCloudProject(projectID string) error {
+	s := spinner.StartNew(fmt.Sprintf("Checking Google Cloud project: %s...", projectID))
+	defer s.Stop()
+
+	// gcloud projects describe <id> --format="json"
+	commandArgs := []string{
+		"projects",
+		"describe",
+		projectID,
+		"--format=\"json\"",
+	}
+
+	output, err := executeCommandWithResult("gcloud", commandArgs)
+	if err != nil {
+		return err
+	}
+
+	type gcloudResult struct {
+		LifecycleState string `json:"lifecycleState"`
+	}
+	var result gcloudResult
+	if err := json.Unmarshal(output, &result); err != nil {
+		return err
+	}
+
+	if result.LifecycleState != "ACTIVE" {
+		return errors.New("Project is not currently active")
+	}
+	return nil
+}
+
 func getGoogleCloudRegions() (map[string]string, error) {
-	// Construct the gcloud command
+	s := spinner.StartNew("Collecting Google Cloud regions...")
+	defer s.Stop()
+
 	// gcloud functions regions list --format="json"
 	commandArgs := []string{
 		"functions",
@@ -181,6 +274,39 @@ func getGoogleCloudRegions() (map[string]string, error) {
 		regions[displayName] = region.LocationID
 	}
 	return regions, nil
+}
+
+func isValidGoogleCloudRegion(locationID string) error {
+	s := spinner.StartNew("Collecting Google Cloud regions...")
+	defer s.Stop()
+
+	// gcloud functions regions list --format="json"
+	commandArgs := []string{
+		"functions",
+		"regions",
+		"list",
+		"--format=\"json\"",
+	}
+
+	output, err := executeCommandWithResult("gcloud", commandArgs)
+	if err != nil {
+		return err
+	}
+
+	type gcloudResults struct {
+		LocationID string `json:"locationId"`
+	}
+	var results []gcloudResults
+	if err := json.Unmarshal(output, &results); err != nil {
+		return err
+	}
+
+	for _, region := range results {
+		if region.LocationID == locationID {
+			return nil
+		}
+	}
+	return errors.New(fmt.Sprintf("unknown region: %s", locationID))
 }
 
 func executeCommandWithResult(command string, args []string) ([]byte, error) {

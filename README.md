@@ -28,7 +28,7 @@ You can install `operator` using `brew` and [the operatorai tap](https://github.
 
 ## Usage
 
-Set up the CLI tool using `operator init`. It will take you through a one-off set up:
+Optionally, set up the CLI tool using `operator init`. It will take you through a one-off set up, and store your preferences.
 
 ```bash
 ❯ operator init
@@ -39,7 +39,7 @@ Use the arrow keys to navigate: ↓ ↑ → ←
     Google Cloud Run
 ```
 
-Create a new deployment with `operator create`:
+Create a new deployment with `operator create` (check out `operator create --help` for a full list of options).
 
 ```bash
 ❯ operator create service.hello-world
@@ -53,11 +53,13 @@ To get started, use the `make install` command which will create a `pyenv` virtu
 ❯ cd service.hello-world
 ❯ make install # To create a pyenv-virtualenv
 ```
+
 Launch it locally:
 
 ```bash
 ❯ make localhost
 ```
+
 ... and, when you're ready, deploy it!
 
 ```bash
