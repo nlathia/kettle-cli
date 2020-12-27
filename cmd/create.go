@@ -36,7 +36,8 @@ func init() {
 	rootCmd.AddCommand(createCmd)
 	err := config.Read()
 	if err != nil {
-		runInit(nil, nil)
+		// User has not run operator init
+		return
 	}
 
 	// Set up the config for this template
@@ -50,6 +51,10 @@ func init() {
 }
 
 func validateCreateArgs(cmd *cobra.Command, args []string) error {
+	if configValues == nil {
+		return errors.New("please run operator init to set up this tool")
+	}
+
 	// Validate that args exist
 	if len(args) == 0 {
 		return errors.New("please specify a name")
