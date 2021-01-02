@@ -8,6 +8,7 @@ import (
 )
 
 type TemplateConfig struct {
+	CloudProvider    string `yaml:"cloud_provider"`
 	ProjectID        string `yaml:"project_id"`
 	Name             string `yaml:"name"`
 	FunctionName     string `yaml:"entrypoint"`

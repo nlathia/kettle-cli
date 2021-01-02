@@ -81,16 +81,16 @@ func validateCreateArgs(cmd *cobra.Command, args []string) error {
 	}
 
 	// Validate the selected runtime is supported
-	exists = config.Runtimes.Contains(configValues.Runtime)
-	if !exists {
-		return fmt.Errorf("runtime (%v) needs to be one of (%v)", configValues.Runtime, config.Runtimes.ToSlice())
-	}
+	// exists = config.Runtimes.Contains(configValues.Runtime)
+	// if !exists {
+	// return fmt.Errorf("runtime (%v) needs to be one of (%v)", configValues.Runtime, config.Runtimes.ToSlice())
+	// }
 
 	// Validate the selected type of deployment
-	exists = config.DeploymentTypes.Contains(configValues.Type)
-	if !exists {
-		return fmt.Errorf("type (%v) needs to be one of (%v)", configValues.Type, config.DeploymentTypes.ToSlice())
-	}
+	// exists = config.DeploymentTypes.Contains(configValues.Type)
+	// if !exists {
+	// return fmt.Errorf("type (%v) needs to be one of (%v)", configValues.Type, config.DeploymentTypes.ToSlice())
+	// }
 	return nil
 }
 

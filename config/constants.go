@@ -1,54 +1,58 @@
 package config
 
-import (
-	mapset "github.com/deckarep/golang-set"
-)
-
+// Shared constants
 const (
-	// viper config keys
-	CloudProvider  = "cloud_provider"
-	DeploymentType = "deployment_type"
-	Runtime        = "language"
-
-	// Google Cloud deployments
-	GoogleCloud      = "gcloud"
-	ProjectID        = "project_id"
-	DeploymentRegion = "region"
-
-	// AWS deployments
-	// @TODO
-
-	// Deployment types
-	GoogleCloudFunction = "functions"
-	GoogleCloudRun      = "run"
-	AWSLambda           = "lambda"
-
-	// Supported languages
-	Python = "python37"
-	GoLang = "go113"
-
-	// Service config file name
+	Version          = "v0.0.2-alpha"
 	DeploymentConfig = "operator.config"
 )
 
-var DeploymentTypes = mapset.NewSetWith(
-	GoogleCloudFunction,
-	GoogleCloudRun,
-	AWSLambda,
+// Cloud providers
+const (
+	CloudProvider = "cloud_provider"
+	GoogleCloud   = "gcloud"
+	AWS           = "aws"
 )
 
-var DeploymentNames = map[string]string{
-	"Google Cloud Function": GoogleCloudFunction,
-	"Google Cloud Run":      GoogleCloudRun,
-	"AWS Lambda":            AWSLambda,
+var CloudProviderNames = map[string]string{
+	"Google Cloud (GCP)":        GoogleCloud,
+	"Amazon Web Services (AWS)": AWS,
 }
 
-var Runtimes = mapset.NewSetWith(
-	Python,
-	GoLang,
+// Deployment types
+const (
+	DeploymentType      = "deployment_type"
+	GoogleCloudFunction = "functions"
+	GoogleCloudRun      = "run"
+	AWSLambda           = "lambda"
+)
+
+var DeploymentNames = map[string]map[string]string{
+	GoogleCloud: map[string]string{
+		"Google Cloud Function": GoogleCloudFunction,
+		"Google Cloud Run":      GoogleCloudRun,
+	},
+	AWS: map[string]string{
+		"AWS Lambda": AWSLambda,
+	},
+}
+
+// Supported languages
+const (
+	Runtime = "language"
+	Python  = "python37"
+	GoLang  = "go113"
 )
 
 var RuntimeNames = map[string]string{
 	"Python (3.7)": Python,
 	"Go (1.13)":    GoLang,
 }
+
+// Google Cloud deployments
+const (
+	ProjectID        = "project_id"
+	DeploymentRegion = "region"
+
+	// AWS deployments
+	// @TODO
+)

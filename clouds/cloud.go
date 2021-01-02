@@ -8,6 +8,8 @@ import (
 )
 
 type Cloud interface {
+	Setup() error
+
 	Deploy(directory string, config *config.TemplateConfig) error
 }
 

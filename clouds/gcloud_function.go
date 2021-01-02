@@ -8,6 +8,10 @@ import (
 
 type GoogleCloudFunction struct{}
 
+func (GoogleCloudFunction) Setup() error {
+	return gcpSetup()
+}
+
 func (GoogleCloudFunction) Deploy(directory string, config *config.TemplateConfig) error {
 	// Construct the gcloud command
 	commandArgs := []string{
