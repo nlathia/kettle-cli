@@ -7,7 +7,19 @@ import (
 	"github.com/spf13/viper"
 )
 
-func Collect(configChoices []ConfigChoice) error {
+func Collect(configChoices []*ConfigChoice) error {
+	// Iterate on the flags first, which are quicker to validate
+	for _, choice := range configChoices {
+		if choice.FlagValue != "" {
+			// The user has input a value as a flag; so we validate & store it
+			if err := choice.ValidationFunc(choice.FlagValue); err != nil {
+				return err
+			}
+			viper.Set(choice.Key, choice.FlagValue)
+		}
+	}
+
+	// Iterate over all the choices
 	for _, choice := range configChoices {
 		if choice.FlagValue == "" {
 			// The user has not input a value as a flag; we collect the

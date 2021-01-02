@@ -3,6 +3,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -16,14 +17,14 @@ import (
 var initCmd = &cobra.Command{
 	Use:   "init",
 	Short: "Set up the operator CLI tool",
-	Long: `The operator CLI tool supports multiple types of deployments: Google Cloud Functions,
-	 Cloud Run Containers, and AWS Lambda functions.
+	Long: `The operator CLI tool supports multiple types of deployments: Google Cloud Functions, 
+Cloud Run Containers, and AWS Lambda functions.
 
-The init command allows you to set up your preferences.`,
+The init command allows you to set up your default preferences.`,
 	Run: runInit,
 }
 
-var configChoices = []preferences.ConfigChoice{
+var configChoices = []*preferences.ConfigChoice{
 	{
 		// Pick a cloud provider
 		Label:           "Cloud Provider",
@@ -40,8 +41,10 @@ var configChoices = []preferences.ConfigChoice{
 	{
 		// Pick a deployment type; assumes that the 'Pick a cloud provider'
 		// step has already run and can not be set via a flag (to make things simpler)
-		Label: "Deployment type",
-		Key:   config.DeploymentType,
+		Label:           "Deployment type",
+		Key:             config.DeploymentType,
+		FlagKey:         "type",
+		FlagDescription: "The type of deployment (function, run, lambda)",
 		CollectValuesFunc: func() (map[string]string, error) {
 			selectedCloud := viper.GetString(config.CloudProvider)
 			if selectedCloud != "" {
@@ -76,31 +79,28 @@ func init() {
 	rootCmd.AddCommand(initCmd)
 
 	// Enable operator init to also work with flags
+	// This currently adds all available flags, without checking for consistency
+	// E.g., using --cloud aws and a GCP config flag would still parse but would
+	// fail on validation
+
+	// Add global flags
 	for _, configChoice := range configChoices {
 		if configChoice.FlagKey != "" {
 			initCmd.Flags().StringVar(&configChoice.FlagValue, configChoice.FlagKey, "", configChoice.FlagDescription)
 		}
 	}
 
-	// initCmd.Flags().StringVar(&initValues.Runtime, "runtime", "")
-	// Google Cloud specific flags
-	// initCmd.Flags().StringVar(&initValues.DeploymentRegion, "region", "", "The region to deploy to")
-	// initCmd.Flags().StringVar(&initValues.ProjectID, "project-id", "", "The gcloud project use")
-}
-
-func runInit(cmd *cobra.Command, args []string) {
-	// Iterate on the flags first, which are quicker to validate
-	for _, choice := range configChoices {
-		if choice.FlagValue != "" {
-			// The user has input a value as a flag; so we validate & store it
-			if err := choice.ValidationFunc(choice.FlagValue); err != nil {
-				fmt.Printf("Error: %v", err)
-				return
-			}
-			viper.Set(choice.Key, choice.FlagValue)
+	// Add GCP-specific flags
+	for _, configChoice := range clouds.GcpConfigChoices {
+		if configChoice.FlagKey != "" {
+			initCmd.Flags().StringVar(&configChoice.FlagValue, configChoice.FlagKey, "", configChoice.FlagDescription)
 		}
 	}
 
+	// @TODO Add AWS-specific flags
+}
+
+func runInit(cmd *cobra.Command, args []string) {
 	// Collect the remaining global preferences
 	err := preferences.Collect(configChoices)
 	if err != nil {
@@ -108,7 +108,7 @@ func runInit(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	// Run the cloud-specific setup
+	// // Run the cloud-specific setup
 	selectedDeploymentType := viper.GetString(config.DeploymentType)
 	cloudProvider, err := clouds.GetCloudProvider(selectedDeploymentType)
 	if err != nil {
@@ -128,12 +128,12 @@ func runInit(cmd *cobra.Command, args []string) {
 
 // mapContainsValue returns an error if a map doesn't contain a specific value
 func mapContainsValue(value string, mapValues map[string]string) error {
-	values := make([]string, len(mapValues))
+	values := []string{}
 	for _, mapValue := range mapValues {
 		if mapValue == value {
 			return nil
 		}
 		values = append(values, mapValue)
 	}
-	return errors.New(fmt.Sprintf("unknown value: %s (%s)", value, values))
+	return errors.New(fmt.Sprintf("unknown value: %s (%s)", value, strings.Join(values, ", ")))
 }

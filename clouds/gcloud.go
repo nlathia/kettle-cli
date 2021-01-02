@@ -11,11 +11,13 @@ import (
 	"github.com/janeczku/go-spinner"
 )
 
-var GcpConfigChoices = []preferences.ConfigChoice{
+var GcpConfigChoices = []*preferences.ConfigChoice{
 	{
 		// Pick a Google Cloud Project
 		Label:             "Google Cloud Project",
 		Key:               config.ProjectID,
+		FlagKey:           "gcp-project-id",
+		FlagDescription:   "The id of the GCP project to use",
 		CollectValuesFunc: getGoogleCloudProjects,
 		ValidationFunc:    isActiveGoogleCloudProject,
 	},
@@ -23,6 +25,8 @@ var GcpConfigChoices = []preferences.ConfigChoice{
 		// Pick a deployment region
 		Label:             "Deployment Region",
 		Key:               config.DeploymentRegion,
+		FlagKey:           "deployment-region",
+		FlagDescription:   "The name of the GCP deployment region to use",
 		CollectValuesFunc: getGoogleCloudRegions,
 		ValidationFunc:    isValidGoogleCloudRegion,
 	},
