@@ -7,12 +7,13 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/operatorai/operator/config"
+	"github.com/operatorai/operator/preferences"
 )
 
 type GoogleCloudRun struct{}
 
 func (GoogleCloudRun) Setup() error {
-	return gcpSetup()
+	return preferences.Collect(GcpConfigChoices)
 }
 
 func (GoogleCloudRun) Deploy(directory string, cfg *config.TemplateConfig) error {

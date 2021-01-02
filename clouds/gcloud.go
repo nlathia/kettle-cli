@@ -5,62 +5,27 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/janeczku/go-spinner"
-	"github.com/spf13/viper"
-
 	"github.com/operatorai/operator/config"
+	"github.com/operatorai/operator/preferences"
+
+	"github.com/janeczku/go-spinner"
 )
 
-func gcpSetup() error {
-
-	// A configChoice is defined as:
-	type configChoice struct {
-		// The label, which is shown in the prompt to the end user
-		label string
-
-		// The config key: the selection will be stored in viper using this
-		key string
-
-		// A function to collect values if the user does not provide one via a flag
-		collectValuesFunc func() (map[string]string, error)
-
-		// A function to validate the choice
-		validationFunc func(string) error
-	}
-
-	configChoices := []configChoice{
-		{
-			// Pick a Google Cloud Project
-			label:             "Google Cloud Project",
-			key:               config.ProjectID,
-			collectValuesFunc: getGoogleCloudProjects,
-			validationFunc:    isActiveGoogleCloudProject,
-		},
-		{
-			// Pick a deployment region
-			label:             "Deployment Region",
-			key:               config.DeploymentRegion,
-			collectValuesFunc: getGoogleCloudRegions,
-			validationFunc:    isValidGoogleCloudRegion,
-		},
-	}
-
-	// Iterate on all of the remaining choices second, since
-	// it is slower to collect their values
-	for _, choice := range configChoices {
-		values, err := choice.collectValuesFunc()
-		if err != nil {
-			fmt.Printf("Error: %v", err)
-			return err
-		}
-		value, err := getValue(choice.label, values)
-		if err != nil {
-			return err
-		}
-		viper.Set(choice.key, value)
-	}
-
-	return nil
+var GcpConfigChoices = []preferences.ConfigChoice{
+	{
+		// Pick a Google Cloud Project
+		Label:             "Google Cloud Project",
+		Key:               config.ProjectID,
+		CollectValuesFunc: getGoogleCloudProjects,
+		ValidationFunc:    isActiveGoogleCloudProject,
+	},
+	{
+		// Pick a deployment region
+		Label:             "Deployment Region",
+		Key:               config.DeploymentRegion,
+		CollectValuesFunc: getGoogleCloudRegions,
+		ValidationFunc:    isValidGoogleCloudRegion,
+	},
 }
 
 func getGoogleCloudProjects() (map[string]string, error) {
@@ -69,23 +34,20 @@ func getGoogleCloudProjects() (map[string]string, error) {
 
 	// gcloud projects list --format="json"
 	projectListLimit := 25
-	commandArgs := []string{
+	output, err := executeCommandWithResult("gcloud", []string{
 		"projects",
 		"list",
 		"--format=\"json\"",
 		fmt.Sprintf("--limit=%d", projectListLimit),
-	}
-
-	output, err := executeCommandWithResult("gcloud", commandArgs)
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	type gcloudResults struct {
+	var results []struct {
 		ProjectID string `json:"projectId"`
 		Name      string `json:"name"`
 	}
-	var results []gcloudResults
 	if err := json.Unmarshal(output, &results); err != nil {
 		return nil, err
 	}
@@ -109,26 +71,22 @@ func isActiveGoogleCloudProject(projectID string) error {
 	defer s.Stop()
 
 	// gcloud projects describe <id> --format="json"
-	commandArgs := []string{
+	output, err := executeCommandWithResult("gcloud", []string{
 		"projects",
 		"describe",
 		projectID,
 		"--format=\"json\"",
-	}
-
-	output, err := executeCommandWithResult("gcloud", commandArgs)
+	})
 	if err != nil {
 		return err
 	}
 
-	type gcloudResult struct {
+	var result struct {
 		LifecycleState string `json:"lifecycleState"`
 	}
-	var result gcloudResult
 	if err := json.Unmarshal(output, &result); err != nil {
 		return err
 	}
-
 	if result.LifecycleState != "ACTIVE" {
 		return errors.New("Project is not currently active")
 	}
@@ -140,23 +98,20 @@ func getGoogleCloudRegions() (map[string]string, error) {
 	defer s.Stop()
 
 	// gcloud functions regions list --format="json"
-	commandArgs := []string{
+	output, err := executeCommandWithResult("gcloud", []string{
 		"functions",
 		"regions",
 		"list",
 		"--format=\"json\"",
-	}
-
-	output, err := executeCommandWithResult("gcloud", commandArgs)
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	type gcloudResults struct {
+	var results []struct {
 		DisplayName string `json:"displayName"`
 		LocationID  string `json:"locationId"`
 	}
-	var results []gcloudResults
 	if err := json.Unmarshal(output, &results); err != nil {
 		return nil, err
 	}
@@ -174,22 +129,19 @@ func isValidGoogleCloudRegion(locationID string) error {
 	defer s.Stop()
 
 	// gcloud functions regions list --format="json"
-	commandArgs := []string{
+	output, err := executeCommandWithResult("gcloud", []string{
 		"functions",
 		"regions",
 		"list",
 		"--format=\"json\"",
-	}
-
-	output, err := executeCommandWithResult("gcloud", commandArgs)
+	})
 	if err != nil {
 		return err
 	}
 
-	type gcloudResults struct {
+	var results []struct {
 		LocationID string `json:"locationId"`
 	}
-	var results []gcloudResults
 	if err := json.Unmarshal(output, &results); err != nil {
 		return err
 	}
