@@ -19,6 +19,8 @@ func GetCloudProvider(cloudType string) (Cloud, error) {
 		return GoogleCloudFunction{}, nil
 	case config.GoogleCloudRun:
 		return GoogleCloudRun{}, nil
+	case config.AWSLambda:
+		return AWSLambdaFunction{}, nil
 	}
 	return nil, errors.New(fmt.Sprintf("Unknown cloud: %s", cloudType))
 }
