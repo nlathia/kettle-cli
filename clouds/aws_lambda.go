@@ -140,9 +140,10 @@ func removeExistingDeployment() error {
 }
 
 // lambdaExists queries whether a lambda function already exists
-// any error is
 func lambdaExists(name string) bool {
 	fmt.Println("🚢  Checking if ", name, "already exists as a lambda function")
+
+	// @TODO suppress output from this command
 	err := executeCommand("aws", []string{
 		"lambda",
 		"get-function",
