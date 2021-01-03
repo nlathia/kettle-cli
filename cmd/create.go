@@ -45,10 +45,10 @@ func init() {
 	createCmd.Flags().StringVar(&configValues.CloudProvider, "cloud", viper.GetString(config.CloudProvider), "The name of the cloud provider")
 	createCmd.Flags().StringVar(&configValues.Type, "type", viper.GetString(config.DeploymentType), "The type of deployment to create")
 	createCmd.Flags().StringVar(&configValues.Runtime, "runtime", viper.GetString(config.Runtime), "The function's runtime language")
-	createCmd.Flags().StringVar(&configValues.DeploymentRegion, "region", viper.GetString(config.DeploymentRegion), "The region to deploy to")
 
 	// Google Cloud specific flags
 	createCmd.Flags().StringVar(&configValues.ProjectID, "project-id", viper.GetString(config.ProjectID), "The gcloud project use")
+	createCmd.Flags().StringVar(&configValues.DeploymentRegion, "region", viper.GetString(config.DeploymentRegion), "The region to deploy to")
 }
 
 func validateCreateArgs(cmd *cobra.Command, args []string) error {
@@ -115,6 +115,18 @@ func runCreate(cmd *cobra.Command, args []string) error {
 		configValues.Type,
 	)
 	assetNames := templates.AssetNames()
+
+	// Basic error checking
+	numAssetFiles := 0
+	for _, assetName := range assetNames {
+		if strings.Contains(assetName, templateRoot) {
+			numAssetFiles++
+		}
+	}
+	if numAssetFiles == 0 {
+		return errors.New(fmt.Sprintf("no template for: %s", templateRoot))
+	}
+
 	for _, assetName := range assetNames {
 		// Skip assets that are not part of the desired template
 		if !strings.Contains(assetName, templateRoot) {
