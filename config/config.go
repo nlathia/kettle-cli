@@ -9,12 +9,12 @@ import (
 
 type TemplateConfig struct {
 	CloudProvider    string `yaml:"cloud_provider"`
-	ProjectID        string `yaml:"project_id"`
+	ProjectID        string `yaml:"project_id,omitempty"`
 	Name             string `yaml:"name"`
 	FunctionName     string `yaml:"entrypoint"`
 	Runtime          string `yaml:"runtime"`
 	Type             string `yaml:"type"`
-	DeploymentRegion string `yaml:"region"`
+	DeploymentRegion string `yaml:"region,omitempty"`
 	Deployed         string `yaml:"deployed_utc,omitempty"`
 	PackageName      string `yaml:"package,omitempty"`
 }

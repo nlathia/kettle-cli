@@ -22,7 +22,7 @@ var createCmd = &cobra.Command{
 	Long: `The operator CLI tool can automatically create a directory
  with all of the boiler plate that you need to get started.
 	
-	The create command will create a directory with all the code to get you started.`,
+The create command will create a directory with all the code to get you started.`,
 	Args: validateCreateArgs,
 	RunE: runCreate,
 }
@@ -42,6 +42,7 @@ func init() {
 
 	// Set up the config for this template
 	configValues = &config.TemplateConfig{}
+	createCmd.Flags().StringVar(&configValues.CloudProvider, "cloud", viper.GetString(config.CloudProvider), "The name of the cloud provider")
 	createCmd.Flags().StringVar(&configValues.Type, "type", viper.GetString(config.DeploymentType), "The type of deployment to create")
 	createCmd.Flags().StringVar(&configValues.Runtime, "runtime", viper.GetString(config.Runtime), "The function's runtime language")
 	createCmd.Flags().StringVar(&configValues.DeploymentRegion, "region", viper.GetString(config.DeploymentRegion), "The region to deploy to")
@@ -83,13 +84,13 @@ func validateCreateArgs(cmd *cobra.Command, args []string) error {
 	// Validate the selected runtime is supported
 	// exists = config.Runtimes.Contains(configValues.Runtime)
 	// if !exists {
-	// return fmt.Errorf("runtime (%v) needs to be one of (%v)", configValues.Runtime, config.Runtimes.ToSlice())
+	// 	return fmt.Errorf("runtime (%v) needs to be one of (%v)", configValues.Runtime, config.Runtimes.ToSlice())
 	// }
 
 	// Validate the selected type of deployment
 	// exists = config.DeploymentTypes.Contains(configValues.Type)
 	// if !exists {
-	// return fmt.Errorf("type (%v) needs to be one of (%v)", configValues.Type, config.DeploymentTypes.ToSlice())
+	// 	return fmt.Errorf("type (%v) needs to be one of (%v)", configValues.Type, config.DeploymentTypes.ToSlice())
 	// }
 	return nil
 }
@@ -106,14 +107,15 @@ func runCreate(cmd *cobra.Command, args []string) error {
 	}
 
 	// Iterate on all of the template files
+	// Root: templates/<language>/<cloud-provider>/<type>/
 	templateRoot := fmt.Sprintf(
-		"templates/%s/%s/",
-		"gcloud",
+		"templates/%s/%s/%s",
+		configValues.Runtime,
+		configValues.CloudProvider,
 		configValues.Type,
 	)
 	assetNames := templates.AssetNames()
 	for _, assetName := range assetNames {
-
 		// Skip assets that are not part of the desired template
 		if !strings.Contains(assetName, templateRoot) {
 			continue

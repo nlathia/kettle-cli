@@ -108,7 +108,7 @@ func runInit(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	// // Run the cloud-specific setup
+	// Run the cloud-specific setup
 	selectedDeploymentType := viper.GetString(config.DeploymentType)
 	cloudProvider, err := clouds.GetCloudProvider(selectedDeploymentType)
 	if err != nil {
@@ -122,7 +122,7 @@ func runInit(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	// Does not use SafeWrite - overwrites everything
+	// Save the config
 	config.Write()
 }
 
