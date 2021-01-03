@@ -106,7 +106,7 @@ func (AWSLambdaFunction) Deploy(directory string, config *config.TemplateConfig)
 		}
 	}
 
-	// aws lambda wait function-active --function-name config.Name
+	// @TODO aws lambda wait function-active --function-name config.Name
 	return nil
 }
 
