@@ -19,10 +19,6 @@ env PYTHON_CONFIGURE_OPTS="--enable-framework CC=clang" \
         $1
 pyenv local $1
 
-pip install --upgrade pip setuptools wheel
-for i in ./requirements*txt; do
-    echo "\n ⏱  Installing requirements in: $i"
-    pip install -r $i
-done
-
 echo "\n ✅  Done."
+
+source $(dirname $0)/install_dependencies.sh

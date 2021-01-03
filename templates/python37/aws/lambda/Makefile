@@ -1,5 +1,5 @@
 VIRTUALENV_NAME=$(shell pwd | rev | cut -d '/' -f 1 | rev)-dev
-IMAGE_URL=gcr.io/{{ .ProjectID }}/{{ .FunctionName }}:latest
+IMAGE_URL={{ .FunctionName }}:latest
 
 .PHONY: install uninstall test clean docker localhost
 
