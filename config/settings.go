@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"path"
 
@@ -36,8 +35,6 @@ func setConfigPath() {
 
 func Read() error {
 	setConfigPath()
-	viper.SetDefault(DeploymentType, GoogleCloudRun)
-	viper.SetDefault(Runtime, Python)
 	viper.AutomaticEnv() // read in environment variables that match
 
 	// If a config file is found, read it in.
@@ -51,8 +48,7 @@ func Write() {
 	configPath := getConfigPath()
 	if err := viper.SafeWriteConfigAs(configPath); err != nil {
 		if os.IsNotExist(err) {
-			log.Println("Creating new config file")
-			err = viper.WriteConfigAs(configPath)
+			_ = viper.WriteConfigAs(configPath)
 		}
 	}
 	viper.WriteConfigAs(configPath)
