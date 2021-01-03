@@ -61,10 +61,6 @@ func validateCreateArgs(cmd *cobra.Command, args []string) error {
 		return errors.New("please specify a name")
 	}
 
-	// Set the directory and function name
-	configValues.Name = templates.CreateFunctionName(args)
-	configValues.FunctionName = templates.CreateEntryFunctionName(args, configValues.Runtime)
-
 	// Construct the path where we are going to generate the boiler plate
 	var err error
 	directoryPath, err = templates.GetRelativeDirectory(args[0])
@@ -81,21 +77,29 @@ func validateCreateArgs(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("directory already exists")
 	}
 
+	// Validate the input cloud provider
+	if err := mapContainsValue(configValues.CloudProvider, config.CloudProviderNames); err != nil {
+		return err
+	}
+
 	// Validate the selected runtime is supported
-	// exists = config.Runtimes.Contains(configValues.Runtime)
-	// if !exists {
-	// 	return fmt.Errorf("runtime (%v) needs to be one of (%v)", configValues.Runtime, config.Runtimes.ToSlice())
-	// }
+	if err := mapContainsValue(configValues.Runtime, config.RuntimeNames); err != nil {
+		return err
+	}
 
 	// Validate the selected type of deployment
-	// exists = config.DeploymentTypes.Contains(configValues.Type)
-	// if !exists {
-	// 	return fmt.Errorf("type (%v) needs to be one of (%v)", configValues.Type, config.DeploymentTypes.ToSlice())
-	// }
+	if err := mapContainsValue(configValues.Type, config.DeploymentNames[configValues.CloudProvider]); err != nil {
+		return err
+	}
+
 	return nil
 }
 
 func runCreate(cmd *cobra.Command, args []string) error {
+	// Set the directory and function name
+	configValues.Name = templates.CreateFunctionName(args)
+	configValues.FunctionName = templates.CreateEntryFunctionName(args, configValues.Runtime)
+
 	// Print out the config
 	fmt.Println("🎇  Type: ", configValues.Type)
 	fmt.Println("🎇  Language: ", configValues.Runtime)
