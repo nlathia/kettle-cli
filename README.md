@@ -109,7 +109,6 @@ There are many! This is a version 0.
 
 * Only http-triggered cloud functions are supported
 * This assumes that GCP APIs have been enabled and may not fail gracefully
-* There is no support for AWS yet
 
 Please report any bugs or issues to me (neal.lathia@gmail.com) or by raising an issue in this repo.
 
