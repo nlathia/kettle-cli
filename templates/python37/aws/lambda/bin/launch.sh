@@ -1,9 +1,22 @@
+#!/bin/bash
 # Makefile command: `make localhost` 
-# This script launches the function locally
+# This script tests the function locally & interactively
 
-echo "\n ⏱  Launching locally (use ctrl+c to exit)..."
+FILE="event.json"
+if [ -f "$1" ]; then
+    echo "✅  Using $1 as input."
+    FILE="$1"
+elif [ -f "$FILE" ]; then
+    echo "✅  Using $FILE as input."
+else
+    read -p " 🎯 Enter a JSON payload to test: "
+    echo "$REPLY" > "$FILE"
+    validation=$(cat event.json | python -m json.tool)
+    if [[ "$?" -ne 0 ]]; then
+        echo " ❌  Input is not valid JSON, aborting."
+        rm "$FILE"
+        exit 1
+    fi
+fi
 
-echo "\n 🎯 Example test command:"
-echo " $ curl -X POST http://localhost:9000/2015-03-31/functions/function/invocations -d '{\"payload\":\"hello world!\"}'\n"
-
-docker run -p 9000:8080 $1
+python-lambda-local -f {{.FunctionName}} main.py "$FILE"

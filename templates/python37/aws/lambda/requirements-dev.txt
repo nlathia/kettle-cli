@@ -1,1 +1,2 @@
 pytest==6.1.1
+python-lambda-local
