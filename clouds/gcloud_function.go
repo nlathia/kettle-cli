@@ -4,9 +4,14 @@ import (
 	"fmt"
 
 	"github.com/operatorai/operator/config"
+	"github.com/operatorai/operator/preferences"
 )
 
 type GoogleCloudFunction struct{}
+
+func (GoogleCloudFunction) Setup() error {
+	return preferences.Collect(GcpConfigChoices)
+}
 
 func (GoogleCloudFunction) Deploy(directory string, config *config.TemplateConfig) error {
 	// Construct the gcloud command

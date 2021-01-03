@@ -7,11 +7,16 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/operatorai/operator/config"
+	"github.com/operatorai/operator/preferences"
 )
 
 type GoogleCloudRun struct{}
 
-func (g GoogleCloudRun) Deploy(directory string, cfg *config.TemplateConfig) error {
+func (GoogleCloudRun) Setup() error {
+	return preferences.Collect(GcpConfigChoices)
+}
+
+func (GoogleCloudRun) Deploy(directory string, cfg *config.TemplateConfig) error {
 	projectID := viper.GetString(config.ProjectID)
 	if projectID == "" {
 		return errors.New("please run operator init")

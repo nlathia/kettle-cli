@@ -8,6 +8,8 @@ import (
 )
 
 type Cloud interface {
+	Setup() error
+
 	Deploy(directory string, config *config.TemplateConfig) error
 }
 
@@ -17,6 +19,8 @@ func GetCloudProvider(cloudType string) (Cloud, error) {
 		return GoogleCloudFunction{}, nil
 	case config.GoogleCloudRun:
 		return GoogleCloudRun{}, nil
+	case config.AWSLambda:
+		return AWSLambdaFunction{}, nil
 	}
 	return nil, errors.New(fmt.Sprintf("Unknown cloud: %s", cloudType))
 }
