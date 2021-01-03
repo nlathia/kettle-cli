@@ -4,6 +4,6 @@
 echo "\n ⏱  Launching locally (use ctrl+c to exit)..."
 
 echo "\n 🎯 Example test command:"
-echo " $ curl -X POST http://localhost:9090/ -d '{\"key\": \"value\"}'\n\n"
+echo " $ curl -XPOST http://localhost:9000/2015-03-31/functions/function/invocations -d '{\"payload\":\"hello world!\"}'\n"
 
-PORT=8080 && docker run -p 9090:${PORT} -e PORT=${PORT} $1
+docker run -p 9000:8080 $1

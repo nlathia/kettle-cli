@@ -7,6 +7,7 @@
 // templates/python37/aws/lambda/README.md
 // templates/python37/aws/lambda/bin/_config.sh
 // templates/python37/aws/lambda/bin/cleanup.sh
+// templates/python37/aws/lambda/bin/install_dependencies.sh
 // templates/python37/aws/lambda/bin/launch.sh
 // templates/python37/aws/lambda/bin/remove_pyenv.sh
 // templates/python37/aws/lambda/bin/setup_pyenv.sh
@@ -162,7 +163,7 @@ func templatesHelpersGo() (*asset, error) {
 	return a, nil
 }
 
-var _templatesPython37AwsLambdaDockerfile = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x5c\x93\x5d\x4f\xdb\x4c\x10\x85\xef\xfd\x2b\x22\xde\xeb\xc4\xfb\xfd\x11\x29\x17\x41\x81\xb7\x11\x90\x20\x63\x5a\xd1\xaa\x8a\x66\x76\x67\x89\x85\xe3\x44\xb1\x69\x4b\x7f\x7d\x65\x82\x08\xe1\xc2\xd6\xcc\x99\xb3\xcf\xd9\xb9\xd8\xff\x06\xeb\xae\xdb\xb5\xe3\x3c\x7f\xac\xba\xf5\x33\x8e\xc2\x76\x93\xc3\xef\xb6\xff\x86\x35\x6c\x30\xc2\x10\xa1\xa5\x61\xb5\x81\x47\x6a\x73\xac\xb7\x98\xef\x5e\xba\xf5\xb6\x91\x23\x9b\xcf\xb6\xe1\x89\xf6\xa9\xaa\x69\xf4\x2e\x66\x97\xc5\xf2\x66\xd0\x86\x3d\x74\x61\x9d\x65\xd3\xd9\x6c\xc0\x48\x72\x19\x53\xb4\xce\xfa\xc4\x80\x79\xf0\x49\xb0\x08\x92\x1b\x07\x9c\xa3\x30\x3a\x00\x0a\x26\x99\x61\xc2\x4b\x47\x1a\x04\x0f\x0e\x9c\x57\x9e\xc5\xa0\x46\x1d\xec\x47\x7f\xfe\x0e\xf2\x57\x9a\x02\xb2\x09\x45\x4c\x5a\x07\xa5\xad\x4f\x9e\xa1\x92\x51\xc5\x80\x36\x0a\x32\x51\x44\x08\xce\x10\x33\x5e\x19\xaf\xb5\x15\x92\x21\x07\xe7\x94\x21\xe6\x53\x38\xa5\x69\xaf\xb8\x12\x8e\x27\x8a\x5c\x9a\xfe\x3e\xce\x1b\xc3\x52\x20\x4a\x48\xc1\x2b\x62\x09\x82\x49\x26\x0a\x30\x51\x06\x19\x12\xa5\xc8\x75\x04\x0d\x46\x49\xf7\x89\x96\x82\xd0\x06\x89\x9b\xe4\x80\x83\x56\x82\x1b\xd4\x91\x73\x26\x82\xec\x97\x61\x9a\x69\x34\xc4\x02\x0a\x50\x26\x78\x81\x28\x93\x61\x42\x0b\xee\x1c\x8f\xa7\x34\xcf\x91\xa4\x56\x3e\x80\x13\xdc\x10\x82\x72\x8a\x71\x6b\x11\x29\x68\xe0\xde\x68\x25\xbd\x72\x5e\x58\x43\x8c\x5c\x72\x4c\x5b\x22\x46\x3c\x7a\x2d\x09\xe0\x94\x06\x68\xc0\x1a\x8a\xde\x25\xe0\xcc\xa2\x93\xd6\x6b\x2e\x95\x88\x2e\x59\x41\x5e\x3b\xa1\x7d\x4c\x9a\x1c\x33\x42\x06\x06\xca\x3a\x16\x02\x68\xe9\x11\x25\xf9\x23\x2d\xbb\x58\x7c\x1d\x5c\x4f\x17\xff\x4f\xa8\x59\xdd\xdf\x8d\xee\xcb\xcb\xa1\x7b\x15\xcb\xef\x93\x71\x4e\x5d\xc8\xeb\x6d\x80\xba\xab\x36\xf4\x2a\xdf\x4e\xcb\x2f\x93\xfc\x17\xec\xf3\x1a\x9a\xc7\x1c\xab\x66\x9c\x3f\xb7\xfb\x83\xeb\xd8\x62\xd5\xe4\xe3\x43\xbb\xdd\x75\x7d\x71\x48\x9a\xad\xae\xe7\xe7\xc5\xb4\x78\x58\x7d\x02\xd5\x15\x8e\xfb\x9f\x51\x6f\xbc\x43\xd9\xcf\xf7\xcf\x4d\x1f\x7f\xd2\x1c\xfc\xbd\xd0\x41\xfb\x74\xac\x0e\x7a\x1f\x59\x57\xf8\xb6\xdc\xcd\xf9\x6c\xba\x2a\xa7\x77\x57\xab\x62\xb9\x2c\x27\xef\xde\x8f\xe3\xe2\x7e\x51\xce\x6f\x2e\x56\xb3\x79\x31\xf9\x98\x93\x65\xdf\x96\xc5\xd5\x6c\x5e\x0c\x8e\xc7\xb2\x8b\x45\x59\x3c\xdc\x2e\xe7\x8b\x72\xf0\xe3\x2c\x7f\x7b\x5b\xd4\x74\xfb\x97\xdd\xb6\x6a\xba\x51\xbb\x3e\xfb\x99\xfd\x0b\x00\x00\xff\xff\x32\xc6\x7d\x62\x90\x03\x00\x00")
+var _templatesPython37AwsLambdaDockerfile = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x2c\xcc\xc1\x4a\x03\x31\x10\xc6\xf1\xfb\x3c\xc5\x50\xef\x93\x83\x07\xc1\xeb\x96\x42\x91\x76\x25\x20\x22\x22\x32\x9b\x0c\xee\x60\x32\x09\x9b\x54\x29\xa5\xef\x2e\xae\x9e\x7f\xdf\xf7\xdf\xf9\xf1\x80\xf5\x34\x25\x0d\x24\x61\x21\xfe\x6e\x2e\x71\x9e\x22\xbb\x7a\xee\x73\xb1\xfb\x5b\xba\x03\xb8\xc1\xa1\xd4\x33\xa6\x12\x38\x61\x28\x51\xb0\x17\xec\xb3\x60\x28\xd6\x59\x4d\x16\xd4\xcc\x1f\x42\xf0\x3c\xfa\x87\xed\xde\xa3\xfb\xe2\xc5\x75\x6e\x9f\x30\x8c\x8f\x2f\x48\x48\xee\x37\xb3\xb7\xd6\x39\xa5\xf5\x1b\xa5\x8a\x49\x14\x0b\x2a\x0d\xfc\xd3\x11\x27\x35\xa7\x7f\x8b\xf7\x55\xff\x91\xda\x0c\x30\x1c\xb6\xf8\xba\xc9\xac\x46\x97\x0b\xed\x4e\x16\xba\x16\x3b\x72\x96\xeb\x75\xf3\x06\x3f\x01\x00\x00\xff\xff\x4c\xf3\xee\x0c\xca\x00\x00\x00")
 
 func templatesPython37AwsLambdaDockerfileBytes() ([]byte, error) {
 	return bindataRead(
@@ -177,12 +178,12 @@ func templatesPython37AwsLambdaDockerfile() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/Dockerfile", size: 912, mode: os.FileMode(420), modTime: time.Unix(1609594669, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/Dockerfile", size: 202, mode: os.FileMode(420), modTime: time.Unix(1609677017, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
-var _templatesPython37AwsLambdaMakefile = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x5c\x90\xd1\x6b\xc2\x30\x10\xc6\x9f\xbd\xbf\xe2\x1e\x04\xf5\xa1\x29\x7b\x2d\x08\x13\x74\x5b\x41\x3b\x91\x29\xec\xa9\xc4\xf4\x5c\xb3\xc5\xa4\xb4\x49\x87\x68\xff\xf7\xd1\x56\x53\xd8\x5b\xee\xf2\xdd\x7d\xbf\xfb\x0e\xf1\xee\x63\xbf\x58\xaf\x92\x43\x9a\x2c\x36\xab\xf9\x78\x5a\xe5\xa4\x14\x16\xbf\x19\xde\xb0\xa4\x1a\x6f\x28\x9c\xc5\x20\xc3\x49\x38\xc1\xe0\x84\x4f\x7d\x7f\x16\x64\x54\x43\xbc\x59\xbc\xae\xd2\xfd\x6e\x3d\xff\x12\x25\x93\x26\xbc\x5e\x91\x6d\x4b\xf3\x4d\xc2\xc6\x4b\x6c\x9a\xae\xf1\xe2\xb4\xb0\xd2\xe8\x84\x9f\x09\x9b\x26\x52\xdc\x52\x65\x01\xd8\xf6\xed\x3d\xf9\x8c\x50\xea\xca\x72\xa5\xd0\xe9\xc7\xab\xfd\x47\xa1\x88\x6b\xcc\x8c\xf8\xa1\x12\x95\x11\x5c\xe5\xa6\x1d\xf3\xb2\x08\x46\xcf\x2c\x3c\x4a\x1d\x96\x74\x36\x35\xa5\xc5\x85\x74\xcd\xaa\x1c\xe0\xa1\x18\x76\x7a\x6d\x45\xd6\x15\x5e\x8a\xe3\xe9\xbf\x0c\x66\x00\xad\x7d\xbb\xbc\xb8\xf4\xa0\x1d\xc9\xe0\xd6\x95\xae\xe8\x8c\x7a\xbc\x08\x46\x77\xce\xa3\x93\x2a\x6b\x73\x5a\x76\xf5\x49\x2a\xc2\xc0\xe2\x78\xea\xa3\x9a\x21\x03\xf0\xe7\x44\xf7\x03\xfd\x72\xc5\x9d\x16\x79\x4f\x36\xcc\xc0\x5f\x00\x00\x00\xff\xff\xe8\x53\x4f\xa8\xa9\x01\x00\x00")
+var _templatesPython37AwsLambdaMakefile = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x5c\x90\x41\x8b\xfa\x30\x10\xc5\xcf\xce\xa7\x98\x83\xa0\x1e\x9a\xf2\xbf\x16\x84\xbf\x60\x77\xb7\xa0\x5d\x91\x55\xd8\x53\x89\xe9\x48\xb3\x1b\x93\xd2\x26\x5d\x44\xfb\xdd\x97\xb6\x9a\xc2\xde\x32\x93\x37\xf3\x7e\xf3\x8e\xc9\xfe\xe3\xb0\xda\xc4\xe9\x31\x4b\x57\xdb\x78\x39\x9d\xd7\x05\x29\x85\xe5\x4f\x8e\x77\xac\xa8\xc1\x3b\x0a\x67\x31\xc8\x71\x16\xce\x30\x38\xe3\xbf\xa1\xbf\x08\x72\x6a\x20\xd9\xae\x5e\xe3\xec\xb0\xdf\x2c\x49\x54\x4c\x9a\xf0\x76\x43\xb6\xab\xcc\x17\x09\x9b\xac\xb1\x6d\xfb\xc6\x8b\xd3\xc2\x4a\xa3\x53\x7e\x21\x6c\xdb\x48\x71\x4b\xb5\x05\x60\xbb\xb7\xf7\xf4\x33\x42\xa9\x6b\xcb\x95\x42\xa7\x9f\xaf\xee\x1f\x85\x22\xae\x31\x37\xe2\x9b\x2a\x54\x46\x70\x55\x98\x6e\xcc\xcb\x22\x98\xfc\x67\xe1\x49\xea\xb0\xa2\x8b\x69\x28\x2b\xaf\xa4\x1b\x56\x17\x00\x4f\xc5\xb8\xd3\x6b\x6b\xb2\xae\xf4\x52\x9c\xce\xff\x64\xb0\x00\xe8\xec\xbb\xe5\xe5\x75\x00\xed\x49\x46\xb7\xbe\x74\x65\x6f\x34\xe0\x45\x30\x79\x70\x9e\x9c\x54\x79\x97\xd3\xba\xaf\xcf\x52\x11\x06\x16\xa7\x73\x1f\xd5\x02\x19\x80\x3f\x27\x7a\x1c\xe8\x97\x2b\xee\xb4\x28\x06\xb2\x71\x06\x7e\x03\x00\x00\xff\xff\x6f\x72\x09\xf9\xa9\x01\x00\x00")
 
 func templatesPython37AwsLambdaMakefileBytes() ([]byte, error) {
 	return bindataRead(
@@ -197,7 +198,7 @@ func templatesPython37AwsLambdaMakefile() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/Makefile", size: 425, mode: os.FileMode(420), modTime: time.Unix(1609594414, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/Makefile", size: 425, mode: os.FileMode(420), modTime: time.Unix(1609677217, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -217,7 +218,7 @@ func templatesPython37AwsLambdaReadmeMd() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/README.md", size: 150, mode: os.FileMode(420), modTime: time.Unix(1609594432, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/README.md", size: 150, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -237,7 +238,7 @@ func templatesPython37AwsLambdaBin_configSh() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/bin/_config.sh", size: 75, mode: os.FileMode(493), modTime: time.Unix(1609594414, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/bin/_config.sh", size: 75, mode: os.FileMode(493), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -257,12 +258,32 @@ func templatesPython37AwsLambdaBinCleanupSh() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/bin/cleanup.sh", size: 245, mode: os.FileMode(493), modTime: time.Unix(1609594414, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/bin/cleanup.sh", size: 245, mode: os.FileMode(493), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
-var _templatesPython37AwsLambdaBinLaunchSh = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x4c\xce\x4f\x4a\x03\x31\x14\xc7\xf1\x7d\x4e\xf1\x23\x2d\xad\x22\xf3\xc7\x5d\x3b\xe0\xd2\x9d\xd2\xa2\xb3\x70\x91\x45\x43\xe6\xd5\x84\xc9\x24\xc3\x24\x91\x96\xd2\x2b\xe8\x11\x3c\x82\x78\x25\x4f\xe0\x11\xa4\xd5\x16\x97\x0f\x3e\xef\xc7\x77\x84\x7b\xd9\xd2\xda\x58\x82\xf2\x5d\x27\x5d\x53\x61\xd5\xc9\x96\x60\xbd\x92\x56\xfb\x10\x57\x60\x23\xd4\xda\x04\x04\x35\x98\x3e\xc2\xca\xe4\x94\xa6\x80\xa8\x09\xeb\xe4\x54\x34\xde\xfd\x7a\xbb\x65\x8c\x94\xf6\xe0\xc2\xe1\xeb\xed\x13\xb8\x3b\x62\xe3\x9e\x4f\x00\x17\x29\x10\x54\x1c\xec\x95\x42\xf4\xa0\x8d\x89\x97\x79\x9e\xf3\x7f\x9f\xdf\xef\xaf\x1f\xb8\xdd\xc8\xae\xb7\x84\x48\x21\x9e\xe3\xf8\x1f\xc2\x18\x2a\x0d\x16\xd9\x13\x96\x8b\xc7\x1a\x3a\xc6\xbe\x2a\x8a\x73\x74\x35\x2f\xe7\x65\x81\xac\xc1\x74\x27\x78\x4b\x5b\xc1\x2b\x08\xfe\x22\x6d\x22\xc1\xf7\x53\xe1\x84\xe3\x8c\x2d\x17\x0f\xf5\xcd\xac\x9c\x95\x98\x4c\xd0\x78\xd5\xd2\x80\x21\x39\x64\x3d\x0e\x03\xd5\x78\x77\x10\x7b\x64\x84\x23\x3d\xdd\xe3\x6b\xf6\x13\x00\x00\xff\xff\x70\x87\xca\xf1\x3a\x01\x00\x00")
+var _templatesPython37AwsLambdaBinInstall_dependenciesSh = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x5c\x8e\xb1\x4d\xc4\x40\x10\x45\xf3\xa9\xe2\xcb\x38\x42\xb2\xc9\x21\x25\x21\xa3\x00\x12\xcb\xfb\xf1\x8e\xb4\xcc\x2c\xbb\x63\x01\x05\x10\xd3\x00\x4d\xd0\x12\x95\x20\x40\x27\xdd\x5d\xfa\xf5\xdf\xd3\xbb\xc0\x9d\xf5\x58\x4a\xe9\x88\x4c\xdc\xbf\x45\x76\x43\x62\xa5\x25\xda\xaa\xec\x22\x9d\x81\x89\x22\x55\x2b\xf4\xff\x8d\x69\xda\xeb\xd6\x96\x44\xfc\xae\x9d\xb1\xd7\x70\x2f\x1d\x2f\x99\x2c\xf2\xe8\x0d\x0a\x35\xcc\x57\x8d\xcf\xbb\x36\x3e\xd1\xa2\x5f\xc6\x6b\xdc\x20\xb9\x00\x00\xd7\xec\x18\x1e\x0c\xdf\x1f\x5f\x38\x64\xa8\x6d\x38\x26\xa0\x76\x8d\x51\x87\x3f\xe2\x24\xa0\x61\xd4\x33\xcf\xe7\x3b\x70\xeb\xc6\x79\x90\xe4\x46\xf9\x09\x00\x00\xff\xff\x46\x28\xa4\xab\xdd\x00\x00\x00")
+
+func templatesPython37AwsLambdaBinInstall_dependenciesShBytes() ([]byte, error) {
+	return bindataRead(
+		_templatesPython37AwsLambdaBinInstall_dependenciesSh,
+		"templates/python37/aws/lambda/bin/install_dependencies.sh",
+	)
+}
+
+func templatesPython37AwsLambdaBinInstall_dependenciesSh() (*asset, error) {
+	bytes, err := templatesPython37AwsLambdaBinInstall_dependenciesShBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/bin/install_dependencies.sh", size: 221, mode: os.FileMode(420), modTime: time.Unix(1609676032, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _templatesPython37AwsLambdaBinLaunchSh = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x4c\xce\x41\x4a\x3b\x31\x14\xc7\xf1\x7d\x4e\xf1\xfb\xa7\x85\xfe\x45\xa6\x93\x5a\x84\x3a\x7b\x77\x8a\x82\x5d\xb8\x98\x45\x43\xe6\xd5\x84\xbe\x49\x86\x24\xa3\x2d\xe2\x15\xf4\x08\x1e\x41\xbc\x92\x27\xf0\x08\x62\xb5\x83\xbb\xc7\xe3\xf3\x78\xdf\x11\x2e\xf5\x86\xd6\x8e\x09\x26\xb4\xad\xf6\x4d\x85\x55\xab\x37\x04\x0e\x46\xb3\x0d\x29\xaf\x20\x46\x58\x5a\x97\x90\x4c\x74\x5d\x06\xeb\xde\x1b\x4b\x09\xd9\x12\xd6\xbd\x37\xd9\x05\xff\xe3\x79\x27\x04\x19\x1b\x20\x6b\x8f\x8f\x97\x77\xe0\x62\x8f\x9d\xbf\x3b\x00\xfc\xef\x13\xc1\xe4\xc8\xc7\x06\x39\x80\xb6\x2e\x1f\x4d\xa7\x53\xf9\xe7\xf2\xf3\xf5\xf9\x0d\xe7\x5b\xdd\x76\x4c\xc8\x94\xf2\x10\x27\x7f\x11\xc6\x30\x7d\x64\x14\xb7\xd7\x57\x37\x4b\xd8\x9c\xbb\xaa\x2c\x87\xe6\xea\x4c\x29\x55\x9e\xa8\xd9\x69\xa1\xe6\xc5\x7c\x56\x1e\x32\xd3\x30\x95\xce\xdf\x07\xa3\xf7\x4b\x14\x0d\x26\x8f\xb5\xec\xf4\x8e\x83\x6e\x6a\x59\xd5\xd2\x12\x73\xc0\x43\x88\xdc\xfc\xab\xe5\xd3\x44\x0a\xd1\x04\xb3\xa1\x88\xd8\x7b\x14\x1d\xbe\x5f\x54\x0b\xb5\x50\x18\xcf\xc4\x57\x00\x00\x00\xff\xff\xae\xac\x00\x4f\x48\x01\x00\x00")
 
 func templatesPython37AwsLambdaBinLaunchShBytes() ([]byte, error) {
 	return bindataRead(
@@ -277,7 +298,7 @@ func templatesPython37AwsLambdaBinLaunchSh() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/bin/launch.sh", size: 314, mode: os.FileMode(420), modTime: time.Unix(1609594414, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/bin/launch.sh", size: 328, mode: os.FileMode(484), modTime: time.Unix(1609677237, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -297,12 +318,12 @@ func templatesPython37AwsLambdaBinRemove_pyenvSh() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/bin/remove_pyenv.sh", size: 412, mode: os.FileMode(493), modTime: time.Unix(1609594414, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/bin/remove_pyenv.sh", size: 412, mode: os.FileMode(493), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
-var _templatesPython37AwsLambdaBinSetup_pyenvSh = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x7c\x52\xc1\x6e\x13\x31\x10\xbd\xfb\x2b\x9e\x36\x7b\x48\x90\x36\xa5\xd7\x54\x3d\xa0\x50\x20\x12\x24\x51\x1b\x90\x50\x5b\x45\x66\x77\x76\x77\x14\xef\x78\xb1\xbd\x09\x95\xb8\x72\xe6\x07\xf8\x09\x7e\x89\x2f\x41\x6e\x52\xd8\xe4\x50\x4b\x96\xec\xf1\x9b\x37\x6f\xde\x78\x80\x0f\x7a\x43\x25\x1b\x42\x6e\x9b\x46\x4b\x31\x41\xa3\x37\x04\x16\x1f\xb4\x31\x6a\x80\x55\xcd\x1e\x3e\x77\xdc\x06\xec\xd8\x18\xe4\x8e\x74\x20\x68\xb4\x0f\x24\x5b\x6c\xd9\x85\x4e\x1b\x90\x6c\xd9\x59\x69\x48\x02\xd4\x00\xaf\xa4\x78\x22\x41\xdc\xb6\x44\xa8\x09\x05\xb5\x24\x05\x49\xce\xe4\x51\x50\xc9\x42\x11\x17\xdf\xd4\x00\x8e\xbe\x76\xec\x28\x72\x78\x44\x55\x43\x3f\x1a\x2b\xe5\x29\x20\x23\xa5\xbc\xed\x5c\x4e\x48\x87\x05\x3b\xd1\x0d\x21\x7d\x39\x3a\x5b\xe7\x56\x4a\xae\xc6\xbe\x56\x8a\x4b\xdc\xde\x22\x1d\x1e\x94\x91\xf3\x6c\xc5\xe3\x3b\x2a\x47\x2d\xb2\xf7\x48\x97\x9f\x57\xef\x16\xf3\xf5\xa7\xab\xeb\x9b\xd9\x62\x3e\xc2\xfd\xfd\x45\xac\x2d\x0a\x00\x28\xaf\x2d\x92\x3b\xc1\x9f\x9f\xbf\x81\xd9\x5e\x3d\x4b\x85\xe5\x43\xa8\xad\x9c\x66\x27\x8f\x49\xfb\x5a\x4f\xad\x9e\x40\x54\xc9\x4a\x1d\xd3\x4e\xa3\x7d\x91\x54\x9f\x82\xfb\x16\x4e\x90\x9e\x27\x2a\x32\x1f\x30\xd3\xc5\xfc\xcd\xec\xed\xc7\xeb\xab\xf5\x62\xb9\xba\xb9\x4c\xb2\x8c\x44\x7f\x31\x94\x95\x4e\x37\xb4\xb3\x6e\x83\xe9\xf4\x32\x37\x5a\xaa\x04\x77\x3d\x65\x87\xf9\xc4\xe3\x3e\x1c\x57\x96\x95\xf6\xd1\xca\x13\x05\xff\x11\xe9\xb9\xda\xe7\x1b\x9b\x6b\x13\xaf\xaa\xe5\xf6\x5f\x9f\x59\xd6\xb5\x95\xd3\x05\x21\x46\x3d\x85\xae\x0d\xd6\x1a\x8f\x5d\x4d\x64\x54\x69\x1d\x38\xce\x75\x7c\xd6\x9f\xe9\x8b\xf0\x2d\x5c\xa0\xb0\xcf\xbb\x7d\xf4\x0b\x58\x26\x48\xf9\x60\x75\x5f\x80\x43\xca\xaa\xb0\x42\x7d\x83\x7f\xfd\x00\x5e\x5b\xa1\x71\xa2\xfe\x06\x00\x00\xff\xff\x6a\xc5\x0e\xa5\xdb\x02\x00\x00")
+var _templatesPython37AwsLambdaBinSetup_pyenvSh = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x74\x51\x4d\x6f\x13\x31\x10\xbd\xfb\x57\x3c\x6d\xf6\x90\x1c\x36\xd0\x6b\x51\x0f\x28\x14\x88\x04\x49\xd4\x06\x24\xd4\x56\x91\xf1\x8e\xb3\xa3\x78\xc7\xc1\x76\x52\x55\xe2\xca\x99\x3f\xc0\x9f\xe0\x2f\xf1\x4b\x90\x9b\xad\x58\x56\xaa\x25\x4b\xfe\x78\xf3\xe6\xcd\x7b\x23\x7c\xd4\x3b\xb2\xec\x08\xc6\xb7\xad\x96\xfa\x1c\xad\xde\x11\x58\x62\xd2\xce\xa9\x11\xd6\x0d\x47\x44\x13\x78\x9f\x70\xcf\xce\xc1\x04\xd2\x89\xa0\xb1\x7f\x20\x39\xe2\xc8\x21\x1d\xb4\x03\xc9\x91\x83\x97\x96\x24\x41\x8d\xf0\x5a\xea\x27\x12\xe4\xed\x2d\x52\x43\xa8\x69\x4f\x52\x93\x18\xa6\x88\x9a\x2c\x0b\x65\x5c\xfe\x53\x23\x04\xfa\x76\xe0\x40\x99\x23\x22\xab\x1a\xc7\xc9\x54\xa9\x48\x09\x15\x29\x15\xfd\x21\x18\x42\x39\xae\x39\x88\x6e\x09\xe5\xcb\xc9\x8b\x8d\xf1\x62\x79\x3b\x8d\x8d\x52\x6c\x71\x73\x83\x72\xdc\x29\xa3\x10\xd9\x4b\xc4\x77\x6c\x03\xed\x51\x7d\x40\xb9\xfa\xb2\x7e\xbf\x5c\x6c\x3e\x5f\x5e\x5d\xcf\x97\x8b\x09\xee\xee\x5e\xe5\xde\xa2\x00\x80\x4c\xe3\x51\xdc\x0a\xfe\xfc\xfc\x0d\xcc\x4f\xea\x59\xb6\x58\x3d\xa4\xc6\xcb\xb0\xba\x78\x2c\x3a\xf5\x7a\x1a\x75\x00\x51\x96\x95\xfa\x9f\x76\x96\xed\xcb\xa4\x7a\x08\xee\x5b\x78\x8e\xf2\xac\x50\x99\xb9\xc3\xcc\x96\x8b\xb7\xf3\x77\x9f\xae\x2e\x37\xcb\xd5\xfa\xfa\xa2\xa8\x2a\x12\xfd\xd5\x51\x65\x83\x6e\xe9\xde\x87\x1d\x66\xb3\x0b\xe3\xb4\x6c\x0b\xdc\xf6\x94\x75\xf9\xe4\xe3\xe9\x39\xaf\xaa\xb2\xfe\xd1\xca\x81\x82\x7f\x88\xf2\x4c\x9d\xea\x9d\x37\xda\xe5\x6b\x6f\x8e\x5f\x3f\x80\x37\x5e\x68\x5a\x3c\x13\x4a\x67\xc7\xa6\x1f\x77\x4e\xe8\x6f\x00\x00\x00\xff\xff\xf9\xa3\x9d\x63\x70\x02\x00\x00")
 
 func templatesPython37AwsLambdaBinSetup_pyenvShBytes() ([]byte, error) {
 	return bindataRead(
@@ -317,7 +338,7 @@ func templatesPython37AwsLambdaBinSetup_pyenvSh() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/bin/setup_pyenv.sh", size: 731, mode: os.FileMode(493), modTime: time.Unix(1609594598, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/bin/setup_pyenv.sh", size: 624, mode: os.FileMode(493), modTime: time.Unix(1609676063, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -337,7 +358,7 @@ func templatesPython37AwsLambdaMainPy() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/main.py", size: 682, mode: os.FileMode(420), modTime: time.Unix(1609594676, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/main.py", size: 682, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -357,7 +378,7 @@ func templatesPython37AwsLambdaRequirementsDevTxt() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/requirements-dev.txt", size: 13, mode: os.FileMode(420), modTime: time.Unix(1609594414, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/requirements-dev.txt", size: 13, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -377,7 +398,7 @@ func templatesPython37AwsLambdaRequirementsTxt() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/requirements.txt", size: 13, mode: os.FileMode(420), modTime: time.Unix(1609594603, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/requirements.txt", size: 13, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -397,7 +418,7 @@ func templatesPython37AwsLambdaSrc__init__Py() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/src/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609594661, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/src/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -417,7 +438,7 @@ func templatesPython37AwsLambdaSrcModel__init__Py() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/src/model/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609594414, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/src/model/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -437,7 +458,7 @@ func templatesPython37AwsLambdaSrcModelArtifactsReadmeMd() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/src/model/artifacts/README.md", size: 82, mode: os.FileMode(420), modTime: time.Unix(1609594414, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/src/model/artifacts/README.md", size: 82, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -457,7 +478,7 @@ func templatesPython37AwsLambdaSrcModelArtifacts__init__Py() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/src/model/artifacts/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609594414, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/src/model/artifacts/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -477,7 +498,7 @@ func templatesPython37AwsLambdaSrcModelArtifactsFilesPy() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/src/model/artifacts/files.py", size: 438, mode: os.FileMode(420), modTime: time.Unix(1609594414, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/src/model/artifacts/files.py", size: 438, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -497,7 +518,7 @@ func templatesPython37AwsLambdaSrcModelModelPy() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/src/model/model.py", size: 419, mode: os.FileMode(420), modTime: time.Unix(1609594414, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/src/model/model.py", size: 419, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -517,7 +538,7 @@ func templatesPython37AwsLambdaTests__init__Py() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/tests/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609594414, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/tests/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -537,7 +558,7 @@ func templatesPython37AwsLambdaTestsModel__init__Py() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/tests/model/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609594414, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/tests/model/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -557,7 +578,7 @@ func templatesPython37AwsLambdaTestsModelArtifacts__init__Py() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/tests/model/artifacts/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609594414, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/tests/model/artifacts/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -577,7 +598,7 @@ func templatesPython37AwsLambdaTestsModelArtifactsTest_filesPy() (*asset, error)
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/tests/model/artifacts/test_files.py", size: 270, mode: os.FileMode(420), modTime: time.Unix(1609594414, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/tests/model/artifacts/test_files.py", size: 270, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -597,7 +618,7 @@ func templatesPython37AwsLambdaTestsModelTest_modelPy() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/tests/model/test_model.py", size: 520, mode: os.FileMode(420), modTime: time.Unix(1609594414, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/tests/model/test_model.py", size: 520, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -617,7 +638,7 @@ func templatesPython37GcloudFunctionsMakefile() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/Makefile", size: 282, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/Makefile", size: 282, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -637,7 +658,7 @@ func templatesPython37GcloudFunctionsReadmeMd() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/README.md", size: 149, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/README.md", size: 149, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -657,7 +678,7 @@ func templatesPython37GcloudFunctionsBin_configSh() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/bin/_config.sh", size: 75, mode: os.FileMode(493), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/bin/_config.sh", size: 75, mode: os.FileMode(493), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -677,7 +698,7 @@ func templatesPython37GcloudFunctionsBinCleanupSh() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/bin/cleanup.sh", size: 245, mode: os.FileMode(493), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/bin/cleanup.sh", size: 245, mode: os.FileMode(493), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -697,7 +718,7 @@ func templatesPython37GcloudFunctionsBinLaunchSh() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/bin/launch.sh", size: 347, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/bin/launch.sh", size: 347, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -717,7 +738,7 @@ func templatesPython37GcloudFunctionsBinRemove_pyenvSh() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/bin/remove_pyenv.sh", size: 412, mode: os.FileMode(493), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/bin/remove_pyenv.sh", size: 412, mode: os.FileMode(493), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -737,7 +758,7 @@ func templatesPython37GcloudFunctionsBinSetup_pyenvSh() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/bin/setup_pyenv.sh", size: 731, mode: os.FileMode(493), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/bin/setup_pyenv.sh", size: 731, mode: os.FileMode(493), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -757,7 +778,7 @@ func templatesPython37GcloudFunctionsMainPy() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/main.py", size: 616, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/main.py", size: 616, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -777,7 +798,7 @@ func templatesPython37GcloudFunctionsModel__init__Py() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/model/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/model/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -797,7 +818,7 @@ func templatesPython37GcloudFunctionsModelArtifactsReadmeMd() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/model/artifacts/README.md", size: 82, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/model/artifacts/README.md", size: 82, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -817,7 +838,7 @@ func templatesPython37GcloudFunctionsModelArtifacts__init__Py() (*asset, error) 
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/model/artifacts/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/model/artifacts/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -837,7 +858,7 @@ func templatesPython37GcloudFunctionsModelArtifactsFilesPy() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/model/artifacts/files.py", size: 438, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/model/artifacts/files.py", size: 438, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -857,7 +878,7 @@ func templatesPython37GcloudFunctionsModelModelPy() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/model/model.py", size: 484, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/model/model.py", size: 484, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -877,7 +898,7 @@ func templatesPython37GcloudFunctionsRequirementsDevTxt() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/requirements-dev.txt", size: 41, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/requirements-dev.txt", size: 41, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -897,7 +918,7 @@ func templatesPython37GcloudFunctionsRequirementsTxt() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/requirements.txt", size: 13, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/requirements.txt", size: 13, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -917,7 +938,7 @@ func templatesPython37GcloudFunctionsTests__init__Py() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/tests/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/tests/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -937,7 +958,7 @@ func templatesPython37GcloudFunctionsTestsModel__init__Py() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/tests/model/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/tests/model/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -957,7 +978,7 @@ func templatesPython37GcloudFunctionsTestsModelArtifacts__init__Py() (*asset, er
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/tests/model/artifacts/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/tests/model/artifacts/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -977,7 +998,7 @@ func templatesPython37GcloudFunctionsTestsModelArtifactsTest_filesPy() (*asset, 
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/tests/model/artifacts/test_files.py", size: 270, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/tests/model/artifacts/test_files.py", size: 270, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -997,7 +1018,7 @@ func templatesPython37GcloudFunctionsTestsModelTest_modelPy() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/tests/model/test_model.py", size: 520, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/tests/model/test_model.py", size: 520, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1017,7 +1038,7 @@ func templatesPython37GcloudRunDockerignore() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/.dockerignore", size: 72, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/.dockerignore", size: 72, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1037,7 +1058,7 @@ func templatesPython37GcloudRunDockerfile() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/Dockerfile", size: 672, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/Dockerfile", size: 672, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1057,7 +1078,7 @@ func templatesPython37GcloudRunMakefile() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/Makefile", size: 425, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/Makefile", size: 425, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1077,7 +1098,7 @@ func templatesPython37GcloudRunReadmeMd() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/README.md", size: 154, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/README.md", size: 154, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1097,7 +1118,7 @@ func templatesPython37GcloudRunBin_configSh() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/bin/_config.sh", size: 75, mode: os.FileMode(493), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/bin/_config.sh", size: 75, mode: os.FileMode(493), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1117,7 +1138,7 @@ func templatesPython37GcloudRunBinCleanupSh() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/bin/cleanup.sh", size: 245, mode: os.FileMode(493), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/bin/cleanup.sh", size: 245, mode: os.FileMode(493), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1137,7 +1158,7 @@ func templatesPython37GcloudRunBinLaunchSh() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/bin/launch.sh", size: 314, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/bin/launch.sh", size: 314, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1157,7 +1178,7 @@ func templatesPython37GcloudRunBinRemove_pyenvSh() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/bin/remove_pyenv.sh", size: 412, mode: os.FileMode(493), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/bin/remove_pyenv.sh", size: 412, mode: os.FileMode(493), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1177,7 +1198,7 @@ func templatesPython37GcloudRunBinSetup_pyenvSh() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/bin/setup_pyenv.sh", size: 731, mode: os.FileMode(493), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/bin/setup_pyenv.sh", size: 731, mode: os.FileMode(493), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1197,7 +1218,7 @@ func templatesPython37GcloudRunMainPy() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/main.py", size: 486, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/main.py", size: 486, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1217,7 +1238,7 @@ func templatesPython37GcloudRunModel__init__Py() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/model/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/model/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1237,7 +1258,7 @@ func templatesPython37GcloudRunModelArtifactsReadmeMd() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/model/artifacts/README.md", size: 82, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/model/artifacts/README.md", size: 82, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1257,7 +1278,7 @@ func templatesPython37GcloudRunModelArtifacts__init__Py() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/model/artifacts/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/model/artifacts/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1277,7 +1298,7 @@ func templatesPython37GcloudRunModelArtifactsFilesPy() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/model/artifacts/files.py", size: 438, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/model/artifacts/files.py", size: 438, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1297,7 +1318,7 @@ func templatesPython37GcloudRunModelModelPy() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/model/model.py", size: 419, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/model/model.py", size: 419, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1317,7 +1338,7 @@ func templatesPython37GcloudRunRequirementsDevTxt() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/requirements-dev.txt", size: 13, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/requirements-dev.txt", size: 13, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1337,7 +1358,7 @@ func templatesPython37GcloudRunRequirementsTxt() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/requirements.txt", size: 0, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/requirements.txt", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1357,7 +1378,7 @@ func templatesPython37GcloudRunTests__init__Py() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/tests/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/tests/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1377,7 +1398,7 @@ func templatesPython37GcloudRunTestsModel__init__Py() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/tests/model/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/tests/model/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1397,7 +1418,7 @@ func templatesPython37GcloudRunTestsModelArtifacts__init__Py() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/tests/model/artifacts/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/tests/model/artifacts/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1417,7 +1438,7 @@ func templatesPython37GcloudRunTestsModelArtifactsTest_filesPy() (*asset, error)
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/tests/model/artifacts/test_files.py", size: 270, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/tests/model/artifacts/test_files.py", size: 270, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1437,7 +1458,7 @@ func templatesPython37GcloudRunTestsModelTest_modelPy() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/tests/model/test_model.py", size: 520, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/tests/model/test_model.py", size: 520, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1500,6 +1521,7 @@ var _bindata = map[string]func() (*asset, error){
 	"templates/python37/aws/lambda/README.md":                                 templatesPython37AwsLambdaReadmeMd,
 	"templates/python37/aws/lambda/bin/_config.sh":                            templatesPython37AwsLambdaBin_configSh,
 	"templates/python37/aws/lambda/bin/cleanup.sh":                            templatesPython37AwsLambdaBinCleanupSh,
+	"templates/python37/aws/lambda/bin/install_dependencies.sh":               templatesPython37AwsLambdaBinInstall_dependenciesSh,
 	"templates/python37/aws/lambda/bin/launch.sh":                             templatesPython37AwsLambdaBinLaunchSh,
 	"templates/python37/aws/lambda/bin/remove_pyenv.sh":                       templatesPython37AwsLambdaBinRemove_pyenvSh,
 	"templates/python37/aws/lambda/bin/setup_pyenv.sh":                        templatesPython37AwsLambdaBinSetup_pyenvSh,
@@ -1611,11 +1633,12 @@ var _bintree = &bintree{nil, map[string]*bintree{
 					"Makefile":   &bintree{templatesPython37AwsLambdaMakefile, map[string]*bintree{}},
 					"README.md":  &bintree{templatesPython37AwsLambdaReadmeMd, map[string]*bintree{}},
 					"bin": &bintree{nil, map[string]*bintree{
-						"_config.sh":      &bintree{templatesPython37AwsLambdaBin_configSh, map[string]*bintree{}},
-						"cleanup.sh":      &bintree{templatesPython37AwsLambdaBinCleanupSh, map[string]*bintree{}},
-						"launch.sh":       &bintree{templatesPython37AwsLambdaBinLaunchSh, map[string]*bintree{}},
-						"remove_pyenv.sh": &bintree{templatesPython37AwsLambdaBinRemove_pyenvSh, map[string]*bintree{}},
-						"setup_pyenv.sh":  &bintree{templatesPython37AwsLambdaBinSetup_pyenvSh, map[string]*bintree{}},
+						"_config.sh":              &bintree{templatesPython37AwsLambdaBin_configSh, map[string]*bintree{}},
+						"cleanup.sh":              &bintree{templatesPython37AwsLambdaBinCleanupSh, map[string]*bintree{}},
+						"install_dependencies.sh": &bintree{templatesPython37AwsLambdaBinInstall_dependenciesSh, map[string]*bintree{}},
+						"launch.sh":               &bintree{templatesPython37AwsLambdaBinLaunchSh, map[string]*bintree{}},
+						"remove_pyenv.sh":         &bintree{templatesPython37AwsLambdaBinRemove_pyenvSh, map[string]*bintree{}},
+						"setup_pyenv.sh":          &bintree{templatesPython37AwsLambdaBinSetup_pyenvSh, map[string]*bintree{}},
 					}},
 					"main.py":              &bintree{templatesPython37AwsLambdaMainPy, map[string]*bintree{}},
 					"requirements-dev.txt": &bintree{templatesPython37AwsLambdaRequirementsDevTxt, map[string]*bintree{}},
