@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/manifoldco/promptui"
 )
@@ -51,20 +52,12 @@ func getValue(label string, values map[string]string) (string, error) {
 
 // mapContainsValue returns an error if a map doesn't contain a specific value
 func mapContainsValue(value string, mapValues map[string]string) error {
-	values := make([]string, len(mapValues))
+	values := []string{}
 	for _, mapValue := range mapValues {
 		if mapValue == value {
 			return nil
 		}
 		values = append(values, mapValue)
 	}
-	return errors.New(fmt.Sprintf("unknown value: %s (%s)", value, values))
-}
-
-func getString(label string, validation func(string) error) (string, error) {
-	prompt := promptui.Prompt{
-		Label:    label,
-		Validate: validation,
-	}
-	return prompt.Run()
+	return errors.New(fmt.Sprintf("unknown value: %s (%s)", value, strings.Join(values, ", ")))
 }
