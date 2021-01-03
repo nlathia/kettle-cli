@@ -24,19 +24,19 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.TemplateConfig) error
 
 	// Build the docker image
 	// gcloud builds submit --tag gcr.io/PROJECT-ID/helloworld
-	commandArgs := []string{
+	fmt.Println("🏭  Building: ", cfg.Name, "as a Cloud Run container")
+	err := executeCommand("gcloud", []string{
 		"builds",
 		"submit",
 		"--tag", fmt.Sprintf("gcr.io/%s/%s", projectID, cfg.Name),
-	}
-	fmt.Println("🏭  Building: ", cfg.Name, "as a Cloud Run container")
-	err := executeCommand("gcloud", commandArgs)
+	})
 	if err != nil {
 		return err
 	}
 
 	// gcloud run deploy --image gcr.io/PROJECT-ID/helloworld
-	commandArgs = []string{
+	fmt.Println("🚢  Deploying ", cfg.Name, fmt.Sprintf("as a %s function", cfg.Type))
+	return executeCommand("gcloud", []string{
 		"run",
 		"deploy",
 		cfg.Name, // The cloud run service is named the same as the directory
@@ -44,7 +44,5 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.TemplateConfig) error
 		"--platform", "managed",
 		"--allow-unauthenticated",
 		"--region=europe-west2",
-	}
-	fmt.Println("🚢  Deploying ", cfg.Name, fmt.Sprintf("as a %s function", cfg.Type))
-	return executeCommand("gcloud", commandArgs)
+	})
 }
