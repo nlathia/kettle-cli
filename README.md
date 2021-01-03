@@ -1,6 +1,6 @@
 # operator
 
-Operator is a command line tool for creating and shipping machine learning deployments. You can use it to generate and deploy Google [Cloud Functions](https://cloud.google.com/functions) or [Cloud Run](https://cloud.google.com/run) containerised applications.
+Operator is a command line tool for creating and shipping machine learning deployments. You can use it to generate and deploy AWS [Lambda](https://aws.amazon.com/lambda/)s, or Google [Cloud Functions](https://cloud.google.com/functions) and [Cloud Run](https://cloud.google.com/run) containerised applications.
 
 This CLI has two primary commands:
 
