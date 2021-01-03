@@ -37,7 +37,7 @@ func getGoogleCloudProjects() (map[string]string, error) {
 	defer s.Stop()
 
 	// gcloud projects list --format="json"
-	projectListLimit := 25
+	projectListLimit := 50
 	output, err := executeCommandWithResult("gcloud", []string{
 		"projects",
 		"list",
@@ -55,11 +55,11 @@ func getGoogleCloudProjects() (map[string]string, error) {
 	if err := json.Unmarshal(output, &results); err != nil {
 		return nil, err
 	}
-	if len(results) == projectListLimit {
+	if len(results) >= projectListLimit {
 		// Bail if the user has too many projects to 'reasonably' display
 		// @TODO add this back in
 		return nil, errors.New(fmt.Sprintf("you have %d or more Google Cloud projects. "+
-			"Please use operator init --project-id <id> to specify a project.", projectListLimit))
+			"Please use operator init --gcp-project-id <id> to specify a project.", projectListLimit))
 	}
 
 	projectIDs := map[string]string{}
