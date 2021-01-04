@@ -1,12 +1,16 @@
 package clouds
 
 import (
+	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"path"
 	"strings"
 
+	"github.com/janeczku/go-spinner"
 	"github.com/operatorai/operator/config"
+	"github.com/operatorai/operator/preferences"
 )
 
 const (
@@ -15,11 +19,23 @@ const (
 
 type AWSLambdaFunction struct{}
 
+var AWSConfigChoices = []*preferences.ConfigChoice{
+	{
+		// Pick a Google Cloud Project
+		Label:             "AWS IAM Role",
+		Key:               config.IAMRole,
+		FlagKey:           "aws-iam-role",
+		FlagDescription:   "The name of the AWS IAM role to use when deploying functions",
+		CollectValuesFunc: getAWSRoles,
+		ValidationFunc:    nil,
+	},
+}
+
 func (AWSLambdaFunction) Setup() error {
 	// @TODO: enable selecting whether to create .zip or image-based lambdas
 	// @TODO: aws iam create-role
 	// https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-awscli.html
-	return nil
+	return preferences.Collect(AWSConfigChoices)
 }
 
 func (AWSLambdaFunction) Deploy(directory string, config *config.TemplateConfig) error {
@@ -85,8 +101,10 @@ func (AWSLambdaFunction) Deploy(directory string, config *config.TemplateConfig)
 		if err != nil {
 			return err
 		}
+		// @TODO aws lambda wait function-updated --function-name config.Name
 	} else {
 		// Create the function for the first time
+		// https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/create-function.html
 		fmt.Println("🚢  Deploying ", config.Name, "as a new AWS Lambda function")
 		fmt.Println("⏭  Entry point: ", config.FunctionName, fmt.Sprintf("(%s)", config.Runtime))
 		err = executeCommand("aws", []string{
@@ -104,9 +122,10 @@ func (AWSLambdaFunction) Deploy(directory string, config *config.TemplateConfig)
 		if err != nil {
 			return err
 		}
+		// @TODO aws lambda wait function-active --function-name config.Name
+		// https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/wait/index.html#cli-aws-lambda-wait
 	}
 
-	// @TODO aws lambda wait function-active --function-name config.Name
 	return nil
 }
 
@@ -154,4 +173,52 @@ func lambdaExists(name string) bool {
 		return false
 	}
 	return true
+}
+
+func getAWSRoles() (map[string]string, error) {
+	s := spinner.StartNew("Collecting AWS IAM roles...")
+	defer s.Stop()
+
+	//  aws iam list-roles --output json
+	output, err := executeCommandWithResult("aws", []string{
+		"iam",
+		"list-roles",
+		"--output",
+		"json",
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	var results struct {
+		Roles []struct {
+			RoleName   string `json:"RoleName"`
+			Path       string `json:"Path"`
+			Arn        string `json:"Arn"`
+			RolePolicy struct {
+				Statement []struct {
+					Principal struct {
+						Service string `json:"Service"`
+					} `json:"Principal"`
+				} `json:"Statement"`
+			} `json:"AssumeRolePolicyDocument"`
+		} `json:"Roles"`
+	}
+	if err := json.Unmarshal(output, &results); err != nil {
+		return nil, err
+	}
+
+	// @TODO check if results is empty and then create a role
+	roles := map[string]string{}
+	for _, role := range results.Roles {
+		if role.RolePolicy.Statement[0].Principal.Service == "lambda.amazonaws.com" {
+			displayName := fmt.Sprintf("%s (%s)", role.RoleName, role.Path)
+			roles[displayName] = role.Arn
+		}
+	}
+
+	if len(roles) == 0 {
+		return roles, errors.New("no matching roles exist")
+	}
+	return roles, nil
 }
