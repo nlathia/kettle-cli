@@ -1,19 +1,22 @@
 # operator
 
-Operator is a command line tool for creating and shipping machine learning deployments. You can use it to generate and deploy AWS [Lambda](https://aws.amazon.com/lambda/)s, Google [Cloud Functions](https://cloud.google.com/functions) and Google [Cloud Run](https://cloud.google.com/run) containerised applications.
+Operator is a command line tool for creating and deploying http-triggered functions that run in the cloud.
 
-This CLI has two primary commands:
+You can use it to generate and deploy AWS [Lambda](https://aws.amazon.com/lambda/)s, Google [Cloud Functions](https://cloud.google.com/functions) and Google [Cloud Run](https://cloud.google.com/run) containerised applications, in either Go or Python.
 
-* `operator create <name>` creates a directory containing all the boiler plate code that you need to get going. You just need to fill in the functions that loads the model and returns a prediction.
-* `operator deploy <path>` deploys the code in that directory as a Cloud Function or Cloud Run application.
+The Python functions have been specifically designed to support deploying machine learning models.
 
-This is a pre-release alpha version of this tool. Please send any bugs or feedback.
+This CLI has three primary commands:
+
+* `operator init` is a one-off command that sets up the tool with your preferences (for cloud provider, programming language, etc.)
+* `operator create <name>` creates a directory containing all the boiler plate code that you need to get going. 
+* `operator deploy <path>` deploys the code in that directory to the cloud.
 
 ## Pre-requisites
 
 Operator relies on you having a few things installed already.
 
-### AWS or Google Cloud
+### Cloud Providers
 
 For AWS Lambdas:
 
@@ -23,14 +26,12 @@ For Google Cloud Functions:
 
 * The [gcloud](https://cloud.google.com/sdk/gcloud) SDK
 * Enable the Cloud Functions API in the GCP console
-* Only http-triggered cloud functions are currently supported by this tool
 
 For Google Cloud Run:
 
 * The [gcloud](https://cloud.google.com/sdk/gcloud) SDK
 * Enable the Cloud Run API in the GCP console
 * [Optional] [Docker](https://docs.docker.com/get-docker/) to build and run Cloud Run containerized applications locally.
-* Only http-triggered cloud functions are currently supported by this tool
 
 ### Programming Languages
 
