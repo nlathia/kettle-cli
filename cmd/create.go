@@ -113,7 +113,7 @@ func runCreate(cmd *cobra.Command, args []string) error {
 	// Iterate on all of the template files
 	// Root: templates/<language>/<cloud-provider>/<type>/
 	templateRoot := fmt.Sprintf(
-		"templates/%s/%s/%s",
+		"templates/%s/%s/%s/",
 		configValues.Runtime,
 		configValues.CloudProvider,
 		configValues.Type,

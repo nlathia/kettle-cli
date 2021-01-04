@@ -1,9 +1,11 @@
 VIRTUALENV_NAME=$(shell pwd | rev | cut -d '/' -f 1 | rev)-dev
-IMAGE_URL={{ .FunctionName }}:latest
 
-.PHONY: install uninstall test clean docker localhost
+.PHONY: install uninstall test clean localhost
 
-uninstall:
+clean:
+	@./bin/cleanup.sh
+
+uninstall: clean
 	@./bin/remove_pyenv.sh
 
 install: uninstall
@@ -12,11 +14,5 @@ install: uninstall
 test:
 	@pytest
 
-clean:
-	@./bin/cleanup.sh
-
-docker:
-	docker build -f Dockerfile -t $(IMAGE_URL) .
-
-localhost: docker
-	@./bin/launch.sh $(IMAGE_URL)
+localhost:
+	@./bin/launch.sh 
