@@ -26,7 +26,6 @@ func Collect(configChoices []*ConfigChoice) error {
 			// available values and show them as a prompt
 			values, err := choice.CollectValuesFunc()
 			if err != nil {
-				fmt.Printf("Error: %v", err)
 				return err
 			}
 			value, err := getValue(choice.Label, values)

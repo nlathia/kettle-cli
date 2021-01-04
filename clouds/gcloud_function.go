@@ -10,7 +10,7 @@ import (
 type GoogleCloudFunction struct{}
 
 func (GoogleCloudFunction) Setup() error {
-	return preferences.Collect(GcpConfigChoices)
+	return preferences.Collect(GCPConfigChoices)
 }
 
 func (GoogleCloudFunction) Deploy(directory string, config *config.TemplateConfig) error {

@@ -83,21 +83,19 @@ func init() {
 	// E.g., using --cloud aws and a GCP config flag would still parse but would
 	// fail on validation
 
-	// Add global flags
-	for _, configChoice := range configChoices {
-		if configChoice.FlagKey != "" {
-			initCmd.Flags().StringVar(&configChoice.FlagValue, configChoice.FlagKey, "", configChoice.FlagDescription)
-		}
+	configChoiceLists := [][]*preferences.ConfigChoice{
+		configChoices,           // Add global flags
+		clouds.GCPConfigChoices, // Add GCP-specific flags
+		clouds.AWSConfigChoices, // Add AWS-specific flags
 	}
 
-	// Add GCP-specific flags
-	for _, configChoice := range clouds.GcpConfigChoices {
-		if configChoice.FlagKey != "" {
-			initCmd.Flags().StringVar(&configChoice.FlagValue, configChoice.FlagKey, "", configChoice.FlagDescription)
+	for _, configChoiceList := range configChoiceLists {
+		for _, configChoice := range configChoiceList {
+			if configChoice.FlagKey != "" {
+				initCmd.Flags().StringVar(&configChoice.FlagValue, configChoice.FlagKey, "", configChoice.FlagDescription)
+			}
 		}
 	}
-
-	// @TODO Add AWS-specific flags
 }
 
 func runInit(cmd *cobra.Command, args []string) {

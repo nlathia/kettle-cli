@@ -54,5 +54,5 @@ const (
 	DeploymentRegion = "region"
 
 	// AWS deployments
-	// @TODO
+	IAMRole = "iam_role"
 )

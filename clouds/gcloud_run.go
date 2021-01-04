@@ -13,7 +13,7 @@ import (
 type GoogleCloudRun struct{}
 
 func (GoogleCloudRun) Setup() error {
-	return preferences.Collect(GcpConfigChoices)
+	return preferences.Collect(GCPConfigChoices)
 }
 
 func (GoogleCloudRun) Deploy(directory string, cfg *config.TemplateConfig) error {

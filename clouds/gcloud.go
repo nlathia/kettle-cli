@@ -11,7 +11,7 @@ import (
 	"github.com/janeczku/go-spinner"
 )
 
-var GcpConfigChoices = []*preferences.ConfigChoice{
+var GCPConfigChoices = []*preferences.ConfigChoice{
 	{
 		// Pick a Google Cloud Project
 		Label:             "Google Cloud Project",
