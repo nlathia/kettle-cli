@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path"
 	"strings"
 
 	"github.com/janeczku/go-spinner"
+	"github.com/manifoldco/promptui"
 	"github.com/operatorai/operator/config"
 	"github.com/operatorai/operator/preferences"
 )
@@ -21,13 +23,17 @@ type AWSLambdaFunction struct{}
 
 var AWSConfigChoices = []*preferences.ConfigChoice{
 	{
-		// Pick a Google Cloud Project
-		Label:             "AWS IAM Role",
-		Key:               config.IAMRole,
-		FlagKey:           "aws-iam-role",
-		FlagDescription:   "The name of the AWS IAM role to use when deploying functions",
+		// Pick or create an AWS IAM role for deploying Lambdas
+		Label: "Available AWS IAM Roles",
+		Key:   config.IAMRole,
+
+		// Flags are currently unsupported because there's no quick way
+		// to validate an ARN
+		// FlagKey:           "aws-iam-role",
+		// FlagDescription:   "The name of the AWS IAM role to use when deploying lambdas",
+		// ValidationFunc:    validateAWSRoleExists,
+
 		CollectValuesFunc: getAWSRoles,
-		ValidationFunc:    nil,
 	},
 }
 
@@ -146,8 +152,7 @@ func getPyenvSitePackagesDirectory() (string, error) {
 	), nil
 }
 
-// removeExistingDeployment removes any existing deployment zip file
-// if it exits
+// removeExistingDeployment removes the deployment.zip file, if present
 func removeExistingDeployment() error {
 	if _, err := os.Stat(deploymentPackage); err != nil {
 		if os.IsNotExist(err) {
@@ -160,7 +165,8 @@ func removeExistingDeployment() error {
 
 // lambdaExists queries whether a lambda function already exists
 func lambdaExists(name string) bool {
-	fmt.Println("🚢  Checking if ", name, "already exists as a lambda function")
+	s := spinner.StartNew(fmt.Sprintf("Checking if: %s exists...", name))
+	defer s.Stop()
 
 	// @TODO suppress output from this command
 	err := executeCommand("aws", []string{
@@ -208,7 +214,6 @@ func getAWSRoles() (map[string]string, error) {
 		return nil, err
 	}
 
-	// @TODO check if results is empty and then create a role
 	roles := map[string]string{}
 	for _, role := range results.Roles {
 		if role.RolePolicy.Statement[0].Principal.Service == "lambda.amazonaws.com" {
@@ -218,7 +223,83 @@ func getAWSRoles() (map[string]string, error) {
 	}
 
 	if len(roles) == 0 {
-		return roles, errors.New("no matching roles exist")
+		s.Stop()
+		prompt := promptui.Prompt{
+			Label:     "No matching AWS IAM roles. Create a new one?",
+			IsConfirm: true,
+		}
+
+		confirmed, err := prompt.Run()
+		if err != nil {
+			return nil, err
+		}
+
+		if strings.ToLower(confirmed) == "y" {
+			return createIAMRole()
+		}
+		return roles, errors.New("unknown input")
 	}
 	return roles, nil
+}
+
+func createIAMRole() (map[string]string, error) {
+	s := spinner.StartNew("Creating AWS IAM role for lambda.amazonaws.com...")
+	defer s.Stop()
+
+	f, err := ioutil.TempFile(".", "trust_policy*.json")
+	if err != nil {
+		return nil, err
+	}
+	defer os.Remove(f.Name())
+
+	trustPolicy := []byte(`{
+		"Version": "2012-10-17",
+		"Statement": [
+			{
+				"Effect": "Allow",
+				"Principal": {
+					"Service": "lambda.amazonaws.com"
+				},
+				"Action": "sts:AssumeRole"
+			}
+		]
+	}`)
+	if _, err = f.Write(trustPolicy); err != nil {
+		return nil, err
+	}
+
+	// $ aws iam create-role --role-name lambda-ex --assume-role-policy-document file://trust-policy.json
+	output, err := executeCommandWithResult("aws", []string{
+		"iam",
+		"create-role",
+		"--role-name",
+		"operator-lambda-role",
+		"--assume-role-policy-document",
+		fmt.Sprintf("file://%s", f.Name()),
+		"--output",
+		"json",
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	var result struct {
+		Role struct {
+			RoleName string `json:"RoleName"`
+			Path     string `json:"Path"`
+			Arn      string `json:"Arn"`
+		} `json:"Role"`
+	}
+	if err := json.Unmarshal(output, &result); err != nil {
+		return nil, err
+	}
+
+	displayName := fmt.Sprintf("%s (%s)", result.Role.RoleName, result.Role.Path)
+	return map[string]string{
+		displayName: result.Role.Arn,
+	}, nil
+}
+
+func validateAWSRoleExists(arn string) error {
+	return nil
 }
