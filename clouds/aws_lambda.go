@@ -29,8 +29,9 @@ var AWSConfigChoices = []*preferences.ConfigChoice{
 
 		// Flags are currently unsupported because there's no quick way
 		// to validate an ARN
+
 		// FlagKey:           "aws-iam-role",
-		// FlagDescription:   "The name of the AWS IAM role to use when deploying lambdas",
+		// FlagDescription:   "The ARN of the AWS IAM role to use when deploying lambdas",
 		// ValidationFunc:    validateAWSRoleExists,
 
 		CollectValuesFunc: getAWSRoles,
@@ -38,9 +39,7 @@ var AWSConfigChoices = []*preferences.ConfigChoice{
 }
 
 func (AWSLambdaFunction) Setup() error {
-	// @TODO: enable selecting whether to create .zip or image-based lambdas
-	// @TODO: aws iam create-role
-	// https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-awscli.html
+	// @TODO (Future): enable selecting whether to create .zip or image-based lambdas
 	return preferences.Collect(AWSConfigChoices)
 }
 
@@ -118,7 +117,7 @@ func (AWSLambdaFunction) Deploy(directory string, config *config.TemplateConfig)
 			"create-function",
 			"--function-name", config.Name,
 			"--runtime", config.Runtime,
-			"--role", "@TODO",
+			"--role", config.IAMRole,
 			"--handler", fmt.Sprintf("main.%s", config.FunctionName),
 			"--package-type", "Zip",
 			"--zip-file", fmt.Sprintf("fileb://%s", deploymentPackage),

@@ -40,15 +40,15 @@ func init() {
 		return
 	}
 
-	// Set up the config for this template
-	configValues = &config.TemplateConfig{}
-	createCmd.Flags().StringVar(&configValues.CloudProvider, "cloud", viper.GetString(config.CloudProvider), "The name of the cloud provider")
-	createCmd.Flags().StringVar(&configValues.Type, "type", viper.GetString(config.DeploymentType), "The type of deployment to create")
-	createCmd.Flags().StringVar(&configValues.Runtime, "runtime", viper.GetString(config.Runtime), "The function's runtime language")
-
-	// Google Cloud specific flags
-	createCmd.Flags().StringVar(&configValues.ProjectID, "project-id", viper.GetString(config.ProjectID), "The gcloud project use")
-	createCmd.Flags().StringVar(&configValues.DeploymentRegion, "region", viper.GetString(config.DeploymentRegion), "The region to deploy to")
+	// Set up the config for this template from the viper settings
+	configValues = &config.TemplateConfig{
+		CloudProvider:    viper.GetString(config.CloudProvider),
+		Type:             viper.GetString(config.DeploymentType),
+		Runtime:          viper.GetString(config.Runtime),
+		ProjectID:        viper.GetString(config.ProjectID),
+		DeploymentRegion: viper.GetString(config.DeploymentRegion),
+		IAMRole:          viper.GetString(config.IAMRole),
+	}
 }
 
 func validateCreateArgs(cmd *cobra.Command, args []string) error {
