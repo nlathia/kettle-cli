@@ -37,19 +37,29 @@ var DeploymentNames = map[string]map[string]string{
 }
 
 // Supported languages
+// The values depend on the cloud provider (e.g., "python37" or "python3.7")
 const (
 	Runtime = "language"
-	Python  = "python37"
-	GoLang  = "go113"
 )
 
-var RuntimeNames = map[string]string{
-	"Python (3.7)": Python,
-	"Go (1.13)":    GoLang,
+var RuntimeNames = map[string]map[string]string{
+	GoogleCloudFunction: map[string]string{
+		"Python (3.7)": "python37",
+		"Go (1.13)":    "go113",
+	},
+	GoogleCloudRun: map[string]string{
+		"Python (3.7)": "python37",
+		"Go (1.13)":    "go113",
+	},
+	AWSLambda: map[string]string{
+		"Python (3.7)": "python3.7",
+		"Go (1.13)":    "go113",
+	},
 }
 
-// Google Cloud deployments
+// Cloud-specific config
 const (
+	// Google Cloud deployments
 	ProjectID        = "project_id"
 	DeploymentRegion = "region"
 

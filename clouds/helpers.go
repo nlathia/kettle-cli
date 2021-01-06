@@ -10,10 +10,12 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-func executeCommand(command string, args []string) error {
+func executeCommand(command string, args []string, quiet bool) error {
 	osCmd := exec.Command(command, args...)
-	osCmd.Stderr = os.Stderr
-	osCmd.Stdout = os.Stdout
+	if !quiet {
+		osCmd.Stderr = os.Stderr
+		osCmd.Stdout = os.Stdout
+	}
 	if err := osCmd.Run(); err != nil {
 		return err
 	}

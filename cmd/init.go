@@ -40,7 +40,7 @@ var configChoices = []*preferences.ConfigChoice{
 	},
 	{
 		// Pick a deployment type; assumes that the 'Pick a cloud provider'
-		// step has already run and can not be set via a flag (to make things simpler)
+		// step has already run or has been set via a flag
 		Label:           "Deployment type",
 		Key:             config.DeploymentType,
 		FlagKey:         "type",
@@ -61,16 +61,25 @@ var configChoices = []*preferences.ConfigChoice{
 		},
 	},
 	{
-		// Pick the default programming language
+		// Pick the default programming language; assumes that the 'Pick a deployment type'
+		// step has already run or has been set via a flag
 		Label:           "Programming language",
 		Key:             config.Runtime,
 		FlagKey:         "runtime",
 		FlagDescription: "The function's runtime language",
 		CollectValuesFunc: func() (map[string]string, error) {
-			return config.RuntimeNames, nil
+			selectedType := viper.GetString(config.DeploymentType)
+			if selectedType != "" {
+				return config.RuntimeNames[selectedType], nil
+			}
+			return nil, errors.New(fmt.Sprintf("unknown deployment type: %s", selectedType))
 		},
 		ValidationFunc: func(v string) error {
-			return mapContainsValue(v, config.RuntimeNames)
+			selectedType := viper.GetString(config.DeploymentType)
+			if selectedType != "" {
+				return mapContainsValue(v, config.RuntimeNames[selectedType])
+			}
+			return errors.New(fmt.Sprintf("unknown deployment type: %s", selectedType))
 		},
 	},
 }

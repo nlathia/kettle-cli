@@ -29,7 +29,7 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.TemplateConfig) error
 		"builds",
 		"submit",
 		"--tag", fmt.Sprintf("gcr.io/%s/%s", projectID, cfg.Name),
-	})
+	}, false)
 	if err != nil {
 		return err
 	}
@@ -44,5 +44,5 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.TemplateConfig) error
 		"--platform", "managed",
 		"--allow-unauthenticated",
 		"--region=europe-west2",
-	})
+	}, false)
 }

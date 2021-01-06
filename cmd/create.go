@@ -82,13 +82,13 @@ func validateCreateArgs(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	// Validate the selected runtime is supported
-	if err := mapContainsValue(configValues.Runtime, config.RuntimeNames); err != nil {
+	// Validate the selected type of deployment
+	if err := mapContainsValue(configValues.Type, config.DeploymentNames[configValues.CloudProvider]); err != nil {
 		return err
 	}
 
-	// Validate the selected type of deployment
-	if err := mapContainsValue(configValues.Type, config.DeploymentNames[configValues.CloudProvider]); err != nil {
+	// Validate the selected runtime is supported
+	if err := mapContainsValue(configValues.Runtime, config.RuntimeNames[configValues.Type]); err != nil {
 		return err
 	}
 
@@ -114,7 +114,7 @@ func runCreate(cmd *cobra.Command, args []string) error {
 	// Root: templates/<language>/<cloud-provider>/<type>/
 	templateRoot := fmt.Sprintf(
 		"templates/%s/%s/%s/",
-		configValues.Runtime,
+		strings.Replace(configValues.Runtime, ".", "", 1),
 		configValues.CloudProvider,
 		configValues.Type,
 	)

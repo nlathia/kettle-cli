@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/iancoleman/strcase"
-	"github.com/operatorai/operator/config"
 )
 
 func removePunctuation(input, replaceWith string) (string, error) {
@@ -20,10 +19,10 @@ func removePunctuation(input, replaceWith string) (string, error) {
 }
 
 // The entry function's case will vary based on the language;
-// Right now, we're only supporting Python so we use ToSnake()
+// Right now, we're only supporting Python & Go so we use ToSnake()
 func CreateEntryFunctionName(args []string, runtime string) string {
 	switch {
-	case strings.Contains(runtime, config.Python):
+	case strings.Contains(runtime, "python"):
 		entryName, err := removePunctuation(args[0], "_")
 		if err != nil {
 			log.Fatal(err)

@@ -55,13 +55,14 @@
 // templates/python37/gcloud/functions/bin/remove_pyenv.sh
 // templates/python37/gcloud/functions/bin/setup_pyenv.sh
 // templates/python37/gcloud/functions/main.py
-// templates/python37/gcloud/functions/model/__init__.py
-// templates/python37/gcloud/functions/model/artifacts/README.md
-// templates/python37/gcloud/functions/model/artifacts/__init__.py
-// templates/python37/gcloud/functions/model/artifacts/files.py
-// templates/python37/gcloud/functions/model/model.py
 // templates/python37/gcloud/functions/requirements-dev.txt
 // templates/python37/gcloud/functions/requirements.txt
+// templates/python37/gcloud/functions/src/__init__.py
+// templates/python37/gcloud/functions/src/model/__init__.py
+// templates/python37/gcloud/functions/src/model/artifacts/README.md
+// templates/python37/gcloud/functions/src/model/artifacts/__init__.py
+// templates/python37/gcloud/functions/src/model/artifacts/files.py
+// templates/python37/gcloud/functions/src/model/model.py
 // templates/python37/gcloud/functions/tests/__init__.py
 // templates/python37/gcloud/functions/tests/model/__init__.py
 // templates/python37/gcloud/functions/tests/model/artifacts/__init__.py
@@ -77,13 +78,14 @@
 // templates/python37/gcloud/run/bin/remove_pyenv.sh
 // templates/python37/gcloud/run/bin/setup_pyenv.sh
 // templates/python37/gcloud/run/main.py
-// templates/python37/gcloud/run/model/__init__.py
-// templates/python37/gcloud/run/model/artifacts/README.md
-// templates/python37/gcloud/run/model/artifacts/__init__.py
-// templates/python37/gcloud/run/model/artifacts/files.py
-// templates/python37/gcloud/run/model/model.py
 // templates/python37/gcloud/run/requirements-dev.txt
 // templates/python37/gcloud/run/requirements.txt
+// templates/python37/gcloud/run/src/__init__.py
+// templates/python37/gcloud/run/src/model/__init__.py
+// templates/python37/gcloud/run/src/model/artifacts/README.md
+// templates/python37/gcloud/run/src/model/artifacts/__init__.py
+// templates/python37/gcloud/run/src/model/artifacts/files.py
+// templates/python37/gcloud/run/src/model/model.py
 // templates/python37/gcloud/run/tests/__init__.py
 // templates/python37/gcloud/run/tests/model/__init__.py
 // templates/python37/gcloud/run/tests/model/artifacts/__init__.py
@@ -165,7 +167,7 @@ func (fi bindataFileInfo) Sys() interface{} {
 	return nil
 }
 
-var _templatesHelpersGo = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x94\x94\xd1\x6f\xdb\x36\x10\xc6\x9f\xc5\xbf\xe2\xa6\x97\x4a\x98\x23\xf7\x75\x2d\xfa\x50\x64\x6d\xb1\x0d\x28\x82\xa4\xc0\x80\x05\x59\x7b\x96\x4f\x12\x11\x8a\x27\x1c\x4f\x71\xbc\x21\xff\xfb\x40\x4a\x96\x1d\x23\x1b\xd6\x17\x8b\x96\xef\x78\xbf\xef\xfb\x48\x0f\x58\xdf\x63\x4b\xa0\xd4\x0f\x0e\x95\x82\x31\xb6\x1f\x58\x14\x0a\x93\xe5\x8e\xdb\xdc\x64\x39\x87\xf8\x39\xa0\x76\xf1\x29\xd4\xd2\xe3\x10\x57\x41\xc5\xfa\x36\xe4\xc6\x64\x79\x6b\xb5\x1b\x37\x55\xcd\xfd\xda\xa2\xaf\xd9\x51\x8f\x7e\x1d\x54\x6a\x0c\x94\x3f\x2f\xe0\x81\x04\x95\x05\xed\xb2\x5c\xd7\xec\x1b\xdb\xe6\xa6\x34\xa6\x19\x7d\x0d\x42\x3d\x3f\xd0\xd5\xe8\x6b\x1d\x51\x2d\xfb\xc2\xfa\x61\xd4\x15\x08\x0d\x0e\x6b\xfa\xdd\x6a\x07\x13\x40\x09\xc5\xb4\x58\x01\x89\xb0\x94\xf0\xb7\xc9\x84\xa6\xaf\xf0\xe6\x1d\x4c\xc4\xd5\x25\xf7\x83\x75\x54\xe4\xb7\x7f\xe2\xc5\x5f\xef\x2f\xfe\x78\x7d\xf1\xd3\xdd\x8f\x79\x69\x32\xdb\xa4\xd2\x1f\xde\x81\xb7\x2e\x76\x67\x42\x3a\x8a\x87\x3c\x4f\x9b\x98\xec\xc9\x1c\x5e\x09\xb5\xd5\xf5\xc4\xf0\xde\xb9\x9b\x34\xf8\x05\xb6\x72\x15\xf7\x32\x4f\xc6\xac\xd7\xf0\xa5\x23\x20\xaf\xb2\x87\xa8\x2d\xaa\x79\x15\x20\x1a\x03\x3b\xeb\x1c\x3c\xa0\xec\x61\x83\x81\xb6\xc0\x1e\xb4\x23\x70\xe8\xdb\x11\x5b\x7a\x1b\xbb\xaf\x6d\xdb\x29\x78\xde\xad\x60\x47\xaf\x84\x80\xbd\xdb\x43\x18\x87\x98\x93\xf5\x2d\x5c\xed\xb5\x63\x0f\x81\x61\x47\x30\x06\x82\x2f\x7c\xe3\xf1\x9e\x8a\x72\xf2\xf2\x52\x08\x95\x3e\x44\x80\x8f\xf3\xfc\xcf\xd8\x53\x81\xd2\x06\xb8\xbd\x3b\x98\x27\xa3\x57\xdb\xd3\xe2\xea\xf4\x8c\x76\x84\x9d\xd5\xba\x8b\xab\x04\x3d\xe7\x5e\x5d\xb2\x57\xb4\x3e\x14\x73\xe7\x0a\xa6\x14\xab\x09\xa8\x7c\x63\xb2\x2c\xc9\x8e\xd3\x4e\xd2\x38\x4f\x36\x72\xdc\xbe\xbe\x5b\x41\xfe\x35\xa6\xf1\x42\x1c\x99\xe3\xb6\xfa\x88\x8a\xae\x20\x91\x58\xf3\x74\x0c\x69\x3e\x64\xd5\x41\xf5\x32\xb2\x34\xd9\x96\x1a\x1c\x9d\x46\x92\xf5\x1a\x2e\x47\x11\xf2\xea\xf6\x30\x7a\x21\xac\x3b\xdc\x38\x5a\x01\x86\x64\xfa\xb7\x59\xc6\x37\x88\x40\x53\x87\x0d\x50\x77\x54\xdf\xd3\x16\x36\xd4\xb0\x44\xf1\x98\x5c\x3f\xce\x9f\xf1\xe3\x21\x39\xc6\x5d\x3b\x1e\xb7\x4b\xdc\xe0\xb1\xa7\xb8\xd9\x96\xc4\x3e\xd0\x16\x1a\xe1\x3e\x0d\xdd\x5a\xa1\x5a\x59\xf6\xa9\xe4\x34\xaf\x7f\x8f\xea\x34\x9a\xe6\xa4\xea\x7f\x59\x7c\xf1\xf2\x81\x3f\x37\xf8\x78\xe0\x8f\xf6\xfe\x46\x1b\xdc\x14\xa7\x13\xcb\x59\xf1\x75\x2a\x0d\x80\x10\xff\x25\x40\x3b\xd4\xa8\x56\xc8\xa1\xda\x07\x02\xe5\x24\xb6\x9e\xfc\x87\x1d\xcb\x7d\xe4\x5f\xc4\x4f\xba\x3f\x91\x5e\xcf\x1d\x3f\x1f\x7e\x29\x96\x9a\x38\xef\x3f\x6f\x3c\xb3\x2e\x0e\x70\xa8\x3e\x91\xee\xb6\xc5\x77\xde\xee\x88\x5f\xfd\xca\xd6\x17\xd3\x76\xcf\xa6\x1f\xef\x74\xc2\xbd\x42\xed\x3e\x3c\xda\xa0\xa1\x48\xaa\x17\xb6\x0d\xb3\x3b\x25\xb3\x0d\x7c\x3d\x25\xbb\x51\xd4\xd4\x52\xbe\x3d\x27\xb3\x4d\x2c\xf8\x25\x7c\x66\x4d\x5b\xa7\x34\xa6\x2b\x30\x13\x36\xe8\x02\x4d\x20\xcf\x6e\xc1\xfc\xfe\x4c\x8f\xca\x48\x07\xea\x7f\x02\x00\x00\xff\xff\x0a\x8c\x9b\xd4\xec\x05\x00\x00")
+var _templatesHelpersGo = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x94\x93\x4f\x6f\xe3\x36\x10\xc5\xcf\xe2\xa7\x98\xea\xd0\x95\x50\x5b\xde\x6b\x77\xb1\x87\x85\xbb\x09\xda\x02\x41\xe0\x04\x28\xd0\x20\x4d\xc6\xd2\x48\x22\x4c\x91\xc2\x70\x64\xc7\x2d\xf2\xdd\x0b\x52\xf2\x9f\x18\x69\xd1\x5e\x22\x45\x1e\xce\xfc\xde\x7b\x9c\x1e\xcb\x0d\x36\x04\x42\x5d\x6f\x50\xc8\x2b\xa5\xbb\xde\xb1\x40\xa6\x92\xd4\xb8\x26\x55\x49\xea\x7c\xf8\xdb\xa3\xb4\xe1\xc9\xd4\xd0\x4b\x1f\xde\xbc\xb0\xb6\x8d\x4f\x95\x4a\xd2\x46\x4b\x3b\xac\x8b\xd2\x75\x0b\x8d\xb6\x74\x86\x3a\xb4\x0b\x2f\x5c\xa2\xa7\x54\xe5\x4a\xd5\x83\x2d\x81\xa9\x73\x5b\xba\x1d\x6c\x29\x03\x8a\x76\x36\xd3\xb6\x1f\x64\x06\x4c\xbd\xc1\x92\x7e\xd3\xd2\xc2\xd8\x37\x87\x6c\x7c\x99\x01\x31\x3b\xce\xe1\x2f\x95\x30\x8d\xff\xc2\xa7\x2f\x30\x82\x14\x4b\xd7\xf5\xda\x50\x96\x3e\xfc\x81\xf3\x3f\xbf\xce\x7f\xff\x38\xff\xf1\xf1\x87\x34\x57\x89\xae\x63\xe9\x77\x5f\xc0\x6a\x13\x4e\x27\x4c\x32\xb0\x85\x34\x8d\x4d\x54\xf2\xaa\x0e\x9f\x98\x9a\x62\x35\x32\x7c\x35\xe6\x2e\x0e\x7e\x87\x2d\x9f\x85\x5e\xea\x55\xa9\xc5\x02\xee\x5b\x02\xb2\xc2\x7b\x08\xda\x82\x9a\x0f\x1e\x82\x5e\xd8\x69\x63\x60\x8b\xbc\x87\x35\x7a\xaa\xc0\x59\x90\x96\xc0\xa0\x6d\x06\x6c\xe8\x73\x38\xbd\xd2\x4d\x2b\x60\xdd\x6e\x06\x3b\xfa\xc0\x04\xce\x9a\x3d\xf8\xa1\x0f\xf6\x6b\xdb\xc0\xed\x5e\x5a\x67\xe1\x7b\xb8\x76\xe0\x1d\xec\x08\x06\x4f\x70\xef\xee\x2c\x6e\x28\xcb\x47\x43\x97\x4c\x28\xf4\x2d\x50\x5c\x4d\x10\x37\xd8\x51\x86\xdc\x78\x78\x78\x3c\x38\xc8\x83\x15\xdd\xd1\xd1\xda\xf1\x19\x3c\xf1\x3b\x2d\x65\x1b\xde\x22\xf9\x94\x69\xb1\x74\x56\x50\x5b\x9f\x4d\x27\x67\x90\xf6\x91\x27\xcd\x3f\xa9\x24\x89\xb2\xc3\xa0\xb3\x34\x2e\x93\x0d\x08\x0f\x1f\x1f\x67\x90\x3e\x85\x34\xde\x89\x23\x31\xae\x29\xae\x50\xd0\x64\xc4\x1c\x6a\x5e\x4f\x21\x4d\x77\xa7\x38\x08\x3e\x8e\xcc\x55\x52\x51\x8d\x83\x91\x40\xb2\x58\xc0\x72\x60\x26\x2b\x66\x0f\x83\x65\xc2\xb2\xc5\xb5\xa1\x19\xa0\x8f\xa6\x3f\x4f\x0a\x9e\x21\x00\x8d\x27\xb4\x87\xb2\xa5\x72\x43\x15\xac\xa9\x76\x1c\x74\x63\x74\xfd\x34\x7f\xc2\x0f\x97\xe4\x14\x77\x69\xdc\x50\x1d\xe3\x06\x8b\x1d\x85\x66\x15\xb1\xde\x52\x05\x35\xbb\x2e\x0e\xad\x34\x53\x29\x8e\xf7\xb1\xe4\x3c\xaa\x7f\x4e\xe9\x3c\x95\xfa\xac\xea\x3f\x59\x3c\x7f\xff\xc2\x5f\x1a\x7c\xba\xf0\x27\x7b\x7f\xa5\x35\xae\xb3\xf3\x89\xf9\xa4\x78\x15\x4b\x3d\x20\x84\xe5\x07\x69\x51\x82\x5a\x26\x83\xa2\xb7\x04\xe2\xa2\xd8\x72\xf4\x1f\x76\x8e\x37\x81\xff\x28\x7e\xd4\x7d\x4d\xb2\x9a\x4e\xfc\x74\xf8\x25\x3b\xd6\x84\x79\xff\xba\xf1\xce\xc9\xd1\x01\xe7\x8b\x6b\x92\x5d\x95\xfd\xcf\xed\x0e\xf8\xc5\x2f\x4e\xdb\x6c\x6c\xf7\x66\xfa\x69\xa7\x23\xee\x2d\x4a\xfb\xed\x45\x7b\xf1\x59\x54\x7d\x64\x5b\x3b\x67\xce\xc9\x74\x0d\x4f\xe7\x64\x77\x82\x12\x8f\xe4\x9f\x2f\xc9\x74\x1d\x0a\x7e\xf6\x37\x4e\x62\xeb\x98\xc6\xb8\x02\x13\x61\x8d\xc6\xd3\x08\xf2\x66\x0b\xa6\xef\x17\x7a\x84\x07\x3a\x50\xff\x1d\x00\x00\xff\xff\x89\xf3\x83\xc0\xc3\x05\x00\x00")
 
 func templatesHelpersGoBytes() ([]byte, error) {
 	return bindataRead(
@@ -180,7 +182,7 @@ func templatesHelpersGo() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/helpers.go", size: 1516, mode: os.FileMode(420), modTime: time.Unix(1602942419, 0)}
+	info := bindataFileInfo{name: "templates/helpers.go", size: 1475, mode: os.FileMode(420), modTime: time.Unix(1609888155, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -200,7 +202,7 @@ func templatesPython37AwsLambdaMakefile() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/Makefile", size: 289, mode: os.FileMode(420), modTime: time.Unix(1609692023, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/Makefile", size: 289, mode: os.FileMode(420), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -280,7 +282,7 @@ func templatesPython37AwsLambdaBinInstall_dependenciesSh() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/bin/install_dependencies.sh", size: 221, mode: os.FileMode(484), modTime: time.Unix(1609677617, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/bin/install_dependencies.sh", size: 221, mode: os.FileMode(493), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -300,7 +302,7 @@ func templatesPython37AwsLambdaBinLaunchSh() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/bin/launch.sh", size: 587, mode: os.FileMode(493), modTime: time.Unix(1609694203, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/bin/launch.sh", size: 587, mode: os.FileMode(493), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -365,7 +367,7 @@ func templatesPython37AwsLambdaMainPy() (*asset, error) {
 	return a, nil
 }
 
-var _templatesPython37AwsLambdaRequirementsDevTxt = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x2a\xa8\x2c\x49\x2d\x2e\xb1\xb5\x35\xd3\x33\xd4\x33\xe4\x2a\xa8\x2c\xc9\xc8\xcf\xd3\xcd\x49\xcc\x4d\x4a\x49\xd4\xcd\xc9\x4f\x4e\xcc\xe1\x02\x04\x00\x00\xff\xff\xc6\xc8\xe8\x77\x22\x00\x00\x00")
+var _templatesPython37AwsLambdaRequirementsDevTxt = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x2a\xa8\x2c\x49\x2d\x2e\xb1\xb5\x35\xd3\x33\xd4\x33\xe4\x2a\xa8\x2c\xc9\xc8\xcf\xd3\xcd\x49\xcc\x4d\x4a\x49\xd4\xcd\xc9\x4f\x4e\xcc\xb1\xb5\x35\x00\x49\x19\x71\x01\x02\x00\x00\xff\xff\x55\xb4\x01\xa2\x2a\x00\x00\x00")
 
 func templatesPython37AwsLambdaRequirementsDevTxtBytes() ([]byte, error) {
 	return bindataRead(
@@ -380,7 +382,7 @@ func templatesPython37AwsLambdaRequirementsDevTxt() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/requirements-dev.txt", size: 34, mode: os.FileMode(420), modTime: time.Unix(1609691366, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/requirements-dev.txt", size: 42, mode: os.FileMode(420), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -585,7 +587,7 @@ func templatesPython37AwsLambdaTestsModelArtifacts__init__Py() (*asset, error) {
 	return a, nil
 }
 
-var _templatesPython37AwsLambdaTestsModelArtifactsTest_filesPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x44\x8f\x41\x6e\xc5\x20\x0c\x44\xf7\x9c\x62\xf4\xbb\xf9\xd9\x70\x80\x4a\x3d\xcb\x17\x0d\x26\xb1\x44\x62\x84\x5d\xb5\xdc\xbe\x8a\x13\xfd\xec\x86\x19\x78\x33\xf0\xd6\xa4\x1b\x44\x43\x28\x5d\x36\x6c\x92\xa9\xc6\xd4\x8d\x4b\x9a\x4d\x71\xe5\x85\x2b\x69\x08\x21\x53\x81\x91\xda\x6b\x21\x7b\xb5\x64\xeb\x73\xfa\x0c\x00\xf0\x81\xdb\x41\x27\xfb\xe9\xbb\xc2\x56\xc2\x61\x41\x0a\x92\x33\xc0\xbb\xbb\x77\x41\xe6\x4e\xb3\x49\x1f\x17\xe6\x97\xbc\x00\xb6\xb2\xe2\x7b\xa0\x4a\xca\xbc\x2f\x37\xcb\xc4\x75\x6c\xe3\x22\x9a\x52\x2d\xfe\xda\xf3\xaf\x73\x6c\x7c\xef\x79\x9c\xe7\x36\x1e\x93\xdf\x4a\xaa\xe4\x5f\x8e\x47\x1c\xe9\x8f\xd5\xf4\x79\xe8\xe9\x3f\x00\x00\xff\xff\xdd\x33\x63\xee\x0e\x01\x00\x00")
+var _templatesPython37AwsLambdaTestsModelArtifactsTest_filesPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x44\x8f\x51\x6e\xc3\x30\x0c\x43\xff\x7d\x0a\xa2\xfb\x69\x7e\x7c\x80\x01\x3b\x4b\xe1\x25\x72\x23\xc0\x89\x0c\x49\xc3\xe6\xdb\x0f\x51\x83\xe6\x4f\xa6\xe8\x47\x8a\xb7\x2e\xea\x10\x4b\xa9\xaa\x6c\x30\x9d\xf3\x26\x0b\xb5\x5c\xd4\xb9\x96\xd9\x0d\xa7\xa7\x72\x23\x4b\x29\x2d\x54\xe1\x64\xfe\x78\x92\x3f\x7a\xf1\xf5\x3e\x7d\x26\x00\xf8\xc0\xa5\x40\xc9\x7f\x74\x37\xf8\x4a\x38\x24\x48\x45\x09\x06\x78\x0f\xf5\x0a\x58\x58\x69\x76\xd1\x71\x62\x7e\x29\x02\xe0\x2b\x1b\xbe\x07\x9a\x94\x85\xf7\xe7\xc5\x72\x89\x39\xf7\x71\x12\xdd\xa8\xd5\xf8\x1d\xfb\xaf\x57\xd9\xfc\xee\x73\x7b\xbd\xfb\xb8\x4d\xe1\x2a\x66\x14\x67\xe7\x63\x9d\xe9\x8f\xcd\xed\x7e\xcc\x53\xfa\x0f\x00\x00\xff\xff\xb9\x6a\xe6\x57\x13\x01\x00\x00")
 
 func templatesPython37AwsLambdaTestsModelArtifactsTest_filesPyBytes() ([]byte, error) {
 	return bindataRead(
@@ -600,12 +602,12 @@ func templatesPython37AwsLambdaTestsModelArtifactsTest_filesPy() (*asset, error)
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/tests/model/artifacts/test_files.py", size: 270, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/tests/model/artifacts/test_files.py", size: 275, mode: os.FileMode(420), modTime: time.Unix(1609888548, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
-var _templatesPython37AwsLambdaTestsModelTest_modelPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x64\x90\xcd\x6a\xe3\x40\x10\x84\xef\xf3\x14\xb5\xda\x8b\x04\x83\x1f\xc0\x60\xf0\x61\xf1\x71\x0d\x66\x6f\x4b\x30\x83\xa6\x15\x0f\x9e\x3f\x7a\x5a\xc4\x89\xf1\xbb\x07\x8f\xa5\xc8\x21\x3a\x08\xa6\xbb\xbe\x2a\xba\x5c\xc8\x89\x05\xf9\x5d\xa8\x88\x1a\x38\x05\x84\x64\xc9\x63\x5a\xd4\x87\x52\x6a\xfb\x50\xac\x06\x77\x91\x91\x49\x59\x1a\x70\x1f\x1c\xab\xa0\xed\xd6\x0a\x00\x98\x64\xe4\xf8\x80\x56\x3e\x19\x3b\xaf\x95\x5a\x88\xa7\xf9\xe2\x30\x19\xfc\xc6\xf6\xdf\xfe\xcf\x1e\x63\xb6\x46\x08\x72\x72\xa5\x42\x90\x84\xfe\x44\xfd\x79\x52\xed\x12\x83\x2e\x26\x64\x4f\x1a\xa6\x14\x62\x81\x2b\x2e\x16\x31\xb1\xa7\xb6\xf7\x83\xc6\xc1\x44\x9b\xc2\x2e\x31\x15\x39\xd0\x2b\x53\x29\x89\xbb\x6a\x30\x11\x4b\x3c\x5c\xc1\xdf\x14\xe9\xe9\xd2\x60\xf8\xbc\xca\x86\x4d\x20\x61\xf7\x41\x6d\x25\x1b\x17\xf3\x28\x47\xeb\x7a\xd1\x74\xc9\xd4\x0b\xd9\x46\xd7\xd5\xff\xfa\xbf\x7f\xed\xf5\xa6\x71\x6d\x32\xd3\x5d\xe7\x52\x6c\xd6\x68\x4e\xe4\x7d\xc2\x5b\x62\x6f\x7f\x35\xb7\xee\xc1\xbc\x68\xd5\x2d\xcd\x4c\x40\xfb\x94\x81\x39\x44\xe3\x47\x59\x4c\x65\xf4\x82\xcd\xd4\xf7\x4c\x2f\x3a\x8d\xc5\xe9\xdb\xe1\x33\xb9\xf9\xb2\xff\x0c\x00\x00\xff\xff\x59\x5f\xc0\x4e\x08\x02\x00\x00")
+var _templatesPython37AwsLambdaTestsModelTest_modelPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x64\x90\xc1\x6a\xf3\x30\x10\x84\xef\x7a\x8a\xfd\xfd\x5f\x6c\x10\x7e\x80\x40\x20\x87\x92\x63\x03\xa1\xb7\x52\x82\x90\xd6\x8d\x88\xa4\x15\xab\x35\x4d\x1b\xf2\xee\x25\x8a\x5d\xa7\xd4\x07\x83\x76\xe7\x9b\x61\xc7\xc7\x4c\x2c\x90\x3f\x05\x8b\xa8\x81\x29\x42\x61\xdb\x47\x72\x18\x60\x5a\xd6\x87\x52\x6a\x73\x57\xf5\x83\x3f\xcb\xc8\xa8\x1c\x0e\x70\x1b\x1c\xaa\xa0\xed\x56\x0a\x00\x80\x51\x46\x4e\x77\xa8\x0f\x64\xdc\xbc\x56\x6a\x21\x1e\xe6\x8b\xc3\x64\xf0\x1f\x36\x2f\xbb\xa7\x1d\x8c\xd9\x19\x41\x90\xa3\x2f\x15\x02\x21\xb0\x47\xb4\xa7\x49\xb5\x25\x06\x3c\x9b\x98\x03\x6a\x30\xa5\x20\x0b\xf8\xe2\x53\x11\x93\x2c\xb6\x36\x0c\x1a\xf6\x26\x39\x8a\x5b\x62\x2c\xb2\xc7\x77\xc6\x52\x88\xbb\x6a\x30\x11\x4b\x3c\xf8\x02\xcf\x94\xf0\xe1\xd2\x68\xf8\xd4\x67\xc3\x26\xa2\xb0\xff\xc2\xb6\x92\x8d\x4f\x79\x94\x83\xf3\x56\x34\x9e\x33\x5a\x41\xd7\xe8\xba\x7a\xad\xff\xdb\xd7\x5e\xae\x1a\x2e\x4d\x66\xbc\xe9\x3c\xa5\x66\x05\xcd\x11\x43\x20\xf8\x20\x0e\xee\x5f\x73\xed\xee\xcc\x9b\x56\xdd\xd2\xcc\x04\xb4\x0f\x19\x30\x87\x68\xf8\x53\x16\x63\x19\x83\xc0\x7a\xea\x7b\xa6\x17\x9d\x86\xc5\xe9\xd7\xe1\x33\xb9\xfe\xb1\x57\xdf\x01\x00\x00\xff\xff\xaa\x57\x16\xab\x0d\x02\x00\x00")
 
 func templatesPython37AwsLambdaTestsModelTest_modelPyBytes() ([]byte, error) {
 	return bindataRead(
@@ -620,7 +622,7 @@ func templatesPython37AwsLambdaTestsModelTest_modelPy() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/tests/model/test_model.py", size: 520, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/tests/model/test_model.py", size: 525, mode: os.FileMode(420), modTime: time.Unix(1609888538, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -640,7 +642,7 @@ func templatesPython37AwsLambda_dockerDockerfile() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/Dockerfile", size: 202, mode: os.FileMode(420), modTime: time.Unix(1609690874, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/Dockerfile", size: 202, mode: os.FileMode(420), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -660,7 +662,7 @@ func templatesPython37AwsLambda_dockerMakefile() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/Makefile", size: 401, mode: os.FileMode(420), modTime: time.Unix(1609690874, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/Makefile", size: 401, mode: os.FileMode(420), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -680,7 +682,7 @@ func templatesPython37AwsLambda_dockerReadmeMd() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/README.md", size: 150, mode: os.FileMode(420), modTime: time.Unix(1609690874, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/README.md", size: 150, mode: os.FileMode(420), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -700,7 +702,7 @@ func templatesPython37AwsLambda_dockerBin_configSh() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/bin/_config.sh", size: 75, mode: os.FileMode(493), modTime: time.Unix(1609690874, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/bin/_config.sh", size: 75, mode: os.FileMode(493), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -720,7 +722,7 @@ func templatesPython37AwsLambda_dockerBinCleanupSh() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/bin/cleanup.sh", size: 245, mode: os.FileMode(493), modTime: time.Unix(1609690874, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/bin/cleanup.sh", size: 245, mode: os.FileMode(493), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -740,7 +742,7 @@ func templatesPython37AwsLambda_dockerBinInstall_dependenciesSh() (*asset, error
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/bin/install_dependencies.sh", size: 221, mode: os.FileMode(420), modTime: time.Unix(1609690874, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/bin/install_dependencies.sh", size: 221, mode: os.FileMode(420), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -760,7 +762,7 @@ func templatesPython37AwsLambda_dockerBinLaunchSh() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/bin/launch.sh", size: 331, mode: os.FileMode(493), modTime: time.Unix(1609690874, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/bin/launch.sh", size: 331, mode: os.FileMode(493), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -780,7 +782,7 @@ func templatesPython37AwsLambda_dockerBinRemove_pyenvSh() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/bin/remove_pyenv.sh", size: 412, mode: os.FileMode(493), modTime: time.Unix(1609690874, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/bin/remove_pyenv.sh", size: 412, mode: os.FileMode(493), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -800,7 +802,7 @@ func templatesPython37AwsLambda_dockerBinSetup_pyenvSh() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/bin/setup_pyenv.sh", size: 624, mode: os.FileMode(493), modTime: time.Unix(1609690874, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/bin/setup_pyenv.sh", size: 624, mode: os.FileMode(493), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -820,7 +822,7 @@ func templatesPython37AwsLambda_dockerMainPy() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/main.py", size: 682, mode: os.FileMode(420), modTime: time.Unix(1609690874, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/main.py", size: 682, mode: os.FileMode(420), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -840,7 +842,7 @@ func templatesPython37AwsLambda_dockerRequirementsDevTxt() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/requirements-dev.txt", size: 13, mode: os.FileMode(420), modTime: time.Unix(1609690874, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/requirements-dev.txt", size: 13, mode: os.FileMode(420), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -860,7 +862,7 @@ func templatesPython37AwsLambda_dockerRequirementsTxt() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/requirements.txt", size: 13, mode: os.FileMode(420), modTime: time.Unix(1609690874, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/requirements.txt", size: 13, mode: os.FileMode(420), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -880,7 +882,7 @@ func templatesPython37AwsLambda_dockerSrc__init__Py() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/src/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609690874, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/src/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -900,7 +902,7 @@ func templatesPython37AwsLambda_dockerSrcModel__init__Py() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/src/model/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609690874, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/src/model/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -920,7 +922,7 @@ func templatesPython37AwsLambda_dockerSrcModelArtifactsReadmeMd() (*asset, error
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/src/model/artifacts/README.md", size: 82, mode: os.FileMode(420), modTime: time.Unix(1609690874, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/src/model/artifacts/README.md", size: 82, mode: os.FileMode(420), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -940,7 +942,7 @@ func templatesPython37AwsLambda_dockerSrcModelArtifacts__init__Py() (*asset, err
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/src/model/artifacts/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609690874, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/src/model/artifacts/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -960,7 +962,7 @@ func templatesPython37AwsLambda_dockerSrcModelArtifactsFilesPy() (*asset, error)
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/src/model/artifacts/files.py", size: 438, mode: os.FileMode(420), modTime: time.Unix(1609690874, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/src/model/artifacts/files.py", size: 438, mode: os.FileMode(420), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -980,7 +982,7 @@ func templatesPython37AwsLambda_dockerSrcModelModelPy() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/src/model/model.py", size: 419, mode: os.FileMode(420), modTime: time.Unix(1609690874, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/src/model/model.py", size: 419, mode: os.FileMode(420), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1000,7 +1002,7 @@ func templatesPython37AwsLambda_dockerTests__init__Py() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/tests/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609690874, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/tests/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1020,7 +1022,7 @@ func templatesPython37AwsLambda_dockerTestsModel__init__Py() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/tests/model/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609690874, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/tests/model/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1040,7 +1042,7 @@ func templatesPython37AwsLambda_dockerTestsModelArtifacts__init__Py() (*asset, e
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/tests/model/artifacts/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609690874, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/tests/model/artifacts/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1060,7 +1062,7 @@ func templatesPython37AwsLambda_dockerTestsModelArtifactsTest_filesPy() (*asset,
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/tests/model/artifacts/test_files.py", size: 270, mode: os.FileMode(420), modTime: time.Unix(1609690874, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/tests/model/artifacts/test_files.py", size: 270, mode: os.FileMode(420), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1080,7 +1082,7 @@ func templatesPython37AwsLambda_dockerTestsModelTest_modelPy() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/tests/model/test_model.py", size: 520, mode: os.FileMode(420), modTime: time.Unix(1609690874, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda_docker/tests/model/test_model.py", size: 520, mode: os.FileMode(420), modTime: time.Unix(1609781906, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1225,7 +1227,7 @@ func templatesPython37GcloudFunctionsBinSetup_pyenvSh() (*asset, error) {
 	return a, nil
 }
 
-var _templatesPython37GcloudFunctionsMainPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x54\x52\xcb\x8e\x9b\x40\x10\xbc\xcf\x57\x94\xbc\x17\x90\x56\x90\x5c\x57\x21\x4a\xa4\x68\x95\x53\x36\x42\xdc\xed\x31\xd3\xe0\xb1\x61\x9a\xcc\xc3\x8a\x65\xf9\xdf\x57\x0c\x0f\x61\x0e\x7d\x98\xaa\xae\xea\xae\xa6\xb1\xdc\xa3\xe9\xa4\xbb\x40\xf7\x03\x5b\x8f\xb3\x63\xa3\x9b\x9b\x10\x11\xea\x59\x51\x97\xc5\xba\x10\x06\x4b\x4a\xd7\xfe\x15\x1d\x4b\xb5\x8f\x90\x10\x13\xa3\xd8\xbc\x25\xa9\x10\x8a\x1a\xdc\xef\xc8\xde\x83\xa9\xbd\x66\xf3\x47\xf6\x84\xc7\x23\xb1\xf4\x2f\x90\xf3\xe9\x9b\x00\x80\xdd\x6e\x57\x92\x1b\xd8\x28\x07\xcf\x90\xe6\x86\xdf\x55\xf5\x17\x33\x2b\x8b\xa4\x9f\xb6\x75\x13\x7d\xfc\x66\x08\x49\x1c\x3d\x2b\x17\xbd\xa7\x46\xf0\xf1\x4c\xf5\xdc\x5f\x92\x0f\xd6\x6c\x24\xaa\x13\xc1\x46\x5b\x47\xf0\xf4\xdf\x83\x6d\xf4\x76\xe4\xc1\x0d\xae\xb2\x0b\xe4\xe0\x4f\xd2\xa3\x96\x06\x47\xc2\xa8\x40\x0a\xda\x8c\x53\xae\x42\xe5\x22\x32\xd9\x21\x38\x6d\xda\x15\x3d\xf4\xf2\x42\xfb\xd5\xe8\xdb\xc9\xfb\xe1\x2d\xcf\xa7\xb9\x07\xae\x99\x33\xb6\x6d\xae\xb8\x76\xf9\xd7\xec\x4b\x2e\x07\x9d\xbf\x4c\xe8\x7b\xac\x4f\xfd\xdf\x0f\xd9\x12\x99\xd8\xe4\xb0\x1f\x8f\x86\x62\x4d\xac\xa5\xe9\x29\x49\x23\xeb\x05\x3f\xaa\x8f\x5f\x1f\x90\x4a\xc5\x0d\x97\x7c\xae\xb2\xd3\x4a\x8e\x87\x99\xf7\xbc\x71\x80\x21\x52\xb3\xb6\x0b\x9d\x47\xb1\x1c\x3c\x89\x67\x2d\x62\x7d\x85\x36\x43\xf0\xc5\xd6\x3f\x9d\xbb\xc6\x94\x96\xbf\x28\x99\x44\x52\xf1\x19\x00\x00\xff\xff\xdd\x3a\x61\x7b\x68\x02\x00\x00")
+var _templatesPython37GcloudFunctionsMainPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x54\x52\x3d\xcf\x9b\x30\x10\xde\xfd\x2b\x1e\xa5\x0b\x48\xaf\xa0\x5d\xa3\x52\xa9\x4b\xd4\xa9\xaa\x50\xf6\xc4\x81\x83\x38\x01\x1f\xb5\x8f\xaa\x51\x94\xff\xfe\x0a\x1b\x10\x61\xb8\xe1\x9e\xaf\xe3\xce\x8d\xe3\x1e\x4d\xa7\xfd\x1d\xa6\x1f\xd8\x09\x6e\x9e\xad\x69\x1e\x4a\x05\xc8\xbb\x2a\xeb\xb9\xa6\x2e\xd6\x85\x34\x38\xaa\x4d\x25\x1f\xe8\x58\xd7\xa7\x00\x29\x15\x19\xc5\xa6\x97\xa4\x4a\xa9\x9a\x1a\x3c\x9f\xd9\x61\xb4\x95\x18\xb6\xbf\x75\x4f\xaf\x57\xe2\xe8\xef\x48\x5e\xd2\xbd\x02\x80\xdd\x6e\x57\x92\x1f\xd8\xd6\x1e\xc2\xd0\xf6\x81\x5f\xc7\xe3\x1f\xcc\xac\x2c\x90\x7e\xba\xd6\x47\xfa\xf4\xcd\x10\x92\x30\x7d\x56\x2e\x7e\x6f\x42\xf0\xe5\x46\xd5\xac\x2f\x49\x46\x67\x37\x16\xc7\x2b\xc1\x85\x58\x4f\x10\xfa\x2f\x60\x17\xb2\x3d\x09\xb8\xc1\x3f\xdd\x8d\xe4\x21\x57\x2d\xa8\xb4\xc5\x85\x30\x39\x50\x0d\x63\xa7\x29\x57\xa3\x72\x31\x89\x71\x18\xbd\xb1\xed\x8a\x9e\x7b\x7d\xa7\xd3\x1a\xf4\xfd\x2a\x32\xec\xf3\x3c\xce\x3d\x70\xc5\x9c\xb1\x6b\xf3\x9a\x2b\x9f\x7f\xcb\xbe\xe6\x7a\x30\xf9\x97\x88\x1e\x42\x7d\xd3\xff\x38\x67\xcb\xca\xd4\x66\x0f\xa7\xe9\x6e\x28\xd6\x8d\xb5\x14\x5b\x49\x3a\xb3\xfc\xd8\x09\x8a\xe5\x72\x49\xb8\x4f\x11\xea\x07\x8c\x1d\x46\x29\xb6\x4e\x8b\x6a\xfa\xdf\xe5\x49\x24\xd1\x24\x55\x9f\x01\x00\x00\xff\xff\xa4\x74\x7f\x43\x35\x02\x00\x00")
 
 func templatesPython37GcloudFunctionsMainPyBytes() ([]byte, error) {
 	return bindataRead(
@@ -1240,107 +1242,7 @@ func templatesPython37GcloudFunctionsMainPy() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/main.py", size: 616, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
-	a := &asset{bytes: bytes, info: info}
-	return a, nil
-}
-
-var _templatesPython37GcloudFunctionsModel__init__Py = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x01\x00\x00\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00")
-
-func templatesPython37GcloudFunctionsModel__init__PyBytes() ([]byte, error) {
-	return bindataRead(
-		_templatesPython37GcloudFunctionsModel__init__Py,
-		"templates/python37/gcloud/functions/model/__init__.py",
-	)
-}
-
-func templatesPython37GcloudFunctionsModel__init__Py() (*asset, error) {
-	bytes, err := templatesPython37GcloudFunctionsModel__init__PyBytes()
-	if err != nil {
-		return nil, err
-	}
-
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/model/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
-	a := &asset{bytes: bytes, info: info}
-	return a, nil
-}
-
-var _templatesPython37GcloudFunctionsModelArtifactsReadmeMd = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x1c\xc9\xd1\x09\x84\x30\x0c\x06\xe0\xf7\x4e\xf1\xc3\xbd\xdc\xc1\xd1\x1d\x1c\xc0\x21\x4a\x93\x6a\xb0\x1a\x49\xa2\xd0\xed\x05\x9f\xbf\x0f\x66\x25\xee\x28\x16\xd2\x4a\x0d\x4f\x69\x22\xc2\xd0\xcb\xe0\xe5\x66\xc2\xfe\xba\x1c\xa1\x88\x55\x1c\x24\xc6\x35\xd4\x06\xbe\x9c\x97\xfc\xc7\x29\x75\xeb\x8c\x26\x9d\xfd\x97\xd3\x13\x00\x00\xff\xff\x09\x94\x0f\x8e\x52\x00\x00\x00")
-
-func templatesPython37GcloudFunctionsModelArtifactsReadmeMdBytes() ([]byte, error) {
-	return bindataRead(
-		_templatesPython37GcloudFunctionsModelArtifactsReadmeMd,
-		"templates/python37/gcloud/functions/model/artifacts/README.md",
-	)
-}
-
-func templatesPython37GcloudFunctionsModelArtifactsReadmeMd() (*asset, error) {
-	bytes, err := templatesPython37GcloudFunctionsModelArtifactsReadmeMdBytes()
-	if err != nil {
-		return nil, err
-	}
-
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/model/artifacts/README.md", size: 82, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
-	a := &asset{bytes: bytes, info: info}
-	return a, nil
-}
-
-var _templatesPython37GcloudFunctionsModelArtifacts__init__Py = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x01\x00\x00\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00")
-
-func templatesPython37GcloudFunctionsModelArtifacts__init__PyBytes() ([]byte, error) {
-	return bindataRead(
-		_templatesPython37GcloudFunctionsModelArtifacts__init__Py,
-		"templates/python37/gcloud/functions/model/artifacts/__init__.py",
-	)
-}
-
-func templatesPython37GcloudFunctionsModelArtifacts__init__Py() (*asset, error) {
-	bytes, err := templatesPython37GcloudFunctionsModelArtifacts__init__PyBytes()
-	if err != nil {
-		return nil, err
-	}
-
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/model/artifacts/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
-	a := &asset{bytes: bytes, info: info}
-	return a, nil
-}
-
-var _templatesPython37GcloudFunctionsModelArtifactsFilesPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x84\x90\xc1\x4e\x86\x30\x10\x84\xef\x3c\xc5\x84\x13\x24\xbf\xe5\x4e\xa2\x89\xaf\x60\xbc\x37\x8d\x2c\x50\x2d\x5d\xd2\xee\x7f\xf8\xdf\xde\x6c\x91\xa2\x27\xb9\x6c\x96\xec\x7c\x33\x1d\xbf\xed\x9c\x04\x9c\x9b\xa6\x99\x68\xc6\x42\x62\x77\x27\x6b\x37\xfb\x40\x36\xba\x8d\x46\x64\x49\x3d\x9e\x5e\x74\x8e\x0d\x00\xb4\x6d\xfb\x46\x72\x4f\x31\xc3\x41\xaf\x21\x0c\x07\x95\xc0\x47\xc8\xea\x33\x26\x9f\xe8\x43\x38\x3d\x4c\x91\xbc\xa6\x25\x1f\x62\xfd\x2a\x1c\x9d\xc2\x47\xbc\xaf\x84\xb2\xf3\xfc\x07\x44\xc8\xfa\xb7\xc2\xe0\x72\x85\x14\x9b\xfd\x21\x2b\xc7\x43\xd1\x91\x59\xcc\x0d\xed\xc6\x13\x05\xb3\x7f\x85\xb6\x3f\xcc\x7f\xc2\x5e\xfe\x6a\x37\xdf\x43\xf8\x37\x7c\x55\x9c\xec\x41\x15\x83\xf0\xf0\xcb\xe4\xec\xa4\xcc\x2b\xea\x33\x38\x1b\x3d\x37\x93\x4f\xfa\xb8\xee\xdc\x13\xb9\x50\x4a\xb6\xb6\x34\x61\xfb\x83\x91\x4a\xce\x2a\xfb\x64\x1f\xbb\xca\xbb\x5d\xad\xf5\xdf\x01\x00\x00\xff\xff\x7e\xe2\x05\x91\xb6\x01\x00\x00")
-
-func templatesPython37GcloudFunctionsModelArtifactsFilesPyBytes() ([]byte, error) {
-	return bindataRead(
-		_templatesPython37GcloudFunctionsModelArtifactsFilesPy,
-		"templates/python37/gcloud/functions/model/artifacts/files.py",
-	)
-}
-
-func templatesPython37GcloudFunctionsModelArtifactsFilesPy() (*asset, error) {
-	bytes, err := templatesPython37GcloudFunctionsModelArtifactsFilesPyBytes()
-	if err != nil {
-		return nil, err
-	}
-
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/model/artifacts/files.py", size: 438, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
-	a := &asset{bytes: bytes, info: info}
-	return a, nil
-}
-
-var _templatesPython37GcloudFunctionsModelModelPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x54\x50\xcd\x4a\xc3\x40\x10\xbe\xe7\x29\x3e\xd7\x4b\x0b\xda\x07\xc8\x41\x2c\x78\xb6\x20\xbd\xcb\x92\x9d\x74\x17\xb7\x3b\x65\x32\xa1\x04\xf1\xdd\x65\x27\xd1\xa6\x39\x85\x9d\xef\x3f\x50\x8f\xcc\x3e\x7c\x9e\x39\x50\xde\x6c\xdb\x06\x00\x1e\xf1\x7a\x3c\xbc\x1d\xec\x02\x5f\x02\x84\x74\x94\x82\x89\x47\x81\x21\x11\x49\xc8\xb0\xcb\xe9\x9d\x0b\x35\x4d\x53\xf5\x2e\x42\x21\x75\xba\x31\xe0\x13\x52\xb9\x8c\xda\xa2\x3e\x6d\xf1\xfc\x62\x3f\xb3\x8d\x73\xee\x18\xd3\x80\x34\x40\x23\xfd\xf3\xb6\xe8\xc7\xd2\x69\xe2\x82\x9e\x65\x31\xf5\x5d\x4c\x85\x90\xc9\x4b\x49\xe5\x34\xa7\xd8\x99\xcc\x5e\x4e\xc3\x2c\x58\x3f\xb3\xc3\xc6\xec\x5a\xec\xcd\x2e\x71\xf1\x32\xa1\xe3\xa2\x3e\x19\xbd\xfa\xcd\x45\x0c\x3f\xcc\x4a\x1f\xd6\x65\x25\x76\x47\xbf\x26\x8d\xeb\x09\x96\xbc\x35\x67\xdd\xc8\x97\x09\xac\x91\x04\xc1\xab\xaf\x40\x5c\x79\xcc\x01\x39\x7d\x11\x94\x97\xa5\x76\x7f\xd5\xef\x96\xbe\x75\xaf\x52\x3d\xcb\xd9\xab\x85\x14\x1a\xc6\xac\x48\x45\x19\x7e\x95\x66\xbd\xfd\xb7\xbb\x45\x71\x2d\x5c\xa4\x9c\x19\x57\x96\x1c\x1e\xdc\x4f\xf3\x1b\x00\x00\xff\xff\x7b\x7e\xf8\x44\xe4\x01\x00\x00")
-
-func templatesPython37GcloudFunctionsModelModelPyBytes() ([]byte, error) {
-	return bindataRead(
-		_templatesPython37GcloudFunctionsModelModelPy,
-		"templates/python37/gcloud/functions/model/model.py",
-	)
-}
-
-func templatesPython37GcloudFunctionsModelModelPy() (*asset, error) {
-	bytes, err := templatesPython37GcloudFunctionsModelModelPyBytes()
-	if err != nil {
-		return nil, err
-	}
-
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/model/model.py", size: 484, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/main.py", size: 565, mode: os.FileMode(420), modTime: time.Unix(1609888683, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1381,6 +1283,126 @@ func templatesPython37GcloudFunctionsRequirementsTxt() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "templates/python37/gcloud/functions/requirements.txt", size: 13, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _templatesPython37GcloudFunctionsSrc__init__Py = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x01\x00\x00\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00")
+
+func templatesPython37GcloudFunctionsSrc__init__PyBytes() ([]byte, error) {
+	return bindataRead(
+		_templatesPython37GcloudFunctionsSrc__init__Py,
+		"templates/python37/gcloud/functions/src/__init__.py",
+	)
+}
+
+func templatesPython37GcloudFunctionsSrc__init__Py() (*asset, error) {
+	bytes, err := templatesPython37GcloudFunctionsSrc__init__PyBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/src/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609888674, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _templatesPython37GcloudFunctionsSrcModel__init__Py = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x01\x00\x00\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00")
+
+func templatesPython37GcloudFunctionsSrcModel__init__PyBytes() ([]byte, error) {
+	return bindataRead(
+		_templatesPython37GcloudFunctionsSrcModel__init__Py,
+		"templates/python37/gcloud/functions/src/model/__init__.py",
+	)
+}
+
+func templatesPython37GcloudFunctionsSrcModel__init__Py() (*asset, error) {
+	bytes, err := templatesPython37GcloudFunctionsSrcModel__init__PyBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/src/model/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _templatesPython37GcloudFunctionsSrcModelArtifactsReadmeMd = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x1c\xc9\xd1\x09\x84\x30\x0c\x06\xe0\xf7\x4e\xf1\xc3\xbd\xdc\xc1\xd1\x1d\x1c\xc0\x21\x4a\x93\x6a\xb0\x1a\x49\xa2\xd0\xed\x05\x9f\xbf\x0f\x66\x25\xee\x28\x16\xd2\x4a\x0d\x4f\x69\x22\xc2\xd0\xcb\xe0\xe5\x66\xc2\xfe\xba\x1c\xa1\x88\x55\x1c\x24\xc6\x35\xd4\x06\xbe\x9c\x97\xfc\xc7\x29\x75\xeb\x8c\x26\x9d\xfd\x97\xd3\x13\x00\x00\xff\xff\x09\x94\x0f\x8e\x52\x00\x00\x00")
+
+func templatesPython37GcloudFunctionsSrcModelArtifactsReadmeMdBytes() ([]byte, error) {
+	return bindataRead(
+		_templatesPython37GcloudFunctionsSrcModelArtifactsReadmeMd,
+		"templates/python37/gcloud/functions/src/model/artifacts/README.md",
+	)
+}
+
+func templatesPython37GcloudFunctionsSrcModelArtifactsReadmeMd() (*asset, error) {
+	bytes, err := templatesPython37GcloudFunctionsSrcModelArtifactsReadmeMdBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/src/model/artifacts/README.md", size: 82, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _templatesPython37GcloudFunctionsSrcModelArtifacts__init__Py = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x01\x00\x00\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00")
+
+func templatesPython37GcloudFunctionsSrcModelArtifacts__init__PyBytes() ([]byte, error) {
+	return bindataRead(
+		_templatesPython37GcloudFunctionsSrcModelArtifacts__init__Py,
+		"templates/python37/gcloud/functions/src/model/artifacts/__init__.py",
+	)
+}
+
+func templatesPython37GcloudFunctionsSrcModelArtifacts__init__Py() (*asset, error) {
+	bytes, err := templatesPython37GcloudFunctionsSrcModelArtifacts__init__PyBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/src/model/artifacts/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _templatesPython37GcloudFunctionsSrcModelArtifactsFilesPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x84\x90\xc1\x4e\x86\x30\x10\x84\xef\x3c\xc5\x84\x13\x24\xbf\xe5\x4e\xa2\x89\xaf\x60\xbc\x37\x8d\x2c\x50\x2d\x5d\xd2\xee\x7f\xf8\xdf\xde\x6c\x91\xa2\x27\xb9\x6c\x96\xec\x7c\x33\x1d\xbf\xed\x9c\x04\x9c\x9b\xa6\x99\x68\xc6\x42\x62\x77\x27\x6b\x37\xfb\x40\x36\xba\x8d\x46\x64\x49\x3d\x9e\x5e\x74\x8e\x0d\x00\xb4\x6d\xfb\x46\x72\x4f\x31\xc3\x41\xaf\x21\x0c\x07\x95\xc0\x47\xc8\xea\x33\x26\x9f\xe8\x43\x38\x3d\x4c\x91\xbc\xa6\x25\x1f\x62\xfd\x2a\x1c\x9d\xc2\x47\xbc\xaf\x84\xb2\xf3\xfc\x07\x44\xc8\xfa\xb7\xc2\xe0\x72\x85\x14\x9b\xfd\x21\x2b\xc7\x43\xd1\x91\x59\xcc\x0d\xed\xc6\x13\x05\xb3\x7f\x85\xb6\x3f\xcc\x7f\xc2\x5e\xfe\x6a\x37\xdf\x43\xf8\x37\x7c\x55\x9c\xec\x41\x15\x83\xf0\xf0\xcb\xe4\xec\xa4\xcc\x2b\xea\x33\x38\x1b\x3d\x37\x93\x4f\xfa\xb8\xee\xdc\x13\xb9\x50\x4a\xb6\xb6\x34\x61\xfb\x83\x91\x4a\xce\x2a\xfb\x64\x1f\xbb\xca\xbb\x5d\xad\xf5\xdf\x01\x00\x00\xff\xff\x7e\xe2\x05\x91\xb6\x01\x00\x00")
+
+func templatesPython37GcloudFunctionsSrcModelArtifactsFilesPyBytes() ([]byte, error) {
+	return bindataRead(
+		_templatesPython37GcloudFunctionsSrcModelArtifactsFilesPy,
+		"templates/python37/gcloud/functions/src/model/artifacts/files.py",
+	)
+}
+
+func templatesPython37GcloudFunctionsSrcModelArtifactsFilesPy() (*asset, error) {
+	bytes, err := templatesPython37GcloudFunctionsSrcModelArtifactsFilesPyBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/src/model/artifacts/files.py", size: 438, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _templatesPython37GcloudFunctionsSrcModelModelPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x54\x50\xcd\x4a\xc3\x40\x10\xbe\xe7\x29\x3e\xd7\x4b\x0b\xda\x07\xc8\x41\x2c\x78\xb6\x20\xbd\xcb\x92\x9d\x74\x17\xb7\x3b\x65\x32\xa1\x04\xf1\xdd\x65\x27\xd1\xa6\x39\x85\x9d\xef\x3f\x50\x8f\xcc\x3e\x7c\x9e\x39\x50\xde\x6c\xdb\x06\x00\x1e\xf1\x7a\x3c\xbc\x1d\xec\x02\x5f\x02\x84\x74\x94\x82\x89\x47\x81\x21\x11\x49\xc8\xb0\xcb\xe9\x9d\x0b\x35\x4d\x53\xf5\x2e\x42\x21\x75\xba\x31\xe0\x13\x52\xb9\x8c\xda\xa2\x3e\x6d\xf1\xfc\x62\x3f\xb3\x8d\x73\xee\x18\xd3\x80\x34\x40\x23\xfd\xf3\xb6\xe8\xc7\xd2\x69\xe2\x82\x9e\x65\x31\xf5\x5d\x4c\x85\x90\xc9\x4b\x49\xe5\x34\xa7\xd8\x99\xcc\x5e\x4e\xc3\x2c\x58\x3f\xb3\xc3\xc6\xec\x5a\xec\xcd\x2e\x71\xf1\x32\xa1\xe3\xa2\x3e\x19\xbd\xfa\xcd\x45\x0c\x3f\xcc\x4a\x1f\xd6\x65\x25\x76\x47\xbf\x26\x8d\xeb\x09\x96\xbc\x35\x67\xdd\xc8\x97\x09\xac\x91\x04\xc1\xab\xaf\x40\x5c\x79\xcc\x01\x39\x7d\x11\x94\x97\xa5\x76\x7f\xd5\xef\x96\xbe\x75\xaf\x52\x3d\xcb\xd9\xab\x85\x14\x1a\xc6\xac\x48\x45\x19\x7e\x95\x66\xbd\xfd\xb7\xbb\x45\x71\x2d\x5c\xa4\x9c\x19\x57\x96\x1c\x1e\xdc\x4f\xf3\x1b\x00\x00\xff\xff\x7b\x7e\xf8\x44\xe4\x01\x00\x00")
+
+func templatesPython37GcloudFunctionsSrcModelModelPyBytes() ([]byte, error) {
+	return bindataRead(
+		_templatesPython37GcloudFunctionsSrcModelModelPy,
+		"templates/python37/gcloud/functions/src/model/model.py",
+	)
+}
+
+func templatesPython37GcloudFunctionsSrcModelModelPy() (*asset, error) {
+	bytes, err := templatesPython37GcloudFunctionsSrcModelModelPyBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/src/model/model.py", size: 484, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1445,7 +1467,7 @@ func templatesPython37GcloudFunctionsTestsModelArtifacts__init__Py() (*asset, er
 	return a, nil
 }
 
-var _templatesPython37GcloudFunctionsTestsModelArtifactsTest_filesPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x44\x8f\x41\x6e\xc5\x20\x0c\x44\xf7\x9c\x62\xf4\xbb\xf9\xd9\x70\x80\x4a\x3d\xcb\x17\x0d\x26\xb1\x44\x62\x84\x5d\xb5\xdc\xbe\x8a\x13\xfd\xec\x86\x19\x78\x33\xf0\xd6\xa4\x1b\x44\x43\x28\x5d\x36\x6c\x92\xa9\xc6\xd4\x8d\x4b\x9a\x4d\x71\xe5\x85\x2b\x69\x08\x21\x53\x81\x91\xda\x6b\x21\x7b\xb5\x64\xeb\x73\xfa\x0c\x00\xf0\x81\xdb\x41\x27\xfb\xe9\xbb\xc2\x56\xc2\x61\x41\x0a\x92\x33\xc0\xbb\xbb\x77\x41\xe6\x4e\xb3\x49\x1f\x17\xe6\x97\xbc\x00\xb6\xb2\xe2\x7b\xa0\x4a\xca\xbc\x2f\x37\xcb\xc4\x75\x6c\xe3\x22\x9a\x52\x2d\xfe\xda\xf3\xaf\x73\x6c\x7c\xef\x79\x9c\xe7\x36\x1e\x93\xdf\x4a\xaa\xe4\x5f\x8e\x47\x1c\xe9\x8f\xd5\xf4\x79\xe8\xe9\x3f\x00\x00\xff\xff\xdd\x33\x63\xee\x0e\x01\x00\x00")
+var _templatesPython37GcloudFunctionsTestsModelArtifactsTest_filesPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x44\x8f\x51\x6e\xc3\x30\x0c\x43\xff\x7d\x0a\xa2\xfb\x69\x7e\x7c\x80\x01\x3b\x4b\xe1\x25\x72\x23\xc0\x89\x0c\x49\xc3\xe6\xdb\x0f\x51\x83\xe6\x4f\xa6\xe8\x47\x8a\xb7\x2e\xea\x10\x4b\xa9\xaa\x6c\x30\x9d\xf3\x26\x0b\xb5\x5c\xd4\xb9\x96\xd9\x0d\xa7\xa7\x72\x23\x4b\x29\x2d\x54\xe1\x64\xfe\x78\x92\x3f\x7a\xf1\xf5\x3e\x7d\x26\x00\xf8\xc0\xa5\x40\xc9\x7f\x74\x37\xf8\x4a\x38\x24\x48\x45\x09\x06\x78\x0f\xf5\x0a\x58\x58\x69\x76\xd1\x71\x62\x7e\x29\x02\xe0\x2b\x1b\xbe\x07\x9a\x94\x85\xf7\xe7\xc5\x72\x89\x39\xf7\x71\x12\xdd\xa8\xd5\xf8\x1d\xfb\xaf\x57\xd9\xfc\xee\x73\x7b\xbd\xfb\xb8\x4d\xe1\x2a\x66\x14\x67\xe7\x63\x9d\xe9\x8f\xcd\xed\x7e\xcc\x53\xfa\x0f\x00\x00\xff\xff\xb9\x6a\xe6\x57\x13\x01\x00\x00")
 
 func templatesPython37GcloudFunctionsTestsModelArtifactsTest_filesPyBytes() ([]byte, error) {
 	return bindataRead(
@@ -1460,12 +1482,12 @@ func templatesPython37GcloudFunctionsTestsModelArtifactsTest_filesPy() (*asset, 
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/tests/model/artifacts/test_files.py", size: 270, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/tests/model/artifacts/test_files.py", size: 275, mode: os.FileMode(420), modTime: time.Unix(1609888588, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
-var _templatesPython37GcloudFunctionsTestsModelTest_modelPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x64\x90\xcd\x6a\xe3\x40\x10\x84\xef\xf3\x14\xb5\xda\x8b\x04\x83\x1f\xc0\x60\xf0\x61\xf1\x71\x0d\x66\x6f\x4b\x30\x83\xa6\x15\x0f\x9e\x3f\x7a\x5a\xc4\x89\xf1\xbb\x07\x8f\xa5\xc8\x21\x3a\x08\xa6\xbb\xbe\x2a\xba\x5c\xc8\x89\x05\xf9\x5d\xa8\x88\x1a\x38\x05\x84\x64\xc9\x63\x5a\xd4\x87\x52\x6a\xfb\x50\xac\x06\x77\x91\x91\x49\x59\x1a\x70\x1f\x1c\xab\xa0\xed\xd6\x0a\x00\x98\x64\xe4\xf8\x80\x56\x3e\x19\x3b\xaf\x95\x5a\x88\xa7\xf9\xe2\x30\x19\xfc\xc6\xf6\xdf\xfe\xcf\x1e\x63\xb6\x46\x08\x72\x72\xa5\x42\x90\x84\xfe\x44\xfd\x79\x52\xed\x12\x83\x2e\x26\x64\x4f\x1a\xa6\x14\x62\x81\x2b\x2e\x16\x31\xb1\xa7\xb6\xf7\x83\xc6\xc1\x44\x9b\xc2\x2e\x31\x15\x39\xd0\x2b\x53\x29\x89\xbb\x6a\x30\x11\x4b\x3c\x5c\xc1\xdf\x14\xe9\xe9\xd2\x60\xf8\xbc\xca\x86\x4d\x20\x61\xf7\x41\x6d\x25\x1b\x17\xf3\x28\x47\xeb\x7a\xd1\x74\xc9\xd4\x0b\xd9\x46\xd7\xd5\xff\xfa\xbf\x7f\xed\xf5\xa6\x71\x6d\x32\xd3\x5d\xe7\x52\x6c\xd6\x68\x4e\xe4\x7d\xc2\x5b\x62\x6f\x7f\x35\xb7\xee\xc1\xbc\x68\xd5\x2d\xcd\x4c\x40\xfb\x94\x81\x39\x44\xe3\x47\x59\x4c\x65\xf4\x82\xcd\xd4\xf7\x4c\x2f\x3a\x8d\xc5\xe9\xdb\xe1\x33\xb9\xf9\xb2\xff\x0c\x00\x00\xff\xff\x59\x5f\xc0\x4e\x08\x02\x00\x00")
+var _templatesPython37GcloudFunctionsTestsModelTest_modelPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x64\x90\xc1\x6a\xf3\x30\x10\x84\xef\x7a\x8a\xfd\xfd\x5f\x6c\x10\x7e\x80\x40\x20\x87\x92\x63\x03\xa1\xb7\x52\x82\x90\xd6\x8d\x88\xa4\x15\xab\x35\x4d\x1b\xf2\xee\x25\x8a\x5d\xa7\xd4\x07\x83\x76\xe7\x9b\x61\xc7\xc7\x4c\x2c\x90\x3f\x05\x8b\xa8\x81\x29\x42\x61\xdb\x47\x72\x18\x60\x5a\xd6\x87\x52\x6a\x73\x57\xf5\x83\x3f\xcb\xc8\xa8\x1c\x0e\x70\x1b\x1c\xaa\xa0\xed\x56\x0a\x00\x80\x51\x46\x4e\x77\xa8\x0f\x64\xdc\xbc\x56\x6a\x21\x1e\xe6\x8b\xc3\x64\xf0\x1f\x36\x2f\xbb\xa7\x1d\x8c\xd9\x19\x41\x90\xa3\x2f\x15\x02\x21\xb0\x47\xb4\xa7\x49\xb5\x25\x06\x3c\x9b\x98\x03\x6a\x30\xa5\x20\x0b\xf8\xe2\x53\x11\x93\x2c\xb6\x36\x0c\x1a\xf6\x26\x39\x8a\x5b\x62\x2c\xb2\xc7\x77\xc6\x52\x88\xbb\x6a\x30\x11\x4b\x3c\xf8\x02\xcf\x94\xf0\xe1\xd2\x68\xf8\xd4\x67\xc3\x26\xa2\xb0\xff\xc2\xb6\x92\x8d\x4f\x79\x94\x83\xf3\x56\x34\x9e\x33\x5a\x41\xd7\xe8\xba\x7a\xad\xff\xdb\xd7\x5e\xae\x1a\x2e\x4d\x66\xbc\xe9\x3c\xa5\x66\x05\xcd\x11\x43\x20\xf8\x20\x0e\xee\x5f\x73\xed\xee\xcc\x9b\x56\xdd\xd2\xcc\x04\xb4\x0f\x19\x30\x87\x68\xf8\x53\x16\x63\x19\x83\xc0\x7a\xea\x7b\xa6\x17\x9d\x86\xc5\xe9\xd7\xe1\x33\xb9\xfe\xb1\x57\xdf\x01\x00\x00\xff\xff\xaa\x57\x16\xab\x0d\x02\x00\x00")
 
 func templatesPython37GcloudFunctionsTestsModelTest_modelPyBytes() ([]byte, error) {
 	return bindataRead(
@@ -1480,7 +1502,7 @@ func templatesPython37GcloudFunctionsTestsModelTest_modelPy() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/tests/model/test_model.py", size: 520, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/tests/model/test_model.py", size: 525, mode: os.FileMode(420), modTime: time.Unix(1609888596, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1665,7 +1687,7 @@ func templatesPython37GcloudRunBinSetup_pyenvSh() (*asset, error) {
 	return a, nil
 }
 
-var _templatesPython37GcloudRunMainPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x4c\x50\x4d\x6b\xe3\x30\x14\xbc\xeb\x57\x0c\xd9\x83\x24\x10\xde\x1c\xc3\x82\x20\x87\x25\xc7\x3a\xb4\xbe\x95\x22\xd4\x48\x4e\xd4\xda\x92\xab\x8f\x40\x08\xf9\xef\xc5\x5f\x10\x0c\x0f\xde\xf3\xcc\x68\x66\x5c\x3f\x84\x98\x11\x12\x21\x6d\x0c\x3d\xda\x4e\xa7\x6f\x2c\xd7\xc3\xb8\x08\x7c\xa5\xe0\x5d\x7b\x13\x88\xf6\xa7\xd8\x94\x17\x68\x1f\x8c\xed\xaa\x69\xae\x84\x21\x5a\xe3\x4e\x59\xa0\x0b\xda\xa8\xe9\x17\x21\x7a\x18\x20\x67\x2d\xa6\x94\xd7\xbd\x55\x8a\x93\x99\x27\x9f\x90\x8c\x13\x42\xf6\x7a\x18\xaa\x18\x4a\xb6\x8c\xfe\xa5\x02\xbd\xcd\x97\x60\x92\x7c\xa7\xc7\xfa\xad\xa1\x1f\x9c\x18\xdb\xe2\x7e\x47\x75\x28\xfe\x94\x5d\xf0\x2f\xba\xb7\x78\x3c\x18\xff\x47\x00\xac\x1e\xd5\x68\x1a\x72\x5d\xab\xb3\x9d\x4f\x8c\x4f\xa8\x3f\xd8\x37\xf5\xff\x1a\xda\x18\x68\x7f\x5b\x61\xb8\xea\xce\x19\x3d\xca\x26\xe4\x8b\xce\xb8\x85\x02\x6f\xad\x59\xb4\x53\xe9\x32\xe4\x9a\x93\x4d\xbe\xe5\x34\x05\x9c\x1f\x4a\x96\xcf\xef\xf3\x85\x95\x4b\xf4\x6b\x8b\x6c\x16\x19\xb3\xba\x16\x6b\x1f\x90\x12\x1b\xa5\x7a\xed\xbc\x52\x9b\x39\xc9\xd4\x44\xf1\xcc\xd8\xcf\x72\x96\x4d\x2c\x56\xe0\x12\x52\x96\x74\x5b\x4d\x1f\x15\x18\x5b\x97\xce\x67\x16\x52\x65\xfd\xd5\xc5\xe0\xc7\xa8\x8c\x1e\xeb\xd7\x86\x0a\xec\xb6\xbb\x2d\xe7\xfc\x37\x00\x00\xff\xff\x2f\x9c\xbd\x55\xe6\x01\x00\x00")
+var _templatesPython37GcloudRunMainPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x4c\x50\x4d\x6b\xe3\x30\x14\xbc\xeb\x57\x0c\xd9\x83\x24\x10\xde\x1c\xc3\x82\x20\x87\x25\xc7\x3a\xb4\xbe\x95\x22\xd4\x48\x4e\xd4\xda\x92\xab\x8f\x40\x08\xf9\xef\xc5\x5f\x10\x0c\x0f\xde\xf3\xcc\x68\x66\x5c\x3f\x84\x98\x11\x12\x21\x6d\x0c\x3d\xda\x4e\xa7\x6f\x2c\xd7\xc3\xb8\x08\x7c\xa5\xe0\x5d\x7b\x13\x88\xf6\xa7\xd8\x94\x17\x68\x8a\xa7\xaa\x0f\xc6\x76\xf3\x5c\x49\x43\xb4\xc6\x9d\xb2\x40\x17\xb4\x51\xd3\x2f\x42\xf4\x30\x40\xce\x7a\x4c\x29\xaf\x7b\xab\x14\x27\x33\x4f\x3e\x21\x19\x27\x84\xec\xf5\x30\x54\x31\x94\x6c\x19\xfd\x4b\x05\x7a\x9b\x2f\xc1\x24\xf9\x4e\x8f\xf5\x5b\x43\x3f\x38\x31\xb6\xc5\xfd\x8e\xea\x50\xfc\x29\xbb\xe0\x5f\x74\x6f\xf1\x78\x30\xfe\x8f\x00\x58\x7d\xaa\xd1\x38\xe4\xba\x56\x67\x3b\x9f\x18\x9f\x50\x7f\xb0\x6f\xea\xff\x35\xb4\x31\xd0\xfe\xb6\xc2\x70\xd5\x9d\x33\x7a\x94\x4d\xc8\x17\x9d\x71\x0b\x05\xde\x5a\xb3\x68\xa7\xd2\x65\xc8\x35\x27\x9b\x7c\xcb\x69\x0a\x38\x3f\x94\x2c\x9f\xdf\xe7\x0b\x2b\x97\xe8\xd7\x26\xd9\x2c\x32\x66\x75\x2d\xd6\x3e\x20\x25\x36\x4a\xf5\xda\x79\xa5\x36\x73\x92\xa9\x89\xe2\x99\xb1\x9f\xe5\x2c\x9b\x58\xac\xc0\x25\xa4\x2c\xe9\xb6\x9a\x3e\x2a\x30\xb6\x2e\x9d\xcf\x2c\xa4\xca\xfa\xab\x8b\xc1\x8f\x51\x19\x3d\xd6\xaf\x0d\x15\xd8\x6d\x77\x5b\xce\x39\xf9\x0d\x00\x00\xff\xff\x87\x18\x23\xd3\xeb\x01\x00\x00")
 
 func templatesPython37GcloudRunMainPyBytes() ([]byte, error) {
 	return bindataRead(
@@ -1680,107 +1702,7 @@ func templatesPython37GcloudRunMainPy() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/main.py", size: 486, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
-	a := &asset{bytes: bytes, info: info}
-	return a, nil
-}
-
-var _templatesPython37GcloudRunModel__init__Py = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x01\x00\x00\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00")
-
-func templatesPython37GcloudRunModel__init__PyBytes() ([]byte, error) {
-	return bindataRead(
-		_templatesPython37GcloudRunModel__init__Py,
-		"templates/python37/gcloud/run/model/__init__.py",
-	)
-}
-
-func templatesPython37GcloudRunModel__init__Py() (*asset, error) {
-	bytes, err := templatesPython37GcloudRunModel__init__PyBytes()
-	if err != nil {
-		return nil, err
-	}
-
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/model/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
-	a := &asset{bytes: bytes, info: info}
-	return a, nil
-}
-
-var _templatesPython37GcloudRunModelArtifactsReadmeMd = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x1c\xc9\xd1\x09\x84\x30\x0c\x06\xe0\xf7\x4e\xf1\xc3\xbd\xdc\xc1\xd1\x1d\x1c\xc0\x21\x4a\x93\x6a\xb0\x1a\x49\xa2\xd0\xed\x05\x9f\xbf\x0f\x66\x25\xee\x28\x16\xd2\x4a\x0d\x4f\x69\x22\xc2\xd0\xcb\xe0\xe5\x66\xc2\xfe\xba\x1c\xa1\x88\x55\x1c\x24\xc6\x35\xd4\x06\xbe\x9c\x97\xfc\xc7\x29\x75\xeb\x8c\x26\x9d\xfd\x97\xd3\x13\x00\x00\xff\xff\x09\x94\x0f\x8e\x52\x00\x00\x00")
-
-func templatesPython37GcloudRunModelArtifactsReadmeMdBytes() ([]byte, error) {
-	return bindataRead(
-		_templatesPython37GcloudRunModelArtifactsReadmeMd,
-		"templates/python37/gcloud/run/model/artifacts/README.md",
-	)
-}
-
-func templatesPython37GcloudRunModelArtifactsReadmeMd() (*asset, error) {
-	bytes, err := templatesPython37GcloudRunModelArtifactsReadmeMdBytes()
-	if err != nil {
-		return nil, err
-	}
-
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/model/artifacts/README.md", size: 82, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
-	a := &asset{bytes: bytes, info: info}
-	return a, nil
-}
-
-var _templatesPython37GcloudRunModelArtifacts__init__Py = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x01\x00\x00\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00")
-
-func templatesPython37GcloudRunModelArtifacts__init__PyBytes() ([]byte, error) {
-	return bindataRead(
-		_templatesPython37GcloudRunModelArtifacts__init__Py,
-		"templates/python37/gcloud/run/model/artifacts/__init__.py",
-	)
-}
-
-func templatesPython37GcloudRunModelArtifacts__init__Py() (*asset, error) {
-	bytes, err := templatesPython37GcloudRunModelArtifacts__init__PyBytes()
-	if err != nil {
-		return nil, err
-	}
-
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/model/artifacts/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
-	a := &asset{bytes: bytes, info: info}
-	return a, nil
-}
-
-var _templatesPython37GcloudRunModelArtifactsFilesPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x84\x90\xc1\x4e\x86\x30\x10\x84\xef\x3c\xc5\x84\x13\x24\xbf\xe5\x4e\xa2\x89\xaf\x60\xbc\x37\x8d\x2c\x50\x2d\x5d\xd2\xee\x7f\xf8\xdf\xde\x6c\x91\xa2\x27\xb9\x6c\x96\xec\x7c\x33\x1d\xbf\xed\x9c\x04\x9c\x9b\xa6\x99\x68\xc6\x42\x62\x77\x27\x6b\x37\xfb\x40\x36\xba\x8d\x46\x64\x49\x3d\x9e\x5e\x74\x8e\x0d\x00\xb4\x6d\xfb\x46\x72\x4f\x31\xc3\x41\xaf\x21\x0c\x07\x95\xc0\x47\xc8\xea\x33\x26\x9f\xe8\x43\x38\x3d\x4c\x91\xbc\xa6\x25\x1f\x62\xfd\x2a\x1c\x9d\xc2\x47\xbc\xaf\x84\xb2\xf3\xfc\x07\x44\xc8\xfa\xb7\xc2\xe0\x72\x85\x14\x9b\xfd\x21\x2b\xc7\x43\xd1\x91\x59\xcc\x0d\xed\xc6\x13\x05\xb3\x7f\x85\xb6\x3f\xcc\x7f\xc2\x5e\xfe\x6a\x37\xdf\x43\xf8\x37\x7c\x55\x9c\xec\x41\x15\x83\xf0\xf0\xcb\xe4\xec\xa4\xcc\x2b\xea\x33\x38\x1b\x3d\x37\x93\x4f\xfa\xb8\xee\xdc\x13\xb9\x50\x4a\xb6\xb6\x34\x61\xfb\x83\x91\x4a\xce\x2a\xfb\x64\x1f\xbb\xca\xbb\x5d\xad\xf5\xdf\x01\x00\x00\xff\xff\x7e\xe2\x05\x91\xb6\x01\x00\x00")
-
-func templatesPython37GcloudRunModelArtifactsFilesPyBytes() ([]byte, error) {
-	return bindataRead(
-		_templatesPython37GcloudRunModelArtifactsFilesPy,
-		"templates/python37/gcloud/run/model/artifacts/files.py",
-	)
-}
-
-func templatesPython37GcloudRunModelArtifactsFilesPy() (*asset, error) {
-	bytes, err := templatesPython37GcloudRunModelArtifactsFilesPyBytes()
-	if err != nil {
-		return nil, err
-	}
-
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/model/artifacts/files.py", size: 438, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
-	a := &asset{bytes: bytes, info: info}
-	return a, nil
-}
-
-var _templatesPython37GcloudRunModelModelPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x54\x90\xc1\x4a\xc4\x40\x0c\x86\xef\x7d\x8a\xdf\xf1\xb2\x0b\xba\x0f\xd0\x83\xb8\xe0\xd9\x05\xd9\xbb\x0c\x9d\x74\x67\x70\x4c\x96\x74\x4a\x29\xe2\xbb\xcb\xa4\x5d\xad\x3d\x95\x49\xfe\xef\x4b\x12\xa8\x47\x16\x1f\xde\x3f\x25\x50\xde\xed\xdb\x06\x00\x94\xca\xa8\x8c\x57\x61\x02\xee\xf1\x7c\x3e\xbd\x9c\xac\x0d\x9e\xc3\xad\x3a\xcb\xa8\xb0\x18\x22\x29\x35\x4d\x53\x61\x57\xa5\x90\xba\xb2\xb3\xc2\x03\x12\x5f\xc7\xd2\xa2\x3e\xed\xf1\xf8\x64\x3f\x8b\xc3\x39\x77\x8e\x69\x40\x1a\x50\x22\xfd\xe6\xf6\xe8\x47\xee\x4a\x12\x46\x2f\xba\x4a\x7c\x17\x13\x13\x32\x79\xe5\xc4\x97\xc5\x7a\x30\xcc\x51\x2f\xc3\x02\xac\x9f\xe9\xb0\x33\x5d\x8b\xa3\xe9\x92\xb0\xd7\x19\x9d\x70\xf1\xc9\xe2\xd5\xb7\x0c\x6e\xfd\xc3\x42\x7a\xb3\xb5\x36\xb0\x7f\xf1\x29\x95\xb8\x5d\x79\x9d\xb7\xce\x59\x6f\xe2\x79\x86\x94\x48\x8a\xe0\x8b\xaf\x8d\x98\x64\xcc\x01\x39\x7d\x10\x8a\xac\x47\x3b\xdc\x56\xdf\x9e\xf9\xcb\xfd\xc1\x5c\x0b\x17\x29\x67\xc1\x24\x9a\xc3\x9d\xfb\x6e\x7e\x02\x00\x00\xff\xff\xf4\xc0\x21\x96\xa3\x01\x00\x00")
-
-func templatesPython37GcloudRunModelModelPyBytes() ([]byte, error) {
-	return bindataRead(
-		_templatesPython37GcloudRunModelModelPy,
-		"templates/python37/gcloud/run/model/model.py",
-	)
-}
-
-func templatesPython37GcloudRunModelModelPy() (*asset, error) {
-	bytes, err := templatesPython37GcloudRunModelModelPyBytes()
-	if err != nil {
-		return nil, err
-	}
-
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/model/model.py", size: 419, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/main.py", size: 491, mode: os.FileMode(420), modTime: time.Unix(1609888715, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1821,6 +1743,126 @@ func templatesPython37GcloudRunRequirementsTxt() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "templates/python37/gcloud/run/requirements.txt", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _templatesPython37GcloudRunSrc__init__Py = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x01\x00\x00\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00")
+
+func templatesPython37GcloudRunSrc__init__PyBytes() ([]byte, error) {
+	return bindataRead(
+		_templatesPython37GcloudRunSrc__init__Py,
+		"templates/python37/gcloud/run/src/__init__.py",
+	)
+}
+
+func templatesPython37GcloudRunSrc__init__Py() (*asset, error) {
+	bytes, err := templatesPython37GcloudRunSrc__init__PyBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/src/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609888702, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _templatesPython37GcloudRunSrcModel__init__Py = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x01\x00\x00\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00")
+
+func templatesPython37GcloudRunSrcModel__init__PyBytes() ([]byte, error) {
+	return bindataRead(
+		_templatesPython37GcloudRunSrcModel__init__Py,
+		"templates/python37/gcloud/run/src/model/__init__.py",
+	)
+}
+
+func templatesPython37GcloudRunSrcModel__init__Py() (*asset, error) {
+	bytes, err := templatesPython37GcloudRunSrcModel__init__PyBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/src/model/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _templatesPython37GcloudRunSrcModelArtifactsReadmeMd = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x1c\xc9\xd1\x09\x84\x30\x0c\x06\xe0\xf7\x4e\xf1\xc3\xbd\xdc\xc1\xd1\x1d\x1c\xc0\x21\x4a\x93\x6a\xb0\x1a\x49\xa2\xd0\xed\x05\x9f\xbf\x0f\x66\x25\xee\x28\x16\xd2\x4a\x0d\x4f\x69\x22\xc2\xd0\xcb\xe0\xe5\x66\xc2\xfe\xba\x1c\xa1\x88\x55\x1c\x24\xc6\x35\xd4\x06\xbe\x9c\x97\xfc\xc7\x29\x75\xeb\x8c\x26\x9d\xfd\x97\xd3\x13\x00\x00\xff\xff\x09\x94\x0f\x8e\x52\x00\x00\x00")
+
+func templatesPython37GcloudRunSrcModelArtifactsReadmeMdBytes() ([]byte, error) {
+	return bindataRead(
+		_templatesPython37GcloudRunSrcModelArtifactsReadmeMd,
+		"templates/python37/gcloud/run/src/model/artifacts/README.md",
+	)
+}
+
+func templatesPython37GcloudRunSrcModelArtifactsReadmeMd() (*asset, error) {
+	bytes, err := templatesPython37GcloudRunSrcModelArtifactsReadmeMdBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/src/model/artifacts/README.md", size: 82, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _templatesPython37GcloudRunSrcModelArtifacts__init__Py = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x01\x00\x00\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00")
+
+func templatesPython37GcloudRunSrcModelArtifacts__init__PyBytes() ([]byte, error) {
+	return bindataRead(
+		_templatesPython37GcloudRunSrcModelArtifacts__init__Py,
+		"templates/python37/gcloud/run/src/model/artifacts/__init__.py",
+	)
+}
+
+func templatesPython37GcloudRunSrcModelArtifacts__init__Py() (*asset, error) {
+	bytes, err := templatesPython37GcloudRunSrcModelArtifacts__init__PyBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/src/model/artifacts/__init__.py", size: 0, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _templatesPython37GcloudRunSrcModelArtifactsFilesPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x84\x90\xc1\x4e\x86\x30\x10\x84\xef\x3c\xc5\x84\x13\x24\xbf\xe5\x4e\xa2\x89\xaf\x60\xbc\x37\x8d\x2c\x50\x2d\x5d\xd2\xee\x7f\xf8\xdf\xde\x6c\x91\xa2\x27\xb9\x6c\x96\xec\x7c\x33\x1d\xbf\xed\x9c\x04\x9c\x9b\xa6\x99\x68\xc6\x42\x62\x77\x27\x6b\x37\xfb\x40\x36\xba\x8d\x46\x64\x49\x3d\x9e\x5e\x74\x8e\x0d\x00\xb4\x6d\xfb\x46\x72\x4f\x31\xc3\x41\xaf\x21\x0c\x07\x95\xc0\x47\xc8\xea\x33\x26\x9f\xe8\x43\x38\x3d\x4c\x91\xbc\xa6\x25\x1f\x62\xfd\x2a\x1c\x9d\xc2\x47\xbc\xaf\x84\xb2\xf3\xfc\x07\x44\xc8\xfa\xb7\xc2\xe0\x72\x85\x14\x9b\xfd\x21\x2b\xc7\x43\xd1\x91\x59\xcc\x0d\xed\xc6\x13\x05\xb3\x7f\x85\xb6\x3f\xcc\x7f\xc2\x5e\xfe\x6a\x37\xdf\x43\xf8\x37\x7c\x55\x9c\xec\x41\x15\x83\xf0\xf0\xcb\xe4\xec\xa4\xcc\x2b\xea\x33\x38\x1b\x3d\x37\x93\x4f\xfa\xb8\xee\xdc\x13\xb9\x50\x4a\xb6\xb6\x34\x61\xfb\x83\x91\x4a\xce\x2a\xfb\x64\x1f\xbb\xca\xbb\x5d\xad\xf5\xdf\x01\x00\x00\xff\xff\x7e\xe2\x05\x91\xb6\x01\x00\x00")
+
+func templatesPython37GcloudRunSrcModelArtifactsFilesPyBytes() ([]byte, error) {
+	return bindataRead(
+		_templatesPython37GcloudRunSrcModelArtifactsFilesPy,
+		"templates/python37/gcloud/run/src/model/artifacts/files.py",
+	)
+}
+
+func templatesPython37GcloudRunSrcModelArtifactsFilesPy() (*asset, error) {
+	bytes, err := templatesPython37GcloudRunSrcModelArtifactsFilesPyBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/src/model/artifacts/files.py", size: 438, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _templatesPython37GcloudRunSrcModelModelPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x54\x90\xc1\x4a\xc4\x40\x0c\x86\xef\x7d\x8a\xdf\xf1\xb2\x0b\xba\x0f\xd0\x83\xb8\xe0\xd9\x05\xd9\xbb\x0c\x9d\x74\x67\x70\x4c\x96\x74\x4a\x29\xe2\xbb\xcb\xa4\x5d\xad\x3d\x95\x49\xfe\xef\x4b\x12\xa8\x47\x16\x1f\xde\x3f\x25\x50\xde\xed\xdb\x06\x00\x94\xca\xa8\x8c\x57\x61\x02\xee\xf1\x7c\x3e\xbd\x9c\xac\x0d\x9e\xc3\xad\x3a\xcb\xa8\xb0\x18\x22\x29\x35\x4d\x53\x61\x57\xa5\x90\xba\xb2\xb3\xc2\x03\x12\x5f\xc7\xd2\xa2\x3e\xed\xf1\xf8\x64\x3f\x8b\xc3\x39\x77\x8e\x69\x40\x1a\x50\x22\xfd\xe6\xf6\xe8\x47\xee\x4a\x12\x46\x2f\xba\x4a\x7c\x17\x13\x13\x32\x79\xe5\xc4\x97\xc5\x7a\x30\xcc\x51\x2f\xc3\x02\xac\x9f\xe9\xb0\x33\x5d\x8b\xa3\xe9\x92\xb0\xd7\x19\x9d\x70\xf1\xc9\xe2\xd5\xb7\x0c\x6e\xfd\xc3\x42\x7a\xb3\xb5\x36\xb0\x7f\xf1\x29\x95\xb8\x5d\x79\x9d\xb7\xce\x59\x6f\xe2\x79\x86\x94\x48\x8a\xe0\x8b\xaf\x8d\x98\x64\xcc\x01\x39\x7d\x10\x8a\xac\x47\x3b\xdc\x56\xdf\x9e\xf9\xcb\xfd\xc1\x5c\x0b\x17\x29\x67\xc1\x24\x9a\xc3\x9d\xfb\x6e\x7e\x02\x00\x00\xff\xff\xf4\xc0\x21\x96\xa3\x01\x00\x00")
+
+func templatesPython37GcloudRunSrcModelModelPyBytes() ([]byte, error) {
+	return bindataRead(
+		_templatesPython37GcloudRunSrcModelModelPy,
+		"templates/python37/gcloud/run/src/model/model.py",
+	)
+}
+
+func templatesPython37GcloudRunSrcModelModelPy() (*asset, error) {
+	bytes, err := templatesPython37GcloudRunSrcModelModelPyBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/src/model/model.py", size: 419, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1885,7 +1927,7 @@ func templatesPython37GcloudRunTestsModelArtifacts__init__Py() (*asset, error) {
 	return a, nil
 }
 
-var _templatesPython37GcloudRunTestsModelArtifactsTest_filesPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x44\x8f\x41\x6e\xc5\x20\x0c\x44\xf7\x9c\x62\xf4\xbb\xf9\xd9\x70\x80\x4a\x3d\xcb\x17\x0d\x26\xb1\x44\x62\x84\x5d\xb5\xdc\xbe\x8a\x13\xfd\xec\x86\x19\x78\x33\xf0\xd6\xa4\x1b\x44\x43\x28\x5d\x36\x6c\x92\xa9\xc6\xd4\x8d\x4b\x9a\x4d\x71\xe5\x85\x2b\x69\x08\x21\x53\x81\x91\xda\x6b\x21\x7b\xb5\x64\xeb\x73\xfa\x0c\x00\xf0\x81\xdb\x41\x27\xfb\xe9\xbb\xc2\x56\xc2\x61\x41\x0a\x92\x33\xc0\xbb\xbb\x77\x41\xe6\x4e\xb3\x49\x1f\x17\xe6\x97\xbc\x00\xb6\xb2\xe2\x7b\xa0\x4a\xca\xbc\x2f\x37\xcb\xc4\x75\x6c\xe3\x22\x9a\x52\x2d\xfe\xda\xf3\xaf\x73\x6c\x7c\xef\x79\x9c\xe7\x36\x1e\x93\xdf\x4a\xaa\xe4\x5f\x8e\x47\x1c\xe9\x8f\xd5\xf4\x79\xe8\xe9\x3f\x00\x00\xff\xff\xdd\x33\x63\xee\x0e\x01\x00\x00")
+var _templatesPython37GcloudRunTestsModelArtifactsTest_filesPy = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x44\x8f\x51\x6e\xc3\x30\x0c\x43\xff\x7d\x0a\xa2\xfb\x69\x7e\x7c\x80\x01\x3b\x4b\xe1\x25\x72\x23\xc0\x89\x0c\x49\xc3\xe6\xdb\x0f\x51\x83\xe6\x4f\xa6\xe8\x47\x8a\xb7\x2e\xea\x10\x4b\xa9\xaa\x6c\x30\x9d\xf3\x26\x0b\xb5\x5c\xd4\xb9\x96\xd9\x0d\xa7\xa7\x72\x23\x4b\x29\x2d\x54\xe1\x64\xfe\x78\x92\x3f\x7a\xf1\xf5\x3e\x7d\x26\x00\xf8\xc0\xa5\x40\xc9\x7f\x74\x37\xf8\x4a\x38\x24\x48\x45\x09\x06\x78\x0f\xf5\x0a\x58\x58\x69\x76\xd1\x71\x62\x7e\x29\x02\xe0\x2b\x1b\xbe\x07\x9a\x94\x85\xf7\xe7\xc5\x72\x89\x39\xf7\x71\x12\xdd\xa8\xd5\xf8\x1d\xfb\xaf\x57\xd9\xfc\xee\x73\x7b\xbd\xfb\xb8\x4d\xe1\x2a\x66\x14\x67\xe7\x63\x9d\xe9\x8f\xcd\xed\x7e\xcc\x53\xfa\x0f\x00\x00\xff\xff\xb9\x6a\xe6\x57\x13\x01\x00\x00")
 
 func templatesPython37GcloudRunTestsModelArtifactsTest_filesPyBytes() ([]byte, error) {
 	return bindataRead(
@@ -1900,7 +1942,7 @@ func templatesPython37GcloudRunTestsModelArtifactsTest_filesPy() (*asset, error)
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/tests/model/artifacts/test_files.py", size: 270, mode: os.FileMode(420), modTime: time.Unix(1609634385, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/tests/model/artifacts/test_files.py", size: 275, mode: os.FileMode(420), modTime: time.Unix(1609888587, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -2031,13 +2073,14 @@ var _bindata = map[string]func() (*asset, error){
 	"templates/python37/gcloud/functions/bin/remove_pyenv.sh":                  templatesPython37GcloudFunctionsBinRemove_pyenvSh,
 	"templates/python37/gcloud/functions/bin/setup_pyenv.sh":                   templatesPython37GcloudFunctionsBinSetup_pyenvSh,
 	"templates/python37/gcloud/functions/main.py":                              templatesPython37GcloudFunctionsMainPy,
-	"templates/python37/gcloud/functions/model/__init__.py":                    templatesPython37GcloudFunctionsModel__init__Py,
-	"templates/python37/gcloud/functions/model/artifacts/README.md":            templatesPython37GcloudFunctionsModelArtifactsReadmeMd,
-	"templates/python37/gcloud/functions/model/artifacts/__init__.py":          templatesPython37GcloudFunctionsModelArtifacts__init__Py,
-	"templates/python37/gcloud/functions/model/artifacts/files.py":             templatesPython37GcloudFunctionsModelArtifactsFilesPy,
-	"templates/python37/gcloud/functions/model/model.py":                       templatesPython37GcloudFunctionsModelModelPy,
 	"templates/python37/gcloud/functions/requirements-dev.txt":                 templatesPython37GcloudFunctionsRequirementsDevTxt,
 	"templates/python37/gcloud/functions/requirements.txt":                     templatesPython37GcloudFunctionsRequirementsTxt,
+	"templates/python37/gcloud/functions/src/__init__.py":                      templatesPython37GcloudFunctionsSrc__init__Py,
+	"templates/python37/gcloud/functions/src/model/__init__.py":                templatesPython37GcloudFunctionsSrcModel__init__Py,
+	"templates/python37/gcloud/functions/src/model/artifacts/README.md":        templatesPython37GcloudFunctionsSrcModelArtifactsReadmeMd,
+	"templates/python37/gcloud/functions/src/model/artifacts/__init__.py":      templatesPython37GcloudFunctionsSrcModelArtifacts__init__Py,
+	"templates/python37/gcloud/functions/src/model/artifacts/files.py":         templatesPython37GcloudFunctionsSrcModelArtifactsFilesPy,
+	"templates/python37/gcloud/functions/src/model/model.py":                   templatesPython37GcloudFunctionsSrcModelModelPy,
 	"templates/python37/gcloud/functions/tests/__init__.py":                    templatesPython37GcloudFunctionsTests__init__Py,
 	"templates/python37/gcloud/functions/tests/model/__init__.py":              templatesPython37GcloudFunctionsTestsModel__init__Py,
 	"templates/python37/gcloud/functions/tests/model/artifacts/__init__.py":    templatesPython37GcloudFunctionsTestsModelArtifacts__init__Py,
@@ -2053,13 +2096,14 @@ var _bindata = map[string]func() (*asset, error){
 	"templates/python37/gcloud/run/bin/remove_pyenv.sh":                        templatesPython37GcloudRunBinRemove_pyenvSh,
 	"templates/python37/gcloud/run/bin/setup_pyenv.sh":                         templatesPython37GcloudRunBinSetup_pyenvSh,
 	"templates/python37/gcloud/run/main.py":                                    templatesPython37GcloudRunMainPy,
-	"templates/python37/gcloud/run/model/__init__.py":                          templatesPython37GcloudRunModel__init__Py,
-	"templates/python37/gcloud/run/model/artifacts/README.md":                  templatesPython37GcloudRunModelArtifactsReadmeMd,
-	"templates/python37/gcloud/run/model/artifacts/__init__.py":                templatesPython37GcloudRunModelArtifacts__init__Py,
-	"templates/python37/gcloud/run/model/artifacts/files.py":                   templatesPython37GcloudRunModelArtifactsFilesPy,
-	"templates/python37/gcloud/run/model/model.py":                             templatesPython37GcloudRunModelModelPy,
 	"templates/python37/gcloud/run/requirements-dev.txt":                       templatesPython37GcloudRunRequirementsDevTxt,
 	"templates/python37/gcloud/run/requirements.txt":                           templatesPython37GcloudRunRequirementsTxt,
+	"templates/python37/gcloud/run/src/__init__.py":                            templatesPython37GcloudRunSrc__init__Py,
+	"templates/python37/gcloud/run/src/model/__init__.py":                      templatesPython37GcloudRunSrcModel__init__Py,
+	"templates/python37/gcloud/run/src/model/artifacts/README.md":              templatesPython37GcloudRunSrcModelArtifactsReadmeMd,
+	"templates/python37/gcloud/run/src/model/artifacts/__init__.py":            templatesPython37GcloudRunSrcModelArtifacts__init__Py,
+	"templates/python37/gcloud/run/src/model/artifacts/files.py":               templatesPython37GcloudRunSrcModelArtifactsFilesPy,
+	"templates/python37/gcloud/run/src/model/model.py":                         templatesPython37GcloudRunSrcModelModelPy,
 	"templates/python37/gcloud/run/tests/__init__.py":                          templatesPython37GcloudRunTests__init__Py,
 	"templates/python37/gcloud/run/tests/model/__init__.py":                    templatesPython37GcloudRunTestsModel__init__Py,
 	"templates/python37/gcloud/run/tests/model/artifacts/__init__.py":          templatesPython37GcloudRunTestsModelArtifacts__init__Py,
@@ -2201,18 +2245,21 @@ var _bintree = &bintree{nil, map[string]*bintree{
 						"remove_pyenv.sh": &bintree{templatesPython37GcloudFunctionsBinRemove_pyenvSh, map[string]*bintree{}},
 						"setup_pyenv.sh":  &bintree{templatesPython37GcloudFunctionsBinSetup_pyenvSh, map[string]*bintree{}},
 					}},
-					"main.py": &bintree{templatesPython37GcloudFunctionsMainPy, map[string]*bintree{}},
-					"model": &bintree{nil, map[string]*bintree{
-						"__init__.py": &bintree{templatesPython37GcloudFunctionsModel__init__Py, map[string]*bintree{}},
-						"artifacts": &bintree{nil, map[string]*bintree{
-							"README.md":   &bintree{templatesPython37GcloudFunctionsModelArtifactsReadmeMd, map[string]*bintree{}},
-							"__init__.py": &bintree{templatesPython37GcloudFunctionsModelArtifacts__init__Py, map[string]*bintree{}},
-							"files.py":    &bintree{templatesPython37GcloudFunctionsModelArtifactsFilesPy, map[string]*bintree{}},
-						}},
-						"model.py": &bintree{templatesPython37GcloudFunctionsModelModelPy, map[string]*bintree{}},
-					}},
+					"main.py":              &bintree{templatesPython37GcloudFunctionsMainPy, map[string]*bintree{}},
 					"requirements-dev.txt": &bintree{templatesPython37GcloudFunctionsRequirementsDevTxt, map[string]*bintree{}},
 					"requirements.txt":     &bintree{templatesPython37GcloudFunctionsRequirementsTxt, map[string]*bintree{}},
+					"src": &bintree{nil, map[string]*bintree{
+						"__init__.py": &bintree{templatesPython37GcloudFunctionsSrc__init__Py, map[string]*bintree{}},
+						"model": &bintree{nil, map[string]*bintree{
+							"__init__.py": &bintree{templatesPython37GcloudFunctionsSrcModel__init__Py, map[string]*bintree{}},
+							"artifacts": &bintree{nil, map[string]*bintree{
+								"README.md":   &bintree{templatesPython37GcloudFunctionsSrcModelArtifactsReadmeMd, map[string]*bintree{}},
+								"__init__.py": &bintree{templatesPython37GcloudFunctionsSrcModelArtifacts__init__Py, map[string]*bintree{}},
+								"files.py":    &bintree{templatesPython37GcloudFunctionsSrcModelArtifactsFilesPy, map[string]*bintree{}},
+							}},
+							"model.py": &bintree{templatesPython37GcloudFunctionsSrcModelModelPy, map[string]*bintree{}},
+						}},
+					}},
 					"tests": &bintree{nil, map[string]*bintree{
 						"__init__.py": &bintree{templatesPython37GcloudFunctionsTests__init__Py, map[string]*bintree{}},
 						"model": &bintree{nil, map[string]*bintree{
@@ -2237,18 +2284,21 @@ var _bintree = &bintree{nil, map[string]*bintree{
 						"remove_pyenv.sh": &bintree{templatesPython37GcloudRunBinRemove_pyenvSh, map[string]*bintree{}},
 						"setup_pyenv.sh":  &bintree{templatesPython37GcloudRunBinSetup_pyenvSh, map[string]*bintree{}},
 					}},
-					"main.py": &bintree{templatesPython37GcloudRunMainPy, map[string]*bintree{}},
-					"model": &bintree{nil, map[string]*bintree{
-						"__init__.py": &bintree{templatesPython37GcloudRunModel__init__Py, map[string]*bintree{}},
-						"artifacts": &bintree{nil, map[string]*bintree{
-							"README.md":   &bintree{templatesPython37GcloudRunModelArtifactsReadmeMd, map[string]*bintree{}},
-							"__init__.py": &bintree{templatesPython37GcloudRunModelArtifacts__init__Py, map[string]*bintree{}},
-							"files.py":    &bintree{templatesPython37GcloudRunModelArtifactsFilesPy, map[string]*bintree{}},
-						}},
-						"model.py": &bintree{templatesPython37GcloudRunModelModelPy, map[string]*bintree{}},
-					}},
+					"main.py":              &bintree{templatesPython37GcloudRunMainPy, map[string]*bintree{}},
 					"requirements-dev.txt": &bintree{templatesPython37GcloudRunRequirementsDevTxt, map[string]*bintree{}},
 					"requirements.txt":     &bintree{templatesPython37GcloudRunRequirementsTxt, map[string]*bintree{}},
+					"src": &bintree{nil, map[string]*bintree{
+						"__init__.py": &bintree{templatesPython37GcloudRunSrc__init__Py, map[string]*bintree{}},
+						"model": &bintree{nil, map[string]*bintree{
+							"__init__.py": &bintree{templatesPython37GcloudRunSrcModel__init__Py, map[string]*bintree{}},
+							"artifacts": &bintree{nil, map[string]*bintree{
+								"README.md":   &bintree{templatesPython37GcloudRunSrcModelArtifactsReadmeMd, map[string]*bintree{}},
+								"__init__.py": &bintree{templatesPython37GcloudRunSrcModelArtifacts__init__Py, map[string]*bintree{}},
+								"files.py":    &bintree{templatesPython37GcloudRunSrcModelArtifactsFilesPy, map[string]*bintree{}},
+							}},
+							"model.py": &bintree{templatesPython37GcloudRunSrcModelModelPy, map[string]*bintree{}},
+						}},
+					}},
 					"tests": &bintree{nil, map[string]*bintree{
 						"__init__.py": &bintree{templatesPython37GcloudRunTests__init__Py, map[string]*bintree{}},
 						"model": &bintree{nil, map[string]*bintree{
