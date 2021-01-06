@@ -2,14 +2,14 @@ import os
 
 from flask import Flask, jsonify, request
 
-from model.model import predict, load_model
+from src.model.model import predict, load_model
 
 app = Flask(__name__)
 model = load_model()
 
 
 @app.route('/', methods=['POST'])
-def {{ .FunctionName }}():
+def {{.FunctionName}}():
     request_json = request.get_json()
     # @TODO add any request validations that you need
     result = predict(model=model, input=request_json)

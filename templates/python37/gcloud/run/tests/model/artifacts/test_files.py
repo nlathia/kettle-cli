@@ -1,6 +1,6 @@
 import os
 
-from model.artifacts import files
+from src.model.artifacts import files
 
 
 def test_get_path():

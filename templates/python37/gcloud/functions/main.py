@@ -1,10 +1,11 @@
 from flask import jsonify
 
-from model.model import predict, load_model
+from src.model.model import predict, load_model
 
 model = load_model()
 
-def {{ .FunctionName }}(request):
+
+def {{.FunctionName}}(request):
     """Responds to any HTTP request.
     Args:
         request (flask.Request): HTTP request object.

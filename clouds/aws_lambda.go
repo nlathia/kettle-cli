@@ -24,17 +24,12 @@ type AWSLambdaFunction struct{}
 var AWSConfigChoices = []*preferences.ConfigChoice{
 	{
 		// Pick or create an AWS IAM role for deploying Lambdas
-		Label: "Available AWS IAM Roles",
-		Key:   config.IAMRole,
-
-		// Flags are currently unsupported because there's no quick way
-		// to validate an ARN
-
-		// FlagKey:           "aws-iam-role",
-		// FlagDescription:   "The ARN of the AWS IAM role to use when deploying lambdas",
-		// ValidationFunc:    validateAWSRoleExists,
-
-		CollectValuesFunc: getAWSRoles,
+		Label:             "Available AWS IAM Roles",
+		Key:               config.IAMRole,
+		FlagKey:           "aws-iam-arn",
+		FlagDescription:   "The ARN of the AWS IAM role to use when deploying lambdas",
+		ValidationFunc:    validateAWSRoleExists,
+		CollectValuesFunc: collectAWSRoles,
 	},
 }
 
@@ -49,69 +44,72 @@ func (AWSLambdaFunction) Deploy(directory string, config *config.TemplateConfig)
 		return err
 	}
 
-	// Store the current working directory
+	// Store the current working directory before navigating away
 	rootDir, err := os.Getwd()
 	if err != nil {
 		return err
 	}
 
-	// Create the path to the zip file
+	// Create the zip file, starting with the contents
+	// of the current working directory
 	deploymentFile := path.Join(rootDir, deploymentPackage)
-
-	// Figure out the path to the site-packages directory
-	// @TODO this assumes they exist, without checking if they really do
-	sitePackages, err := getPyenvSitePackagesDirectory()
-	if err != nil {
-		return err
-	}
-
-	// Change to the directory where the site-packages are stored
-	// So that we can add them to the zip file as a directory
-	os.Chdir(sitePackages)
-
-	// Build the zip file, starting with the site-packages/
-	fmt.Println(fmt.Sprintf("🧱  Building deployment archive: %s", sitePackages))
-	err = executeCommand("zip", []string{
-		"-r",
-		deploymentFile,
-		".",
-	})
-	if err != nil {
-		return err
-	}
-
-	// Change back to the root directory
-	// So that we can add its contents to the zip file
-	os.Chdir(rootDir)
-	fmt.Println(fmt.Sprintf("🧱  Building deployment archive: %s", rootDir))
+	fmt.Println(fmt.Sprintf("🧱  Building deployment archive: %s", deploymentFile))
 	err = executeCommand("zip", []string{
 		"-g",
 		deploymentPackage,
 		"-r",
 		".",
-	})
+	}, true)
 	if err != nil {
 		return err
 	}
 
+	// Figure out the path to the site-packages directory
+	sitePackages, err := getPyenvSitePackagesDirectory()
+	if err != nil {
+		return err
+	}
+
+	if _, err := os.Stat(sitePackages); !os.IsNotExist(err) {
+		// Change to the directory where the site-packages are stored
+		// So that we can add them to the zip file as a directory
+		os.Chdir(sitePackages)
+		fmt.Println(fmt.Sprintf("🧱  Adding to deployment archive: %s", sitePackages))
+		err = executeCommand("zip", []string{
+			"-r",
+			deploymentFile,
+			".",
+		}, true)
+		if err != nil {
+			return err
+		}
+
+		// Return to root directory to deploy the .zip file
+		os.Chdir(rootDir)
+	}
+
+	// Deploy will either create or update the function
+	// and then wait for it to be updated or active
+	var waitCommand string
+
+	fmt.Println("🚢  Deploying ", config.Name, "as an AWS Lambda function")
+	fmt.Println("⏭  Entry point: ", config.FunctionName, fmt.Sprintf("(%s)", config.Runtime))
 	if lambdaExists(config.Name) {
 		// Update the existing function
-		fmt.Println("🚢  Updating ", config.Name, ", an existing AWS Lambda function")
+		waitCommand = "function-updated"
 		err = executeCommand("aws", []string{
 			"lambda",
 			"update-function-code",
 			"--function-name", config.Name,
 			"--zip-file", fmt.Sprintf("fileb://%s", deploymentPackage),
-		})
+		}, false)
 		if err != nil {
 			return err
 		}
-		// @TODO aws lambda wait function-updated --function-name config.Name
 	} else {
 		// Create the function for the first time
 		// https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/create-function.html
-		fmt.Println("🚢  Deploying ", config.Name, "as a new AWS Lambda function")
-		fmt.Println("⏭  Entry point: ", config.FunctionName, fmt.Sprintf("(%s)", config.Runtime))
+		waitCommand = "function-active"
 		err = executeCommand("aws", []string{
 			"lambda",
 			"create-function",
@@ -123,15 +121,20 @@ func (AWSLambdaFunction) Deploy(directory string, config *config.TemplateConfig)
 			"--zip-file", fmt.Sprintf("fileb://%s", deploymentPackage),
 			// "--timeout", <value>,
 			// "--memory-size", <value>,
-		})
+		}, false)
 		if err != nil {
 			return err
 		}
-		// @TODO aws lambda wait function-active --function-name config.Name
-		// https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/wait/index.html#cli-aws-lambda-wait
 	}
 
-	return nil
+	// https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/wait/index.html#cli-aws-lambda-wait
+	return executeCommand("aws", []string{
+		"lambda",
+		"wait",
+		waitCommand,
+		"--function-name",
+		config.Name,
+	}, false)
 }
 
 func getPyenvSitePackagesDirectory() (string, error) {
@@ -167,13 +170,12 @@ func lambdaExists(name string) bool {
 	s := spinner.StartNew(fmt.Sprintf("Checking if: %s exists...", name))
 	defer s.Stop()
 
-	// @TODO suppress output from this command
 	err := executeCommand("aws", []string{
 		"lambda",
 		"get-function",
 		"--function-name",
 		name,
-	})
+	}, true)
 	if err != nil {
 		return false
 	}
@@ -220,11 +222,17 @@ func getAWSRoles() (map[string]string, error) {
 			roles[displayName] = role.Arn
 		}
 	}
+	return roles, nil
+}
 
+func collectAWSRoles() (map[string]string, error) {
+	roles, err := getAWSRoles()
+	if err != nil {
+		return nil, err
+	}
 	if len(roles) == 0 {
-		s.Stop()
 		prompt := promptui.Prompt{
-			Label:     "No matching AWS IAM roles. Create a new one?",
+			Label:     "No matching AWS IAM roles. Create a new one",
 			IsConfirm: true,
 		}
 
@@ -241,10 +249,25 @@ func getAWSRoles() (map[string]string, error) {
 	return roles, nil
 }
 
+func validateAWSRoleExists(arn string) error {
+	roles, err := getAWSRoles()
+	if err != nil {
+		return err
+	}
+
+	for _, roleArn := range roles {
+		if roleArn == arn {
+			return nil
+		}
+	}
+	return errors.New(fmt.Sprintf("No matching role for ARN: %s", arn))
+}
+
 func createIAMRole() (map[string]string, error) {
 	s := spinner.StartNew("Creating AWS IAM role for lambda.amazonaws.com...")
 	defer s.Stop()
 
+	// Write the trust policy to a temp file
 	f, err := ioutil.TempFile(".", "trust_policy*.json")
 	if err != nil {
 		return nil, err
@@ -297,8 +320,4 @@ func createIAMRole() (map[string]string, error) {
 	return map[string]string{
 		displayName: result.Role.Arn,
 	}, nil
-}
-
-func validateAWSRoleExists(arn string) error {
-	return nil
 }
