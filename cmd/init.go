@@ -21,7 +21,7 @@ var initCmd = &cobra.Command{
 Cloud Run Containers, and AWS Lambda functions.
 
 The init command allows you to set up your default preferences.`,
-	Run: runInit,
+	RunE: runInit,
 }
 
 var configChoices = []*preferences.ConfigChoice{
@@ -91,42 +91,25 @@ func init() {
 	// This currently adds all available flags, without checking for consistency
 	// E.g., using --cloud aws and a GCP config flag would still parse but would
 	// fail on validation
-
-	configChoiceLists := [][]*preferences.ConfigChoice{
-		configChoices,           // Add global flags
-		clouds.GCPConfigChoices, // Add GCP-specific flags
-		clouds.AWSConfigChoices, // Add AWS-specific flags
-	}
-
-	for _, configChoiceList := range configChoiceLists {
-		for _, configChoice := range configChoiceList {
-			if configChoice.FlagKey != "" {
-				initCmd.Flags().StringVar(&configChoice.FlagValue, configChoice.FlagKey, "", configChoice.FlagDescription)
-			}
+	for _, configChoice := range configChoices {
+		if configChoice.FlagKey != "" {
+			initCmd.Flags().StringVar(&configChoice.FlagValue, configChoice.FlagKey, "", configChoice.FlagDescription)
 		}
 	}
 }
 
-func runInit(cmd *cobra.Command, args []string) {
+func runInit(cmd *cobra.Command, args []string) error {
 	// Collect the remaining global preferences
 	err := preferences.Collect(configChoices)
 	if err != nil {
-		fmt.Printf("Error: %v", err)
-		return
+		return err
 	}
 
 	// Run the cloud-specific setup
 	selectedDeploymentType := viper.GetString(config.DeploymentType)
 	cloudProvider, err := clouds.GetCloudProvider(selectedDeploymentType)
 	if err != nil {
-		fmt.Printf("Error: %v", err)
-		return
-	}
-
-	err = cloudProvider.Setup()
-	if err != nil {
-		fmt.Printf("Error: %v", err)
-		return
+		return err
 	}
 
 	// Save the config
