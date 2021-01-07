@@ -8,20 +8,24 @@ import (
 )
 
 type TemplateConfig struct {
-	CloudProvider string `yaml:"cloud_provider"`
-	Name          string `yaml:"name"`
-	FunctionName  string `yaml:"entrypoint"`
-	Runtime       string `yaml:"runtime"`
-	Type          string `yaml:"type"`
+	// Template Variables
+	Name         string `yaml:"name"`
+	FunctionName string `yaml:"entrypoint"`
+	Runtime      string `yaml:"runtime"`
+	Type         string `yaml:"type"`
+	Deployed     string `yaml:"deployed_utc,omitempty"`
+	PackageName  string `yaml:"package,omitempty"`
+
+	// Cloud variables
+	CloudProvider    string `yaml:"cloud_provider"`
+	DeploymentRegion string `yaml:"region,omitempty"`
 
 	// GCP Variables
-	ProjectID        string `yaml:"project_id,omitempty"`
-	DeploymentRegion string `yaml:"region,omitempty"`
-	Deployed         string `yaml:"deployed_utc,omitempty"`
-	PackageName      string `yaml:"package,omitempty"`
+	ProjectID string `yaml:"project_id,omitempty"`
 
 	// AWS Variables
-	IAMRole string `yaml:"iam_role,omitempty"`
+	RoleArn   string `yaml:"role_arn,omitempty"`
+	RestApiID string `yaml:"rest_api_id,omitempty"`
 }
 
 func GetConfigFilePath(directoryPath string) string {

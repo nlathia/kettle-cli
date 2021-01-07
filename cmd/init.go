@@ -8,7 +8,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/operatorai/operator/clouds"
 	"github.com/operatorai/operator/config"
 	"github.com/operatorai/operator/preferences"
 )
@@ -105,15 +104,9 @@ func runInit(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	// Run the cloud-specific setup
-	selectedDeploymentType := viper.GetString(config.DeploymentType)
-	cloudProvider, err := clouds.GetCloudProvider(selectedDeploymentType)
-	if err != nil {
-		return err
-	}
-
 	// Save the config
 	config.Write()
+	return nil
 }
 
 // mapContainsValue returns an error if a map doesn't contain a specific value

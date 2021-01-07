@@ -25,7 +25,7 @@ var AWSConfigChoices = []*preferences.ConfigChoice{
 	{
 		// Pick or create an AWS IAM role for deploying Lambdas
 		Label:             "Available AWS IAM Roles",
-		Key:               config.IAMRole,
+		Key:               config.RoleArn,
 		FlagKey:           "aws-iam-arn",
 		FlagDescription:   "The ARN of the AWS IAM role to use when deploying lambdas",
 		ValidationFunc:    validateAWSRoleExists,
@@ -115,7 +115,7 @@ func (AWSLambdaFunction) Deploy(directory string, config *config.TemplateConfig)
 			"create-function",
 			"--function-name", config.Name,
 			"--runtime", config.Runtime,
-			"--role", config.IAMRole,
+			"--role", config.RoleArn,
 			"--handler", fmt.Sprintf("main.%s", config.FunctionName),
 			"--package-type", "Zip",
 			"--zip-file", fmt.Sprintf("fileb://%s", deploymentPackage),

@@ -64,5 +64,5 @@ const (
 	DeploymentRegion = "region"
 
 	// AWS deployments
-	IAMRole = "iam_role"
+	RoleArn = "iam_role_arn"
 )

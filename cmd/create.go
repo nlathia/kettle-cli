@@ -47,7 +47,7 @@ func init() {
 		Runtime:          viper.GetString(config.Runtime),
 		ProjectID:        viper.GetString(config.ProjectID),
 		DeploymentRegion: viper.GetString(config.DeploymentRegion),
-		IAMRole:          viper.GetString(config.IAMRole),
+		RoleArn:          viper.GetString(config.RoleArn),
 	}
 }
 
