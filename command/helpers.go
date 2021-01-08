@@ -1,8 +1,11 @@
 package command
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
+
+	"github.com/manifoldco/promptui"
 )
 
 func Execute(command string, args []string, quiet bool) error {
@@ -25,4 +28,24 @@ func ExecuteWithResult(command string, args []string) ([]byte, error) {
 		return nil, err
 	}
 	return output, nil
+}
+
+// PromptForValue shows a prompt (using a map's keys) to the user and returns
+// the value that is indexed at that key
+func PromptForValue(label string, values map[string]string) (string, error) {
+	valueLabels := []string{}
+	for valueLabel, _ := range values {
+		valueLabels = append(valueLabels, valueLabel)
+	}
+
+	prompt := promptui.Select{
+		Label: label,
+		Items: valueLabels,
+	}
+	_, result, err := prompt.Run()
+	if err != nil {
+		fmt.Printf("Prompt failed %v\n", err)
+		return "", err
+	}
+	return values[result], nil
 }
