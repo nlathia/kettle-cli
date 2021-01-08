@@ -43,11 +43,11 @@ func init() {
 	// Set up the config for this template from the viper settings
 	configValues = &config.TemplateConfig{
 		CloudProvider:    viper.GetString(config.CloudProvider),
-		Type:             viper.GetString(config.DeploymentType),
+		DeploymentType:   viper.GetString(config.DeploymentType),
 		Runtime:          viper.GetString(config.Runtime),
 		ProjectID:        viper.GetString(config.ProjectID),
 		DeploymentRegion: viper.GetString(config.DeploymentRegion),
-		IAMRole:          viper.GetString(config.IAMRole),
+		RoleArn:          viper.GetString(config.RoleArn),
 	}
 }
 
@@ -83,15 +83,14 @@ func validateCreateArgs(cmd *cobra.Command, args []string) error {
 	}
 
 	// Validate the selected type of deployment
-	if err := mapContainsValue(configValues.Type, config.DeploymentNames[configValues.CloudProvider]); err != nil {
+	if err := mapContainsValue(configValues.DeploymentType, config.DeploymentNames[configValues.CloudProvider]); err != nil {
 		return err
 	}
 
 	// Validate the selected runtime is supported
-	if err := mapContainsValue(configValues.Runtime, config.RuntimeNames[configValues.Type]); err != nil {
+	if err := mapContainsValue(configValues.Runtime, config.RuntimeNames[configValues.DeploymentType]); err != nil {
 		return err
 	}
-
 	return nil
 }
 
@@ -101,7 +100,7 @@ func runCreate(cmd *cobra.Command, args []string) error {
 	configValues.FunctionName = templates.CreateEntryFunctionName(args, configValues.Runtime)
 
 	// Print out the config
-	fmt.Println("🎇  Type: ", configValues.Type)
+	fmt.Println("🎇  Type: ", configValues.DeploymentType)
 	fmt.Println("🎇  Language: ", configValues.Runtime)
 
 	// Create a directory with the function name
@@ -116,7 +115,7 @@ func runCreate(cmd *cobra.Command, args []string) error {
 		"templates/%s/%s/%s/",
 		strings.Replace(configValues.Runtime, ".", "", 1),
 		configValues.CloudProvider,
-		configValues.Type,
+		configValues.DeploymentType,
 	)
 	assetNames := templates.AssetNames()
 
@@ -191,7 +190,7 @@ func runCreate(cmd *cobra.Command, args []string) error {
 func cleanUp(directoryPath string, err error) error {
 	cleanupErr := os.RemoveAll(directoryPath)
 	if cleanupErr != nil {
-		fmt.Println("\n⚠️  Failed to clean up: ", directoryPath, cleanupErr)
+		fmt.Println("\n  Failed to clean up: ", directoryPath, cleanupErr)
 	}
 	return err
 }

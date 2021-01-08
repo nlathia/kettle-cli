@@ -8,7 +8,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/operatorai/operator/clouds"
 	"github.com/operatorai/operator/config"
 	"github.com/operatorai/operator/preferences"
 )
@@ -21,116 +20,59 @@ var initCmd = &cobra.Command{
 Cloud Run Containers, and AWS Lambda functions.
 
 The init command allows you to set up your default preferences.`,
-	Run: runInit,
-}
-
-var configChoices = []*preferences.ConfigChoice{
-	{
-		// Pick a cloud provider
-		Label:           "Cloud Provider",
-		Key:             config.CloudProvider,
-		FlagKey:         "cloud",
-		FlagDescription: "The cloud provider to use",
-		CollectValuesFunc: func() (map[string]string, error) {
-			return config.CloudProviderNames, nil
-		},
-		ValidationFunc: func(v string) error {
-			return mapContainsValue(v, config.CloudProviderNames)
-		},
-	},
-	{
-		// Pick a deployment type; assumes that the 'Pick a cloud provider'
-		// step has already run or has been set via a flag
-		Label:           "Deployment type",
-		Key:             config.DeploymentType,
-		FlagKey:         "type",
-		FlagDescription: "The type of deployment (function, run, lambda)",
-		CollectValuesFunc: func() (map[string]string, error) {
-			selectedCloud := viper.GetString(config.CloudProvider)
-			if selectedCloud != "" {
-				return config.DeploymentNames[selectedCloud], nil
-			}
-			return nil, errors.New(fmt.Sprintf("unknown cloud: %s", selectedCloud))
-		},
-		ValidationFunc: func(v string) error {
-			selectedCloud := viper.GetString(config.CloudProvider)
-			if selectedCloud != "" {
-				return mapContainsValue(v, config.DeploymentNames[selectedCloud])
-			}
-			return errors.New(fmt.Sprintf("unknown cloud: %s", selectedCloud))
-		},
-	},
-	{
-		// Pick the default programming language; assumes that the 'Pick a deployment type'
-		// step has already run or has been set via a flag
-		Label:           "Programming language",
-		Key:             config.Runtime,
-		FlagKey:         "runtime",
-		FlagDescription: "The function's runtime language",
-		CollectValuesFunc: func() (map[string]string, error) {
-			selectedType := viper.GetString(config.DeploymentType)
-			if selectedType != "" {
-				return config.RuntimeNames[selectedType], nil
-			}
-			return nil, errors.New(fmt.Sprintf("unknown deployment type: %s", selectedType))
-		},
-		ValidationFunc: func(v string) error {
-			selectedType := viper.GetString(config.DeploymentType)
-			if selectedType != "" {
-				return mapContainsValue(v, config.RuntimeNames[selectedType])
-			}
-			return errors.New(fmt.Sprintf("unknown deployment type: %s", selectedType))
-		},
-	},
+	RunE: runInit,
 }
 
 func init() {
 	rootCmd.AddCommand(initCmd)
-
-	// Enable operator init to also work with flags
-	// This currently adds all available flags, without checking for consistency
-	// E.g., using --cloud aws and a GCP config flag would still parse but would
-	// fail on validation
-
-	configChoiceLists := [][]*preferences.ConfigChoice{
-		configChoices,           // Add global flags
-		clouds.GCPConfigChoices, // Add GCP-specific flags
-		clouds.AWSConfigChoices, // Add AWS-specific flags
-	}
-
-	for _, configChoiceList := range configChoiceLists {
-		for _, configChoice := range configChoiceList {
-			if configChoice.FlagKey != "" {
-				initCmd.Flags().StringVar(&configChoice.FlagValue, configChoice.FlagKey, "", configChoice.FlagDescription)
-			}
-		}
-	}
 }
 
-func runInit(cmd *cobra.Command, args []string) {
+func runInit(cmd *cobra.Command, args []string) error {
+	configChoices := []*preferences.ConfigChoice{
+		{
+			// Pick a cloud provider
+			Label: "Cloud Provider",
+			Key:   config.CloudProvider,
+			CollectValuesFunc: func() (map[string]string, error) {
+				return config.CloudProviderNames, nil
+			},
+		},
+		{
+			// Pick a deployment type; assumes that the 'Pick a cloud provider'
+			// step has already run or has been set via a flag
+			Label: "Deployment type",
+			Key:   config.DeploymentType,
+			CollectValuesFunc: func() (map[string]string, error) {
+				selectedCloud := viper.GetString(config.CloudProvider)
+				if selectedCloud != "" {
+					return config.DeploymentNames[selectedCloud], nil
+				}
+				return nil, errors.New(fmt.Sprintf("unknown cloud: %s", selectedCloud))
+			},
+		},
+		{
+			// Pick the default programming language; assumes that the 'Pick a deployment type'
+			// step has already run or has been set via a flag
+			Label: "Programming language",
+			Key:   config.Runtime,
+			CollectValuesFunc: func() (map[string]string, error) {
+				selectedType := viper.GetString(config.DeploymentType)
+				if selectedType != "" {
+					return config.RuntimeNames[selectedType], nil
+				}
+				return nil, errors.New(fmt.Sprintf("unknown deployment type: %s", selectedType))
+			},
+		},
+	}
 	// Collect the remaining global preferences
 	err := preferences.Collect(configChoices)
 	if err != nil {
-		fmt.Printf("Error: %v", err)
-		return
-	}
-
-	// Run the cloud-specific setup
-	selectedDeploymentType := viper.GetString(config.DeploymentType)
-	cloudProvider, err := clouds.GetCloudProvider(selectedDeploymentType)
-	if err != nil {
-		fmt.Printf("Error: %v", err)
-		return
-	}
-
-	err = cloudProvider.Setup()
-	if err != nil {
-		fmt.Printf("Error: %v", err)
-		return
+		return err
 	}
 
 	// Save the config
 	config.Write()
+	return nil
 }
 
 // mapContainsValue returns an error if a map doesn't contain a specific value

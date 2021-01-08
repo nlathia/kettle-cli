@@ -21,7 +21,7 @@ var CloudProviderNames = map[string]string{
 // Deployment types
 const (
 	DeploymentType      = "deployment_type"
-	GoogleCloudFunction = "functions"
+	GoogleCloudFunction = "function"
 	GoogleCloudRun      = "run"
 	AWSLambda           = "lambda"
 )
@@ -64,5 +64,5 @@ const (
 	DeploymentRegion = "region"
 
 	// AWS deployments
-	IAMRole = "iam_role"
+	RoleArn = "iam_role_arn"
 )
