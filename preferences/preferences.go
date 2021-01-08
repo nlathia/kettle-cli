@@ -1,8 +1,6 @@
 package preferences
 
 import (
-	"fmt"
-
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/viper"
 )
@@ -52,7 +50,6 @@ func getValue(label string, values map[string]string) (string, error) {
 	}
 	_, result, err := prompt.Run()
 	if err != nil {
-		fmt.Printf("Prompt failed %v\n", err)
 		return "", err
 	}
 	return values[result], nil

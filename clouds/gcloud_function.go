@@ -9,6 +9,10 @@ import (
 
 type GoogleCloudFunction struct{}
 
+func (GoogleCloudFunction) GetConfig() *config.TemplateConfig {
+	return nil
+}
+
 func (GoogleCloudFunction) Setup() error {
 	return preferences.Collect(GCPConfigChoices)
 }

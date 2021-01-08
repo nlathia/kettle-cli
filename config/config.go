@@ -9,12 +9,12 @@ import (
 
 type TemplateConfig struct {
 	// Template Variables
-	Name         string `yaml:"name"`
-	FunctionName string `yaml:"entrypoint"`
-	Runtime      string `yaml:"runtime"`
-	Type         string `yaml:"type"`
-	Deployed     string `yaml:"deployed_utc,omitempty"`
-	PackageName  string `yaml:"package,omitempty"`
+	Name           string `yaml:"name"`
+	FunctionName   string `yaml:"entrypoint"`
+	Runtime        string `yaml:"runtime"`
+	DeploymentType string `yaml:"deployment_type"`
+	Deployed       string `yaml:"deployed_utc,omitempty"`
+	PackageName    string `yaml:"package,omitempty"`
 
 	// Cloud variables
 	CloudProvider    string `yaml:"cloud_provider"`

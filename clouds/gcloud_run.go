@@ -12,6 +12,10 @@ import (
 
 type GoogleCloudRun struct{}
 
+func (GoogleCloudRun) GetConfig() *config.TemplateConfig {
+	return nil
+}
+
 func (GoogleCloudRun) Setup() error {
 	return preferences.Collect(GCPConfigChoices)
 }
@@ -35,7 +39,7 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.TemplateConfig) error
 	}
 
 	// gcloud run deploy --image gcr.io/PROJECT-ID/helloworld
-	fmt.Println("🚢  Deploying ", cfg.Name, fmt.Sprintf("as a %s function", cfg.Type))
+	fmt.Println("🚢  Deploying ", cfg.Name, fmt.Sprintf("as a %s function", cfg.DeploymentType))
 	return executeCommand("gcloud", []string{
 		"run",
 		"deploy",

@@ -62,7 +62,7 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	cloudProvider, err := clouds.GetCloudProvider(deploymentConfig.Type)
+	cloudProvider, err := clouds.GetCloudProvider(deploymentConfig.DeploymentType)
 	if err != nil {
 		return err
 	}

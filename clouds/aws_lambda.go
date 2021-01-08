@@ -21,6 +21,10 @@ const (
 
 type AWSLambdaFunction struct{}
 
+func (AWSLambdaFunction) GetConfig() *config.TemplateConfig {
+	return nil
+}
+
 var AWSConfigChoices = []*preferences.ConfigChoice{
 	{
 		// Pick or create an AWS IAM role for deploying Lambdas

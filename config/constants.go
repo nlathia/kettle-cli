@@ -21,7 +21,7 @@ var CloudProviderNames = map[string]string{
 // Deployment types
 const (
 	DeploymentType      = "deployment_type"
-	GoogleCloudFunction = "functions"
+	GoogleCloudFunction = "function"
 	GoogleCloudRun      = "run"
 	AWSLambda           = "lambda"
 )
