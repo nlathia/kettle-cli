@@ -42,42 +42,19 @@ func init() {
 
 	// Set up the config for this template from the viper settings
 	configValues = &config.TemplateConfig{
-		CloudProvider:    viper.GetString(config.CloudProvider),
-		DeploymentType:   viper.GetString(config.DeploymentType),
-		Runtime:          viper.GetString(config.Runtime),
-		ProjectID:        viper.GetString(config.ProjectID),
-		DeploymentRegion: viper.GetString(config.DeploymentRegion),
-		RoleArn:          viper.GetString(config.RoleArn),
+		CloudProvider:  viper.GetString(config.CloudProvider),
+		DeploymentType: viper.GetString(config.DeploymentType),
+		Runtime:        viper.GetString(config.Runtime),
 	}
 }
 
 func validateCreateArgs(cmd *cobra.Command, args []string) error {
-	if configValues == nil {
-		return errors.New("please run operator init to set up this tool")
-	}
-
 	// Validate that args exist
 	if len(args) == 0 {
 		return errors.New("please specify a name")
 	}
 
-	// Construct the path where we are going to generate the boiler plate
-	var err error
-	directoryPath, err = templates.GetRelativeDirectory(args[0])
-	if err != nil {
-		return err
-	}
-
-	// Validate that the function path does *not* already exist
-	exists, err := templates.PathExists(directoryPath)
-	if err != nil {
-		return err
-	}
-	if exists {
-		return fmt.Errorf("directory already exists")
-	}
-
-	// Validate the input cloud provider
+	// Validate the cloud provider
 	if err := mapContainsValue(configValues.CloudProvider, config.CloudProviderNames); err != nil {
 		return err
 	}
@@ -90,6 +67,21 @@ func validateCreateArgs(cmd *cobra.Command, args []string) error {
 	// Validate the selected runtime is supported
 	if err := mapContainsValue(configValues.Runtime, config.RuntimeNames[configValues.DeploymentType]); err != nil {
 		return err
+	}
+
+	// Construct the path where we are going to generate the boiler plate
+	directoryPath, err := templates.GetRelativeDirectory(args[0])
+	if err != nil {
+		return err
+	}
+
+	// Validate that the function path does *not* already exist
+	exists, err := templates.PathExists(directoryPath)
+	if err != nil {
+		return err
+	}
+	if exists {
+		return fmt.Errorf("directory already exists")
 	}
 	return nil
 }
