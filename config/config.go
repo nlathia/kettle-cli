@@ -32,8 +32,8 @@ func GetConfigFilePath(directoryPath string) string {
 	return path.Join(directoryPath, DeploymentConfig)
 }
 
-func WriteConfig(config *TemplateConfig, directoryPath string) error {
-	data, err := yaml.Marshal(config)
+func WriteConfig(cfg *TemplateConfig, directoryPath string) error {
+	data, err := yaml.Marshal(cfg)
 	if err != nil {
 		return err
 	}

@@ -1,4 +1,4 @@
-package preferences
+package config
 
 // A ConfigChoice is used to enumerate a set of preferences
 // that can be selected interactively by the user
