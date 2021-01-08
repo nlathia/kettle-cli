@@ -6,6 +6,7 @@ import (
 
 	"github.com/operatorai/operator/clouds/gcloud"
 	"github.com/operatorai/operator/config"
+	"github.com/spf13/viper"
 )
 
 type GoogleCloud struct{}
@@ -14,8 +15,21 @@ func (GoogleCloud) GetService(deploymentType string) (Service, error) {
 	switch deploymentType {
 	case config.GoogleCloudFunction:
 		return gcloud.GoogleCloudFunction{}, nil
+	case config.GoogleCloudRun:
+		return gcloud.GoogleCloudRun{}, nil
 	}
-	return nil, errors.New(fmt.Sprintf("Unknown service: %s", deploymentType))
+	return nil, errors.New(fmt.Sprintf("unimplemented service: %s", deploymentType))
+}
+
+func (GoogleCloud) AddConfig(cfg *config.TemplateConfig) error {
+	if cfg.ProjectID == "" {
+		cfg.ProjectID = viper.GetString(config.ProjectID)
+	}
+	if cfg.DeploymentRegion == "" {
+		cfg.DeploymentRegion = viper.GetString(config.DeploymentRegion)
+	}
+
+	return nil
 }
 
 // var GCPConfigChoices = []*preferences.ConfigChoice{

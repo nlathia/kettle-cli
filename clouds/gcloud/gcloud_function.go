@@ -3,6 +3,7 @@ package gcloud
 import (
 	"fmt"
 
+	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
 )
 
@@ -43,5 +44,5 @@ func (GoogleCloudFunction) Deploy(directory string, config *config.TemplateConfi
 	}
 	fmt.Println("🚢  Deploying ", config.Name, "as a Google Cloud function")
 	fmt.Println("⏭  Entry point: ", config.FunctionName, fmt.Sprintf("(%s)", config.Runtime))
-	return executeCommand("gcloud", commandArgs, false)
+	return command.Execute("gcloud", commandArgs, false)
 }

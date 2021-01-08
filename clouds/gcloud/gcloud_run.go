@@ -6,6 +6,7 @@ import (
 
 	"github.com/spf13/viper"
 
+	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
 )
 
@@ -29,7 +30,7 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.TemplateConfig) error
 	// Build the docker image
 	// gcloud builds submit --tag gcr.io/PROJECT-ID/helloworld
 	fmt.Println("🏭  Building: ", cfg.Name, "as a Cloud Run container")
-	err := executeCommand("gcloud", []string{
+	err := command.Execute("gcloud", []string{
 		"builds",
 		"submit",
 		"--tag", fmt.Sprintf("gcr.io/%s/%s", projectID, cfg.Name),
@@ -40,7 +41,7 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.TemplateConfig) error
 
 	// gcloud run deploy --image gcr.io/PROJECT-ID/helloworld
 	fmt.Println("🚢  Deploying ", cfg.Name, fmt.Sprintf("as a %s function", cfg.DeploymentType))
-	return executeCommand("gcloud", []string{
+	return command.Execute("gcloud", []string{
 		"run",
 		"deploy",
 		cfg.Name, // The cloud run service is named the same as the directory

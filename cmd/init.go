@@ -9,7 +9,6 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/operatorai/operator/config"
-	"github.com/operatorai/operator/preferences"
 )
 
 // initCmd represents the command to set up and store preferences for the CLI tool
@@ -28,7 +27,7 @@ func init() {
 }
 
 func runInit(cmd *cobra.Command, args []string) error {
-	configChoices := []*preferences.ConfigChoice{
+	configChoices := []*config.ConfigChoice{
 		{
 			// Pick a cloud provider
 			Label: "Cloud Provider",
@@ -66,7 +65,7 @@ func runInit(cmd *cobra.Command, args []string) error {
 	}
 
 	// Collect the remaining global preferences
-	err := preferences.Collect(configChoices)
+	err := config.Collect(configChoices)
 	if err != nil {
 		return err
 	}

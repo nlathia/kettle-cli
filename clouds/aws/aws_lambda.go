@@ -11,8 +11,8 @@ import (
 
 	"github.com/janeczku/go-spinner"
 	"github.com/manifoldco/promptui"
+	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
-	"github.com/operatorai/operator/preferences"
 )
 
 const (
@@ -25,7 +25,7 @@ func (AWSLambdaFunction) GetConfig() *config.TemplateConfig {
 	return nil
 }
 
-var AWSConfigChoices = []*preferences.ConfigChoice{
+var AWSConfigChoices = []*config.ConfigChoice{
 	{
 		// Pick or create an AWS IAM role for deploying Lambdas
 		Label:             "Available AWS IAM Roles",
@@ -39,7 +39,7 @@ var AWSConfigChoices = []*preferences.ConfigChoice{
 
 func (AWSLambdaFunction) Setup() error {
 	// @TODO (Future): enable selecting whether to create .zip or image-based lambdas
-	return preferences.Collect(AWSConfigChoices)
+	return config.Collect(AWSConfigChoices)
 }
 
 func (AWSLambdaFunction) Deploy(directory string, config *config.TemplateConfig) error {
@@ -58,7 +58,7 @@ func (AWSLambdaFunction) Deploy(directory string, config *config.TemplateConfig)
 	// of the current working directory
 	deploymentFile := path.Join(rootDir, deploymentPackage)
 	fmt.Println(fmt.Sprintf("🧱  Building deployment archive: %s", deploymentFile))
-	err = executeCommand("zip", []string{
+	err = command.Execute("zip", []string{
 		"-g",
 		deploymentPackage,
 		"-r",
@@ -79,7 +79,7 @@ func (AWSLambdaFunction) Deploy(directory string, config *config.TemplateConfig)
 		// So that we can add them to the zip file as a directory
 		os.Chdir(sitePackages)
 		fmt.Println(fmt.Sprintf("🧱  Adding to deployment archive: %s", sitePackages))
-		err = executeCommand("zip", []string{
+		err = command.Execute("zip", []string{
 			"-r",
 			deploymentFile,
 			".",
@@ -101,7 +101,7 @@ func (AWSLambdaFunction) Deploy(directory string, config *config.TemplateConfig)
 	if lambdaExists(config.Name) {
 		// Update the existing function
 		waitCommand = "function-updated"
-		err = executeCommand("aws", []string{
+		err = command.Execute("aws", []string{
 			"lambda",
 			"update-function-code",
 			"--function-name", config.Name,
@@ -114,7 +114,7 @@ func (AWSLambdaFunction) Deploy(directory string, config *config.TemplateConfig)
 		// Create the function for the first time
 		// https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/create-function.html
 		waitCommand = "function-active"
-		err = executeCommand("aws", []string{
+		err = command.Execute("aws", []string{
 			"lambda",
 			"create-function",
 			"--function-name", config.Name,
@@ -132,7 +132,7 @@ func (AWSLambdaFunction) Deploy(directory string, config *config.TemplateConfig)
 	}
 
 	// https://awscli.amazonaws.com/v2/documentation/api/latest/reference/lambda/wait/index.html#cli-aws-lambda-wait
-	return executeCommand("aws", []string{
+	return command.Execute("aws", []string{
 		"lambda",
 		"wait",
 		waitCommand,
@@ -142,12 +142,12 @@ func (AWSLambdaFunction) Deploy(directory string, config *config.TemplateConfig)
 }
 
 func getPyenvSitePackagesDirectory() (string, error) {
-	pyenvRoot, err := executeCommandWithResult("pyenv", []string{"root"})
+	pyenvRoot, err := command.ExecuteWithResult("pyenv", []string{"root"})
 	if err != nil {
 		return "", err
 	}
 
-	pyenvLocal, err := executeCommandWithResult("pyenv", []string{"local"})
+	pyenvLocal, err := command.ExecuteWithResult("pyenv", []string{"local"})
 	if err != nil {
 		return "", err
 	}
@@ -174,7 +174,7 @@ func lambdaExists(name string) bool {
 	s := spinner.StartNew(fmt.Sprintf("Checking if: %s exists...", name))
 	defer s.Stop()
 
-	err := executeCommand("aws", []string{
+	err := command.Execute("aws", []string{
 		"lambda",
 		"get-function",
 		"--function-name",
@@ -191,7 +191,7 @@ func getAWSRoles() (map[string]string, error) {
 	defer s.Stop()
 
 	//  aws iam list-roles --output json
-	output, err := executeCommandWithResult("aws", []string{
+	output, err := command.ExecuteWithResult("aws", []string{
 		"iam",
 		"list-roles",
 		"--output",
@@ -295,7 +295,7 @@ func createIAMRole() (map[string]string, error) {
 	}
 
 	// $ aws iam create-role --role-name lambda-ex --assume-role-policy-document file://trust-policy.json
-	output, err := executeCommandWithResult("aws", []string{
+	output, err := command.ExecuteWithResult("aws", []string{
 		"iam",
 		"create-role",
 		"--role-name",
