@@ -64,6 +64,7 @@ func runInit(cmd *cobra.Command, args []string) error {
 			},
 		},
 	}
+
 	// Collect the remaining global preferences
 	err := preferences.Collect(configChoices)
 	if err != nil {

@@ -1,10 +1,9 @@
-package clouds
+package gcloud
 
 import (
 	"fmt"
 
 	"github.com/operatorai/operator/config"
-	"github.com/operatorai/operator/preferences"
 )
 
 type GoogleCloudFunction struct{}
@@ -14,7 +13,8 @@ func (GoogleCloudFunction) GetConfig() *config.TemplateConfig {
 }
 
 func (GoogleCloudFunction) Setup() error {
-	return preferences.Collect(GCPConfigChoices)
+	// return preferences.Collect(GCPConfigChoices)
+	return nil
 }
 
 func (GoogleCloudFunction) Deploy(directory string, config *config.TemplateConfig) error {

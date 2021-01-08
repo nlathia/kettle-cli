@@ -1,4 +1,4 @@
-package clouds
+package gcloud
 
 import (
 	"errors"
@@ -7,7 +7,6 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/operatorai/operator/config"
-	"github.com/operatorai/operator/preferences"
 )
 
 type GoogleCloudRun struct{}
@@ -17,7 +16,8 @@ func (GoogleCloudRun) GetConfig() *config.TemplateConfig {
 }
 
 func (GoogleCloudRun) Setup() error {
-	return preferences.Collect(GCPConfigChoices)
+	// return preferences.Collect(GCPConfigChoices)
+	return nil
 }
 
 func (GoogleCloudRun) Deploy(directory string, cfg *config.TemplateConfig) error {

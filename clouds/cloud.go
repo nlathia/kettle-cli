@@ -7,22 +7,22 @@ import (
 	"github.com/operatorai/operator/config"
 )
 
-type Cloud interface {
-	GetConfig() *config.TemplateConfig
-
-	Setup() error
-
+type Service interface {
 	Deploy(directory string, config *config.TemplateConfig) error
+}
+
+type Cloud interface {
+	// GetConfig() *config.TemplateConfig
+
+	GetService(deploymentType string) (Service, error)
 }
 
 func GetCloudProvider(cloudType string) (Cloud, error) {
 	switch cloudType {
-	case config.GoogleCloudFunction:
-		return GoogleCloudFunction{}, nil
-	case config.GoogleCloudRun:
-		return GoogleCloudRun{}, nil
-	case config.AWSLambda:
-		return AWSLambdaFunction{}, nil
+	case config.GoogleCloud:
+		return GoogleCloud{}, nil
+	case config.AWS:
+		return AmazonWebServices{}, nil
 	}
-	return nil, errors.New(fmt.Sprintf("Unknown cloud: %s", cloudType))
+	return nil, errors.New(fmt.Sprintf("unimplemented cloud: %s", cloudType))
 }
