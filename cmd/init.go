@@ -26,7 +26,7 @@ func init() {
 
 func runInit(cmd *cobra.Command, args []string) error {
 	// Pick a cloud provider
-	cloudProvider, err := command.PromptForValue("Cloud Provider", config.CloudProviderNames)
+	cloudProvider, err := command.PromptForValue("Cloud Provider", config.CloudProviderNames, false)
 	if err != nil {
 		return err
 	}
@@ -43,7 +43,7 @@ func runInit(cmd *cobra.Command, args []string) error {
 
 	// Pick a service
 	availableDeploymentTypes := config.DeploymentNames[cloudProvider]
-	deploymentType, err := command.PromptForValue("Deployment type", availableDeploymentTypes)
+	deploymentType, err := command.PromptForValue("Deployment type", availableDeploymentTypes, false)
 	if err != nil {
 		return err
 	}
@@ -51,13 +51,13 @@ func runInit(cmd *cobra.Command, args []string) error {
 
 	// Pick a programming language
 	availableLanguages := config.RuntimeNames[deploymentType]
-	language, err := command.PromptForValue("Programming language", availableLanguages)
+	language, err := command.PromptForValue("Programming language", availableLanguages, false)
 	if err != nil {
 		return err
 	}
 	viper.Set(config.Runtime, language)
 
-	// Save the config
-	config.Write()
+	// Save the settings
+	config.WriteSettings()
 	return nil
 }

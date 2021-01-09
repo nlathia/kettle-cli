@@ -88,9 +88,12 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	// Store that this function has been deployed
+	// Write the config back, as it may have been updated
 	deploymentConfig.Deployed = time.Now().UTC().String()
-	config.WriteConfig(deploymentConfig, deploymentPath)
+	err = config.WriteConfig(deploymentConfig, deploymentPath)
+	if err != nil {
+		return err
+	}
 
 	// Return to the original root directory
 	os.Chdir(rootDir)
@@ -115,16 +118,6 @@ func getDeploymentPath(args []string) (string, error) {
 		return rootDir, nil
 	}
 
-	// operator deploy /path/to/some/directory
-	// Deploys from a fully formed path
-	exists, err = directoryHasConfigFile(args[0])
-	if err != nil {
-		return "", err
-	}
-	if exists {
-		return args[0], nil
-	}
-
 	// operator deploy some-directory
 	// Deploys from a directory relative to the current working directory
 	deploymentPath, err := templates.GetRelativeDirectory(args[0])
@@ -136,7 +129,7 @@ func getDeploymentPath(args []string) (string, error) {
 		return deploymentPath, nil
 	}
 
-	return "", fmt.Errorf("could not find %s file", config.DeploymentConfig)
+	return "", fmt.Errorf("could not find %s file in %s", config.DeploymentConfig, args[0])
 }
 
 func directoryHasConfigFile(directory string) (bool, error) {

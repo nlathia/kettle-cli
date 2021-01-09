@@ -2,8 +2,9 @@ package config
 
 const (
 	// Shared constants
-	Version          = "v0.0.2-alpha"
-	DeploymentConfig = "operator.config"
+	Version                 = "v0.0.2-alpha"
+	DeploymentConfig        = "operator.config"
+	PromptNoneOfTheseOption = "None of these (create a new one)"
 
 	// Cloud providers
 	CloudProvider = "cloud_provider"

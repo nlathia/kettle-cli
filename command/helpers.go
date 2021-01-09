@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"sort"
 
 	"github.com/manifoldco/promptui"
+	"github.com/operatorai/operator/config"
 )
 
 func Execute(command string, args []string, quiet bool) error {
@@ -32,10 +34,14 @@ func ExecuteWithResult(command string, args []string) ([]byte, error) {
 
 // PromptForValue shows a prompt (using a map's keys) to the user and returns
 // the value that is indexed at that key
-func PromptForValue(label string, values map[string]string) (string, error) {
+func PromptForValue(label string, values map[string]string, addNoneOfThese bool) (string, error) {
 	valueLabels := []string{}
 	for valueLabel, _ := range values {
 		valueLabels = append(valueLabels, valueLabel)
+	}
+	sort.Strings(valueLabels)
+	if addNoneOfThese {
+		valueLabels = append(valueLabels, config.PromptNoneOfTheseOption)
 	}
 
 	prompt := promptui.Select{
@@ -46,6 +52,10 @@ func PromptForValue(label string, values map[string]string) (string, error) {
 	if err != nil {
 		fmt.Printf("Prompt failed %v\n", err)
 		return "", err
+	}
+
+	if result == config.PromptNoneOfTheseOption {
+		return "", nil
 	}
 	return values[result], nil
 }

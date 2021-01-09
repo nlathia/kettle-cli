@@ -1,6 +1,8 @@
 package aws
 
 import (
+	"fmt"
+
 	"github.com/operatorai/operator/config"
 )
 
@@ -10,19 +12,18 @@ const (
 
 type AWSLambdaFunction struct{}
 
-// var AWSConfigChoices = []*config.ConfigChoice{
-// 	{
-// 		// Pick or create an AWS IAM role for deploying Lambdas
-// 		Label:             "Available AWS IAM Roles",
-// 		Key:               config.RoleArn,
-// 		FlagKey:           "aws-iam-arn",
-// 		FlagDescription:   "The ARN of the AWS IAM role to use when deploying lambdas",
-// 		ValidationFunc:    validateAWSRoleExists,
-// 		CollectValuesFunc: collectAWSRoles,
-// 	},
-// }
+func (AWSLambdaFunction) Deploy(directory string, cfg *config.TemplateConfig) error {
+	fmt.Println("🚢  Deploying ", cfg.Name, "as an AWS Lambda function")
+	fmt.Println("⏭  Entry point: ", cfg.FunctionName, fmt.Sprintf("(%s)", cfg.Runtime))
 
-func (AWSLambdaFunction) Deploy(directory string, config *config.TemplateConfig) error {
+	// Set IAM execution role
+	err := setExecutionRole(cfg)
+	if err != nil {
+		return err
+	}
+
+	// @ TODO the rest of the deployment
+
 	return nil
 }
 
@@ -168,144 +169,4 @@ func (AWSLambdaFunction) Deploy(directory string, config *config.TemplateConfig)
 // 		return false
 // 	}
 // 	return true
-// }
-
-// func getAWSRoles() (map[string]string, error) {
-// 	s := spinner.StartNew("Collecting AWS IAM roles...")
-// 	defer s.Stop()
-
-// 	//  aws iam list-roles --output json
-// 	output, err := command.ExecuteWithResult("aws", []string{
-// 		"iam",
-// 		"list-roles",
-// 		"--output",
-// 		"json",
-// 	})
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	var results struct {
-// 		Roles []struct {
-// 			RoleName   string `json:"RoleName"`
-// 			Path       string `json:"Path"`
-// 			Arn        string `json:"Arn"`
-// 			RolePolicy struct {
-// 				Statement []struct {
-// 					Principal struct {
-// 						Service string `json:"Service"`
-// 					} `json:"Principal"`
-// 				} `json:"Statement"`
-// 			} `json:"AssumeRolePolicyDocument"`
-// 		} `json:"Roles"`
-// 	}
-// 	if err := json.Unmarshal(output, &results); err != nil {
-// 		return nil, err
-// 	}
-
-// 	roles := map[string]string{}
-// 	for _, role := range results.Roles {
-// 		if role.RolePolicy.Statement[0].Principal.Service == "lambda.amazonaws.com" {
-// 			displayName := fmt.Sprintf("%s (%s)", role.RoleName, role.Path)
-// 			roles[displayName] = role.Arn
-// 		}
-// 	}
-// 	return roles, nil
-// }
-
-// func collectAWSRoles() (map[string]string, error) {
-// 	roles, err := getAWSRoles()
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	if len(roles) == 0 {
-// 		prompt := promptui.Prompt{
-// 			Label:     "No matching AWS IAM roles. Create a new one",
-// 			IsConfirm: true,
-// 		}
-
-// 		confirmed, err := prompt.Run()
-// 		if err != nil {
-// 			return nil, err
-// 		}
-
-// 		if strings.ToLower(confirmed) == "y" {
-// 			return createIAMRole()
-// 		}
-// 		return roles, errors.New("unknown input")
-// 	}
-// 	return roles, nil
-// }
-
-// func validateAWSRoleExists(arn string) error {
-// 	roles, err := getAWSRoles()
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	for _, roleArn := range roles {
-// 		if roleArn == arn {
-// 			return nil
-// 		}
-// 	}
-// 	return errors.New(fmt.Sprintf("No matching role for ARN: %s", arn))
-// }
-
-// func createIAMRole() (map[string]string, error) {
-// 	s := spinner.StartNew("Creating AWS IAM role for lambda.amazonaws.com...")
-// 	defer s.Stop()
-
-// 	// Write the trust policy to a temp file
-// 	f, err := ioutil.TempFile(".", "trust_policy*.json")
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	defer os.Remove(f.Name())
-
-// 	trustPolicy := []byte(`{
-// 		"Version": "2012-10-17",
-// 		"Statement": [
-// 			{
-// 				"Effect": "Allow",
-// 				"Principal": {
-// 					"Service": "lambda.amazonaws.com"
-// 				},
-// 				"Action": "sts:AssumeRole"
-// 			}
-// 		]
-// 	}`)
-// 	if _, err = f.Write(trustPolicy); err != nil {
-// 		return nil, err
-// 	}
-
-// 	// $ aws iam create-role --role-name lambda-ex --assume-role-policy-document file://trust-policy.json
-// 	output, err := command.ExecuteWithResult("aws", []string{
-// 		"iam",
-// 		"create-role",
-// 		"--role-name",
-// 		"operator-lambda-role",
-// 		"--assume-role-policy-document",
-// 		fmt.Sprintf("file://%s", f.Name()),
-// 		"--output",
-// 		"json",
-// 	})
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	var result struct {
-// 		Role struct {
-// 			RoleName string `json:"RoleName"`
-// 			Path     string `json:"Path"`
-// 			Arn      string `json:"Arn"`
-// 		} `json:"Role"`
-// 	}
-// 	if err := json.Unmarshal(output, &result); err != nil {
-// 		return nil, err
-// 	}
-
-// 	displayName := fmt.Sprintf("%s (%s)", result.Role.RoleName, result.Role.Path)
-// 	return map[string]string{
-// 		displayName: result.Role.Arn,
-// 	}, nil
 // }
