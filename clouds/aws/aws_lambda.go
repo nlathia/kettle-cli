@@ -31,7 +31,6 @@ func (AWSLambdaFunction) Deploy(directory string, cfg *config.TemplateConfig) er
 			return err
 		}
 	}
-
 	return waitForLambda(waitType, cfg)
 }
 
@@ -84,10 +83,13 @@ func createLambda(deploymentArchive string, cfg *config.TemplateConfig) (string,
 	if err != nil {
 		return "", err
 	}
+
 	return "function-active", nil
 }
 
 func waitForLambda(waitType string, cfg *config.TemplateConfig) error {
+	s := spinner.StartNew(fmt.Sprintf("Deploying. Waiting for: %s", waitType))
+	defer s.Stop()
 	return command.Execute("aws", []string{
 		"lambda",
 		"wait",
