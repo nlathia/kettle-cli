@@ -2,6 +2,7 @@
 # Makefile command: `make localhost` 
 # This script tests the function locally & interactively
 
+RESULT="outputfile.txt"
 FILE="event.json"
 if [ -f "$1" ]; then
     echo "✅  Using $1 as input."
@@ -19,4 +20,7 @@ else
     fi
 fi
 
-python-lambda-local -f {{.FunctionName}} main.py "$FILE"
+aws lambda  invoke --function-name {{.FunctionName}} \
+    --payload "fileb://$FILE" $RESULT
+
+echo "✅  Result written to: $RESULT"
