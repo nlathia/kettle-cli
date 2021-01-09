@@ -24,7 +24,8 @@ const (
 	DeploymentRegion = "region"
 
 	// AWS deployments
-	RoleArn             = "iam_role_arn"
+	AccountID           = "account_id"
+	RoleArn             = "role_arn"
 	RestApiID           = "rest_api_id"
 	RestApiRootResource = "rest_api_root_resource"
 )
