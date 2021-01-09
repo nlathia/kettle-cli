@@ -47,7 +47,8 @@ func validateCreateArgs(cmd *cobra.Command, args []string) error {
 	}
 
 	// Construct the path where we are going to generate the boiler plate
-	directoryPath, err := templates.GetRelativeDirectory(args[0])
+	var err error // Avoid shadowing global directoryPath
+	directoryPath, err = templates.GetRelativeDirectory(args[0])
 	if err != nil {
 		return err
 	}
