@@ -85,6 +85,7 @@ func createLambda(deploymentArchive string, cfg *config.TemplateConfig) (string,
 	}
 
 	// @TODO add api gateway
+	// @TODO get api gateway root ID
 	return "function-active", nil
 }
 

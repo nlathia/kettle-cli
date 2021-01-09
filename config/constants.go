@@ -24,8 +24,9 @@ const (
 	DeploymentRegion = "region"
 
 	// AWS deployments
-	RoleArn   = "iam_role_arn"
-	RestApiID = "rest_api_id"
+	RoleArn             = "iam_role_arn"
+	RestApiID           = "rest_api_id"
+	RestApiRootResource = "rest_api_root_resource"
 )
 
 // Mappings between prompts (shown to the user) and values (stored in config)

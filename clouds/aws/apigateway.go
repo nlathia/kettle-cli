@@ -64,6 +64,42 @@ func setApiGateway(cfg *config.TemplateConfig) error {
 	return nil
 }
 
+func setApiGatewayRoot(cfg *config.TemplateConfig) error {
+	if cfg.RestApiRootID != "" {
+		return nil
+	}
+	if cfg.RestApiID == "" {
+		return errors.New("rest-api-id is not set")
+	}
+
+	output, err := command.ExecuteWithResult("aws", []string{
+		"apigateway",
+		"get-resources",
+		"--rest-api-id",
+		cfg.RestApiID,
+	})
+	if err != nil {
+		return err
+	}
+
+	var results struct {
+		Items []struct {
+			Path string `json:"path"`
+			ID   string `json:"id"`
+		} `json:"items"`
+	}
+	if err := json.Unmarshal(output, &results); err != nil {
+		return err
+	}
+	if len(results.Items) == 0 {
+		return errors.New("no matching apigateway resource")
+	}
+
+	cfg.RestApiRootID = results.Items[0].ID
+	viper.Set(config.RestApiRootResource, results.Items[0].ID)
+	return nil
+}
+
 func getApiGateways() (map[string]string, bool, error) {
 	output, err := command.ExecuteWithResult("aws", []string{
 		"apigateway",
