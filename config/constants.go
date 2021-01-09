@@ -19,9 +19,11 @@ const (
 	GoogleCloudRun      = "run"
 	AWSLambda           = "lambda"
 
-	// Google Cloud deployments
-	ProjectID        = "project_id"
+	// Cloud variables
 	DeploymentRegion = "region"
+
+	// Google Cloud deployments
+	ProjectID = "project_id"
 
 	// AWS deployments
 	AccountID           = "account_id"

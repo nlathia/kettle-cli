@@ -7,6 +7,7 @@ import (
 	"github.com/janeczku/go-spinner"
 	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
+	"github.com/spf13/viper"
 )
 
 func setDeploymentRegion(cfg *config.TemplateConfig) error {
@@ -25,6 +26,7 @@ func setDeploymentRegion(cfg *config.TemplateConfig) error {
 	}
 
 	cfg.DeploymentRegion = region
+	viper.Set(config.DeploymentRegion, region)
 	return nil
 }
 
