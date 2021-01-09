@@ -104,7 +104,7 @@ func setApiGatewayRoot(cfg *config.TemplateConfig) error {
 }
 
 func setApiGatewayResource(cfg *config.TemplateConfig) error {
-	if cfg.RestApiResourcePath != "" {
+	if cfg.RestApiResourceID != "" {
 		return nil
 	}
 	if err := setApiGateway(cfg); err != nil {
@@ -133,13 +133,12 @@ func setApiGatewayResource(cfg *config.TemplateConfig) error {
 	}
 
 	var result struct {
-		Path string `json:"path"`
-		ID   string `json:"id"`
+		ID string `json:"id"`
 	}
 	if err := json.Unmarshal(output, &result); err != nil {
 		return err
 	}
-	cfg.RestApiResourcePath = result.Path
+	cfg.RestApiResourceID = result.ID
 
 	// Create POST method on the resource
 	err = command.Execute("aws", []string{

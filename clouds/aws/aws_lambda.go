@@ -20,7 +20,11 @@ func (AWSLambdaFunction) Deploy(directory string, cfg *config.TemplateConfig) er
 	}
 
 	var waitType string
-	if lambdaExists(cfg.Name) {
+	exists, err := lambdaFunctionExists(cfg.Name)
+	if err != nil {
+		return err
+	}
+	if exists {
 		waitType, err = updateLambda(deploymentArchive, cfg)
 		if err != nil {
 			return err
@@ -34,11 +38,9 @@ func (AWSLambdaFunction) Deploy(directory string, cfg *config.TemplateConfig) er
 	return waitForLambda(waitType, cfg)
 }
 
-// lambdaExists queries whether a lambda function already exists
-func lambdaExists(name string) bool {
+func lambdaFunctionExists(name string) (bool, error) {
 	s := spinner.StartNew(fmt.Sprintf("Checking if: %s exists...", name))
 	defer s.Stop()
-
 	err := command.Execute("aws", []string{
 		"lambda",
 		"get-function",
@@ -46,9 +48,9 @@ func lambdaExists(name string) bool {
 		name,
 	}, true)
 	if err != nil {
-		return false
+		return false, err
 	}
-	return true
+	return true, nil
 }
 
 func updateLambda(deploymentArchive string, cfg *config.TemplateConfig) (string, error) {
@@ -69,7 +71,6 @@ func createLambda(deploymentArchive string, cfg *config.TemplateConfig) (string,
 	if err != nil {
 		return "", err
 	}
-
 	err = command.Execute("aws", []string{
 		"lambda",
 		"create-function",
@@ -89,6 +90,9 @@ func createLambda(deploymentArchive string, cfg *config.TemplateConfig) (string,
 		return "", err
 	}
 	// Set the Lambda function as the destination for the POST method
+	// Deploy the API
+	// Grant invoke permission to the API
+	// $ curl -X POST -d "{\"operation\":\"create\",\"tableName\":\"lambda-apigateway\",\"payload\":{\"Item\":{\"id\":\"1\",\"name\":\"Bob\"}}}" https://$API.execute-api.$REGION.amazonaws.com/prod/DynamoDBManager
 	return "function-active", nil
 }
 

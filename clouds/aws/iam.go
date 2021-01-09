@@ -12,6 +12,7 @@ import (
 	"github.com/manifoldco/promptui"
 	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
+	"github.com/spf13/viper"
 )
 
 const (
@@ -48,8 +49,6 @@ func setExecutionRole(cfg *config.TemplateConfig) error {
 			return err
 		}
 	} else {
-		// Allow the user to create a new IAM role if the operator one has not been created
-		// already
 		role, err = command.PromptForValue("IAM Role", roles, !operatorExecutionRoleExists)
 		if err != nil {
 			return err
@@ -63,14 +62,13 @@ func setExecutionRole(cfg *config.TemplateConfig) error {
 	}
 
 	cfg.RoleArn = role
+	viper.Set(config.RoleArn, role)
 	return nil
 }
 
 func getExecutionRoles() (map[string]string, bool, error) {
 	s := spinner.StartNew("Collecting AWS IAM roles...")
 	defer s.Stop()
-
-	//  aws iam list-roles --output json
 	output, err := command.ExecuteWithResult("aws", []string{
 		"iam",
 		"list-roles",
@@ -157,14 +155,11 @@ func createExecutionRole() (string, error) {
 
 	var result struct {
 		Role struct {
-			RoleName string `json:"RoleName"`
-			Path     string `json:"Path"`
-			Arn      string `json:"Arn"`
+			Arn string `json:"Arn"`
 		} `json:"Role"`
 	}
 	if err := json.Unmarshal(output, &result); err != nil {
 		return "", err
 	}
-
 	return result.Role.Arn, nil
 }
