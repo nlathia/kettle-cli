@@ -1,6 +1,6 @@
 VIRTUALENV_NAME=$(shell pwd | rev | cut -d '/' -f 1 | rev)-dev
 
-.PHONY: install uninstall test clean localhost
+.PHONY: install uninstall test clean invoke-local invoke
 
 clean:
 	@./bin/cleanup.sh
@@ -14,5 +14,8 @@ install: uninstall
 test:
 	@pytest
 
-localhost:
-	@./bin/launch.sh 
+invoke-local:
+	@./bin/invoke_local.sh 
+
+invoke:
+	@./bin/invoke.sh 
