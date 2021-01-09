@@ -54,7 +54,6 @@ func validateDeployArgs(cmd *cobra.Command, args []string) error {
 }
 
 // runDeploy creates or updates a cloud function
-// https://cloud.google.com/sdk/gcloud/reference/functions/deploy
 func runDeploy(cmd *cobra.Command, args []string) error {
 	// Get the cloud provider & service type
 	cloudProvider, err := clouds.GetCloudProvider(deploymentConfig.CloudProvider)
@@ -74,10 +73,8 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 	}
 
 	// Change to the directory where the function to deploy is implemented
-	// `gcloud functions deploy` assumes we are in this directory
+	// and run the deployment command
 	os.Chdir(deploymentPath)
-
-	// Run the deployment command
 	if err := service.Deploy(deploymentPath, deploymentConfig); err != nil {
 		return err
 	}

@@ -12,15 +12,6 @@ import (
 
 type GoogleCloudRun struct{}
 
-func (GoogleCloudRun) GetConfig() *config.TemplateConfig {
-	return nil
-}
-
-func (GoogleCloudRun) Setup() error {
-	// return preferences.Collect(GCPConfigChoices)
-	return nil
-}
-
 func (GoogleCloudRun) Deploy(directory string, cfg *config.TemplateConfig) error {
 	projectID := viper.GetString(config.ProjectID)
 	if projectID == "" {

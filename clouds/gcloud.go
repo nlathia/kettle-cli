@@ -6,7 +6,6 @@ import (
 
 	"github.com/operatorai/operator/clouds/gcloud"
 	"github.com/operatorai/operator/config"
-	"github.com/spf13/viper"
 )
 
 type GoogleCloud struct{}
@@ -21,16 +20,16 @@ func (GoogleCloud) GetService(deploymentType string) (Service, error) {
 	return nil, errors.New(fmt.Sprintf("unimplemented service: %s", deploymentType))
 }
 
-func (GoogleCloud) AddConfig(cfg *config.TemplateConfig) error {
-	if cfg.ProjectID == "" {
-		cfg.ProjectID = viper.GetString(config.ProjectID)
-	}
-	if cfg.DeploymentRegion == "" {
-		cfg.DeploymentRegion = viper.GetString(config.DeploymentRegion)
-	}
+// func (GoogleCloud) AddConfig(cfg *config.TemplateConfig) error {
+// 	if cfg.ProjectID == "" {
+// 		cfg.ProjectID = viper.GetString(config.ProjectID)
+// 	}
+// 	if cfg.DeploymentRegion == "" {
+// 		cfg.DeploymentRegion = viper.GetString(config.DeploymentRegion)
+// 	}
 
-	return nil
-}
+// 	return nil
+// }
 
 // var GCPConfigChoices = []*preferences.ConfigChoice{
 // 	{

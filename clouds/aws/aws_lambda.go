@@ -21,10 +21,6 @@ const (
 
 type AWSLambdaFunction struct{}
 
-func (AWSLambdaFunction) GetConfig() *config.TemplateConfig {
-	return nil
-}
-
 var AWSConfigChoices = []*config.ConfigChoice{
 	{
 		// Pick or create an AWS IAM role for deploying Lambdas
@@ -35,11 +31,6 @@ var AWSConfigChoices = []*config.ConfigChoice{
 		ValidationFunc:    validateAWSRoleExists,
 		CollectValuesFunc: collectAWSRoles,
 	},
-}
-
-func (AWSLambdaFunction) Setup() error {
-	// @TODO (Future): enable selecting whether to create .zip or image-based lambdas
-	return config.Collect(AWSConfigChoices)
 }
 
 func (AWSLambdaFunction) Deploy(directory string, config *config.TemplateConfig) error {

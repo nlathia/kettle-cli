@@ -12,8 +12,6 @@ type Service interface {
 }
 
 type Cloud interface {
-	AddConfig(cfg *config.TemplateConfig) error
-
 	GetService(deploymentType string) (Service, error)
 }
 

@@ -17,7 +17,3 @@ func (AmazonWebServices) GetService(deploymentType string) (Service, error) {
 	}
 	return nil, errors.New(fmt.Sprintf("unimplemented service: %s", deploymentType))
 }
-
-func (AmazonWebServices) AddConfig(cfg *config.TemplateConfig) error {
-	return nil
-}
