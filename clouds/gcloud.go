@@ -116,37 +116,6 @@ func (GoogleCloud) GetService(deploymentType string) (Service, error) {
 // 	return nil
 // }
 
-// func getGoogleCloudRegions() (map[string]string, error) {
-// 	s := spinner.StartNew("Collecting Google Cloud regions...")
-// 	defer s.Stop()
-
-// 	// gcloud functions regions list --format="json"
-// 	output, err := executeCommandWithResult("gcloud", []string{
-// 		"functions",
-// 		"regions",
-// 		"list",
-// 		"--format=\"json\"",
-// 	})
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	var results []struct {
-// 		DisplayName string `json:"displayName"`
-// 		LocationID  string `json:"locationId"`
-// 	}
-// 	if err := json.Unmarshal(output, &results); err != nil {
-// 		return nil, err
-// 	}
-
-// 	regions := map[string]string{}
-// 	for _, region := range results {
-// 		displayName := fmt.Sprintf("%s (%s)", region.DisplayName, region.LocationID)
-// 		regions[displayName] = region.LocationID
-// 	}
-// 	return regions, nil
-// }
-
 // func isValidGoogleCloudRegion(locationID string) error {
 // 	s := spinner.StartNew("Collecting Google Cloud regions...")
 // 	defer s.Stop()
