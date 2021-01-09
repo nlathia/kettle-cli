@@ -1,5 +1,5 @@
 #!/bin/bash
-# Makefile command: `make localhost` 
+# Makefile command: `make invoke` 
 # This script tests the function locally & interactively
 
 RESULT="outputfile.txt"
