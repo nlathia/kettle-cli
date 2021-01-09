@@ -145,7 +145,7 @@ func createExecutionRole() (string, error) {
 		"iam",
 		"create-role",
 		"--role-name",
-		"operator-lambda-role",
+		operatorExecutionRole,
 		"--assume-role-policy-document",
 		fmt.Sprintf("file://%s", f.Name()),
 		"--output",
