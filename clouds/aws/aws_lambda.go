@@ -22,6 +22,8 @@ func (AWSLambdaFunction) Deploy(directory string, cfg *config.TemplateConfig) er
 		return err
 	}
 
+	// @ TODO the rest of the deployment
+
 	return nil
 }
 
