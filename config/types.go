@@ -1,16 +1,18 @@
 package config
 
 type TemplateConfig struct {
-	// Template Variables
-	Name           string `yaml:"name"`
-	FunctionName   string `yaml:"entrypoint"`
-	Runtime        string `yaml:"runtime"`
+	// operator init values
+	CloudProvider  string `yaml:"cloud_provider"`
 	DeploymentType string `yaml:"deployment_type"`
-	Deployed       string `yaml:"deployed_utc,omitempty"`
-	PackageName    string `yaml:"package,omitempty"`
+	Runtime        string `yaml:"runtime"`
 
+	// operator create values
+	Name         string `yaml:"name"`
+	FunctionName string `yaml:"entrypoint"`
+
+	// operator deploy values
 	// Cloud variables
-	CloudProvider    string `yaml:"cloud_provider"`
+	Deployed         string `yaml:"deployed_utc,omitempty"`
 	DeploymentRegion string `yaml:"region,omitempty"`
 
 	// GCP Variables

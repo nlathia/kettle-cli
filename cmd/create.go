@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 
 	"github.com/operatorai/operator/config"
 	"github.com/operatorai/operator/templates"
@@ -34,39 +33,17 @@ var directoryPath string
 
 func init() {
 	rootCmd.AddCommand(createCmd)
-	err := config.Read()
-	if err != nil {
-		// User has not run operator init
-		return
-	}
-
-	// Set up the config for this template from the viper settings
-	configValues = &config.TemplateConfig{
-		CloudProvider:  viper.GetString(config.CloudProvider),
-		DeploymentType: viper.GetString(config.DeploymentType),
-		Runtime:        viper.GetString(config.Runtime),
-	}
+	configValues, _ = config.Read()
 }
 
 func validateCreateArgs(cmd *cobra.Command, args []string) error {
+	if configValues == nil {
+		return errors.New("config not found. Please run operator init.")
+	}
+
 	// Validate that args exist
 	if len(args) == 0 {
 		return errors.New("please specify a name")
-	}
-
-	// Validate the cloud provider
-	if err := mapContainsValue(configValues.CloudProvider, config.CloudProviderNames); err != nil {
-		return err
-	}
-
-	// Validate the selected type of deployment
-	if err := mapContainsValue(configValues.DeploymentType, config.DeploymentNames[configValues.CloudProvider]); err != nil {
-		return err
-	}
-
-	// Validate the selected runtime is supported
-	if err := mapContainsValue(configValues.Runtime, config.RuntimeNames[configValues.DeploymentType]); err != nil {
-		return err
 	}
 
 	// Construct the path where we are going to generate the boiler plate
@@ -101,33 +78,13 @@ func runCreate(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	// Iterate on all of the template files
-	// Root: templates/<language>/<cloud-provider>/<type>/
-	templateRoot := fmt.Sprintf(
-		"templates/%s/%s/%s/",
-		strings.Replace(configValues.Runtime, ".", "", 1),
-		configValues.CloudProvider,
-		configValues.DeploymentType,
-	)
-	assetNames := templates.AssetNames()
-
-	// Basic error checking
-	numAssetFiles := 0
-	for _, assetName := range assetNames {
-		if strings.Contains(assetName, templateRoot) {
-			numAssetFiles++
-		}
-	}
-	if numAssetFiles == 0 {
-		return errors.New(fmt.Sprintf("no template for: %s", templateRoot))
+	// Collect template root path and files
+	templateRoot, templateFiles, err := getTemplateFiles()
+	if err != nil {
+		return err
 	}
 
-	for _, assetName := range assetNames {
-		// Skip assets that are not part of the desired template
-		if !strings.Contains(assetName, templateRoot) {
-			continue
-		}
-
+	for _, assetName := range templateFiles {
 		// Create the target path
 		targetPath := strings.Replace(assetName, templateRoot, "", 1)
 		targetPath = path.Join(directoryPath, targetPath)
@@ -175,8 +132,32 @@ func runCreate(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return cleanUp(directoryPath, err)
 	}
+
 	fmt.Println("\n✅  Created: ", directoryPath)
 	return nil
+}
+
+func getTemplateFiles() (string, []string, error) {
+	// Iterate on all of the template files
+	// Root: templates/<language>/<cloud-provider>/<type>/
+	templateRoot := fmt.Sprintf(
+		"templates/%s/%s/%s/",
+		strings.Replace(configValues.Runtime, ".", "", 1),
+		configValues.CloudProvider,
+		configValues.DeploymentType,
+	)
+
+	assetNames := templates.AssetNames()
+	templateFiles := []string{}
+	for _, assetName := range assetNames {
+		if strings.Contains(assetName, templateRoot) {
+			templateFiles = append(templateFiles, assetName)
+		}
+	}
+	if len(templateFiles) == 0 {
+		return "", nil, errors.New(fmt.Sprintf("no matching template for: %s", templateRoot))
+	}
+	return templateRoot, templateFiles, nil
 }
 
 func cleanUp(directoryPath string, err error) error {
