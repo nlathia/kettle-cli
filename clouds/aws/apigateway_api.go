@@ -3,8 +3,8 @@ package aws
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 
-	"github.com/janeczku/go-spinner"
 	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
 	"github.com/spf13/viper"
@@ -14,51 +14,58 @@ const (
 	operatorApiName = "operator-api-gateway"
 )
 
-func setRestApiID(cfg *config.TemplateConfig) error {
+func setRestApiID(cfg *config.TemplateConfig) (bool, error) {
 	if cfg.RestApiID != "" {
-		return nil
+		return false, nil
 	}
 
 	// Look for existing REST APIs
 	apis, operatorApiExists, err := getRestApis()
 	if err != nil {
-		return err
+		return false, err
 	}
 
 	var restApiID string
+	var newApiCreated bool
 	if len(apis) == 0 {
 		// Create a new rest API
 		restApiID, err = createRestApi()
 		if err != nil {
-			return err
+			return false, err
 		}
+		newApiCreated = true
 	} else {
 		// Allow the user to create a new API gateway
 		// if the operator one doesn't alredy exist
-		restApiID, err := command.PromptForValue("AWS API Gateway", apis, !operatorApiExists)
+		restApiID, err = command.PromptForValue("AWS API Gateway", apis, !operatorApiExists)
 		if err != nil {
-			return err
+			return false, err
 		}
 		if restApiID == "" {
 			restApiID, err = createRestApi()
 			if err != nil {
-				return err
+				return false, err
 			}
+			newApiCreated = true
 		}
 	}
 
 	cfg.RestApiID = restApiID
 	viper.Set(config.RestApiID, cfg.RestApiID)
-	return nil
+	return newApiCreated, nil
 }
 
 func setRestApiRootResourceID(cfg *config.TemplateConfig) error {
 	if cfg.RestApiRootID != "" {
 		return nil
 	}
+	if cfg.RestApiID == "" {
+		return errors.New("rest api id not set")
+	}
 
-	s := spinner.StartNew("Collecting API root resource ID...")
-	defer s.Stop()
+	// fmt.Println("Collecting API root resource ID...")
+	// s := spinner.StartNew("Querying...")
+	// defer s.Stop()
 	output, err := command.ExecuteWithResult("aws", []string{
 		"apigateway",
 		"get-resources",
@@ -87,42 +94,47 @@ func setRestApiRootResourceID(cfg *config.TemplateConfig) error {
 }
 
 func getRestApis() (map[string]string, bool, error) {
-	s := spinner.StartNew("Collecting AWS REST APIs...")
-	defer s.Stop()
+	// fmt.Println("Collecting AWS REST APIs...")
+	// s := spinner.StartNew("Querying...")
+	// defer s.Stop()
 
 	output, err := command.ExecuteWithResult("aws", []string{
 		"apigateway",
 		"get-rest-apis",
 	})
 	if err != nil {
+		if err.Error() == "exit status 254" {
+			return map[string]string{}, false, nil
+		}
 		return nil, false, err
 	}
 
 	var results struct {
 		Items []struct {
-			ApiID       string `json:"id"`
-			Name        string `json:"name"`
-			CreatedDate int    `json:"createdDate"`
+			ID   string `json:"id"`
+			Name string `json:"name"`
 		} `json:"items"`
 	}
 	if err := json.Unmarshal(output, &results); err != nil {
 		return nil, false, err
 	}
 
-	apiGatewayIDs := map[string]string{}
+	restApis := map[string]string{}
 	operatorApiGatewayExists := false
-	for _, apiGateway := range results.Items {
-		apiGatewayIDs[apiGateway.Name] = apiGateway.ApiID
-		if apiGateway.Name == operatorApiName {
+	for _, restApi := range results.Items {
+		fmt.Println(restApi.Name, restApi.ID)
+		restApis[restApi.Name] = restApi.ID
+		if restApi.Name == operatorApiName {
 			operatorApiGatewayExists = true
 		}
 	}
-	return apiGatewayIDs, operatorApiGatewayExists, nil
+	return restApis, operatorApiGatewayExists, nil
 }
 
 func createRestApi() (string, error) {
-	s := spinner.StartNew("Creating an AWS REST API...")
-	defer s.Stop()
+	// s := spinner.StartNew("Creating an AWS REST API...")
+	// defer s.Stop()
+
 	output, err := command.ExecuteWithResult("aws", []string{
 		"apigateway",
 		"create-rest-api",
@@ -138,19 +150,16 @@ func createRestApi() (string, error) {
 	if err := json.Unmarshal(output, &result); err != nil {
 		return "", err
 	}
-	if err := deployRestApi(result.ApiID); err != nil {
-		return "", err
-	}
 	return result.ApiID, nil
 }
 
-func deployRestApi(apiID string) error {
-	s := spinner.StartNew("Deploying the AWS REST API...")
-	defer s.Stop()
+func deployRestApi(cfg *config.TemplateConfig) error {
+	// s := spinner.StartNew("Deploying the AWS REST API...")
+	// defer s.Stop()
 	return command.Execute("aws", []string{
 		"apigateway",
 		"create-deployment",
-		"--rest-api-id", apiID,
+		"--rest-api-id", cfg.RestApiID,
 		"--stage-name", "prod",
 	}, true)
 }

@@ -2,14 +2,10 @@ package aws
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
-	"strings"
 
-	"github.com/janeczku/go-spinner"
-	"github.com/manifoldco/promptui"
 	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
 	"github.com/spf13/viper"
@@ -31,19 +27,6 @@ func setExecutionRole(cfg *config.TemplateConfig) error {
 
 	var role string
 	if len(roles) == 0 {
-		prompt := promptui.Prompt{
-			Label:     "No matching AWS IAM roles. Create a new one",
-			IsConfirm: true,
-		}
-
-		confirmed, err := prompt.Run()
-		if err != nil {
-			return err
-		}
-		if strings.ToLower(confirmed) != "y" {
-			return errors.New("cancelled")
-		}
-
 		role, err = createExecutionRole()
 		if err != nil {
 			return err
@@ -67,8 +50,10 @@ func setExecutionRole(cfg *config.TemplateConfig) error {
 }
 
 func getExecutionRoles() (map[string]string, bool, error) {
-	s := spinner.StartNew("Collecting AWS IAM roles...")
-	defer s.Stop()
+	// fmt.Println("Collecting AWS IAM roles...")
+	// s := spinner.StartNew("Querying...")
+	// defer s.Stop()
+
 	output, err := command.ExecuteWithResult("aws", []string{
 		"iam",
 		"list-roles",
@@ -111,8 +96,9 @@ func getExecutionRoles() (map[string]string, bool, error) {
 }
 
 func createExecutionRole() (string, error) {
-	s := spinner.StartNew("Creating AWS IAM role for lambda.amazonaws.com...")
-	defer s.Stop()
+	// fmt.Println("Creating AWS IAM role for lambda.amazonaws.com...")
+	// s := spinner.StartNew("Querying...")
+	// defer s.Stop()
 
 	// Write the trust policy to a temp file
 	f, err := ioutil.TempFile(".", "trust_policy*.json")

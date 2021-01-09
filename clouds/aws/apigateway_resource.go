@@ -3,7 +3,6 @@ package aws
 import (
 	"encoding/json"
 
-	"github.com/janeczku/go-spinner"
 	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
 )
@@ -24,8 +23,8 @@ func setRestApiResourceID(cfg *config.TemplateConfig) error {
 	}
 
 	// Create a resource in the API
-	s := spinner.StartNew("Creating an AWS API gateway resource...")
-	defer s.Stop()
+	// s := spinner.StartNew("Creating an AWS API gateway resource...")
+	// defer s.Stop()
 	output, err := command.ExecuteWithResult("aws", []string{
 		"apigateway",
 		"create-resource",
@@ -48,8 +47,9 @@ func setRestApiResourceID(cfg *config.TemplateConfig) error {
 }
 
 func getRestApiResource(cfg *config.TemplateConfig) (string, bool, error) {
-	s := spinner.StartNew("Collecting AWS API resources...")
-	defer s.Stop()
+	// fmt.Println("Collecting AWS API resources...")
+	// s := spinner.StartNew("Querying...")
+	// defer s.Stop()
 
 	output, err := command.ExecuteWithResult("aws", []string{
 		"apigateway",
@@ -90,8 +90,9 @@ func createRestApiResourceMethod(cfg *config.TemplateConfig) error {
 		return nil
 	}
 
-	s := spinner.StartNew("Creating POST method in API resource...")
-	defer s.Stop()
+	// fmt.Println("Creating POST method in API resource...")
+	// s := spinner.StartNew("Querying...")
+	// defer s.Stop()
 
 	// Create the method
 	err = command.Execute("aws", []string{

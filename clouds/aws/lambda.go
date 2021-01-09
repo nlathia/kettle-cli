@@ -22,6 +22,7 @@ func (AWSLambdaFunction) Deploy(directory string, cfg *config.TemplateConfig) er
 	var waitType string
 	exists, err := lambdaFunctionExists(cfg.Name)
 	if err != nil {
+		fmt.Println(err)
 		return err
 	}
 	if exists {
@@ -46,14 +47,19 @@ func (AWSLambdaFunction) Deploy(directory string, cfg *config.TemplateConfig) er
 }
 
 func lambdaFunctionExists(name string) (bool, error) {
-	s := spinner.StartNew(fmt.Sprintf("Checking if lambda function \"%s\" exists...", name))
+	fmt.Println(fmt.Sprintf("Checking if lambda function \"%s\" exists...", name))
+	s := spinner.StartNew("Querying...")
 	defer s.Stop()
+
 	err := command.Execute("aws", []string{
 		"lambda",
 		"get-function",
 		"--function-name", name,
 	}, true)
 	if err != nil {
+		if err.Error() == "exit status 254" {
+			return false, nil
+		}
 		return false, err
 	}
 	return true, nil
@@ -92,7 +98,8 @@ func createLambdaRestAPI(deploymentArchive string, cfg *config.TemplateConfig) (
 	}
 
 	// Create or set the REST API
-	if err := setRestApiID(cfg); err != nil {
+	newApiCreated, err := setRestApiID(cfg)
+	if err != nil {
 		return "", err
 	}
 	if err := setRestApiRootResourceID(cfg); err != nil {
@@ -111,6 +118,12 @@ func createLambdaRestAPI(deploymentArchive string, cfg *config.TemplateConfig) (
 	if err := addFunctionIntegration(cfg); err != nil {
 		return "", err
 	}
+	if newApiCreated {
+		if err := deployRestApi(cfg); err != nil {
+			return "", err
+		}
+	}
+
 	// Grant invoke permission to the API
 	if err := addInvocationPermission(cfg); err != nil {
 		return "", err
@@ -120,8 +133,9 @@ func createLambdaRestAPI(deploymentArchive string, cfg *config.TemplateConfig) (
 }
 
 func createFunction(deploymentArchive string, cfg *config.TemplateConfig) error {
-	s := spinner.StartNew(fmt.Sprintf("Creating new lambda function: %s", cfg.Name))
-	defer s.Stop()
+	// s := spinner.StartNew(fmt.Sprintf("Creating new lambda function: %s", cfg.Name))
+	// defer s.Stop()
+
 	return command.Execute("aws", []string{
 		"lambda",
 		"create-function",
@@ -135,8 +149,9 @@ func createFunction(deploymentArchive string, cfg *config.TemplateConfig) error 
 }
 
 func waitForLambda(waitType string, cfg *config.TemplateConfig) error {
-	s := spinner.StartNew(fmt.Sprintf("Finishing up. Waiting for: %s", waitType))
-	defer s.Stop()
+	// s := spinner.StartNew(fmt.Sprintf("Finishing up. Waiting for: %s", waitType))
+	// defer s.Stop()
+
 	return command.Execute("aws", []string{
 		"lambda",
 		"wait",
@@ -146,8 +161,9 @@ func waitForLambda(waitType string, cfg *config.TemplateConfig) error {
 }
 
 func addFunctionIntegration(cfg *config.TemplateConfig) error {
-	s := spinner.StartNew("Integrating the API and Lambda function...")
-	defer s.Stop()
+	// fmt.Println("Integrating the API and Lambda function...")
+	// s := spinner.StartNew("Querying...")
+	// defer s.Stop()
 
 	// Create the integration
 	err := command.Execute("aws", []string{
@@ -181,8 +197,10 @@ func addFunctionIntegration(cfg *config.TemplateConfig) error {
 }
 
 func addInvocationPermission(cfg *config.TemplateConfig) error {
-	s := spinner.StartNew("Adding an invocation permissions to the Lambda function...")
-	defer s.Stop()
+	// fmt.Println("Adding an invocation permissions to the Lambda function...")
+	// s := spinner.StartNew("Querying...")
+	// defer s.Stop()
+
 	// The wildcard character (*) as the stage value indicates testing only
 	permissions := map[string]string{
 		"test": "*",

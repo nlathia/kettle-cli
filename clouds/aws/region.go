@@ -3,7 +3,6 @@ package aws
 import (
 	"encoding/json"
 
-	"github.com/janeczku/go-spinner"
 	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
 	"github.com/spf13/viper"
@@ -31,8 +30,9 @@ func setDeploymentRegion(cfg *config.TemplateConfig) error {
 
 // aws ec2 describe-regions --output json
 func getAWSRegions() (map[string]string, error) {
-	s := spinner.StartNew("Collecting AWS regions...")
-	defer s.Stop()
+	// fmt.Println("Collecting AWS regions...")
+	// s := spinner.StartNew("Querying...")
+	// defer s.Stop()
 
 	output, err := command.ExecuteWithResult("aws", []string{
 		"ec2",
