@@ -50,6 +50,15 @@ func validateDeployArgs(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
+
+	// Validate that the cloud provider is set up locally
+	cloud, err := clouds.GetCloudProvider(deploymentConfig.CloudProvider)
+	if err != nil {
+		return err
+	}
+	if err := cloud.Setup(); err != nil {
+		return err
+	}
 	return nil
 }
 
