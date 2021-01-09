@@ -14,12 +14,16 @@ import (
 	"github.com/operatorai/operator/config"
 )
 
+const (
+	operatorExecutionRole = "operator-lambda-role"
+)
+
 func setExecutionRole(cfg *config.TemplateConfig) error {
 	if cfg.RoleArn != "" {
 		return nil
 	}
 
-	roles, err := getExecutionRoles()
+	roles, operatorExecutionRoleExists, err := getExecutionRoles()
 	if err != nil {
 		return err
 	}
@@ -44,10 +48,17 @@ func setExecutionRole(cfg *config.TemplateConfig) error {
 			return err
 		}
 	} else {
-		// @TODO add option to create a new one
-		role, err = command.PromptForValue("IAM Role", roles)
+		// Allow the user to create a new IAM role if the operator one has not been created
+		// already
+		role, err = command.PromptForValue("IAM Role", roles, !operatorExecutionRoleExists)
 		if err != nil {
 			return err
+		}
+		if role == "" {
+			role, err = createExecutionRole()
+			if err != nil {
+				return err
+			}
 		}
 	}
 
@@ -55,7 +66,7 @@ func setExecutionRole(cfg *config.TemplateConfig) error {
 	return nil
 }
 
-func getExecutionRoles() (map[string]string, error) {
+func getExecutionRoles() (map[string]string, bool, error) {
 	s := spinner.StartNew("Collecting AWS IAM roles...")
 	defer s.Stop()
 
@@ -67,7 +78,7 @@ func getExecutionRoles() (map[string]string, error) {
 		"json",
 	})
 	if err != nil {
-		return nil, err
+		return nil, false, err
 	}
 
 	var results struct {
@@ -85,17 +96,21 @@ func getExecutionRoles() (map[string]string, error) {
 		} `json:"Roles"`
 	}
 	if err := json.Unmarshal(output, &results); err != nil {
-		return nil, err
+		return nil, false, err
 	}
 
+	operatorExecutionRoleExists := false
 	roles := map[string]string{}
 	for _, role := range results.Roles {
 		if role.RolePolicy.Statement[0].Principal.Service == "lambda.amazonaws.com" {
 			displayName := fmt.Sprintf("%s (%s)", role.RoleName, role.Path)
 			roles[displayName] = role.Arn
+			if role.RoleName == operatorExecutionRole {
+				operatorExecutionRoleExists = true
+			}
 		}
 	}
-	return roles, nil
+	return roles, operatorExecutionRoleExists, nil
 }
 
 func createExecutionRole() (string, error) {

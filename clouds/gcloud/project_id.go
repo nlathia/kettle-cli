@@ -19,7 +19,7 @@ func setProjectID(cfg *config.TemplateConfig) error {
 		return err
 	}
 
-	project, err := command.PromptForValue("Google Cloud Project", projects)
+	project, err := command.PromptForValue("Google Cloud Project", projects, false)
 	if err != nil {
 		return err
 	}

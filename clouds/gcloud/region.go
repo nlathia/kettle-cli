@@ -19,7 +19,7 @@ func setDeploymentRegion(cfg *config.TemplateConfig) error {
 		return err
 	}
 
-	region, err := command.PromptForValue("Deployment region", regions)
+	region, err := command.PromptForValue("Deployment region", regions, false)
 	if err != nil {
 		return err
 	}
