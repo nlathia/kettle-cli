@@ -57,7 +57,7 @@ func runInit(cmd *cobra.Command, args []string) error {
 	}
 	viper.Set(config.Runtime, language)
 
-	// Save the config
-	config.Write()
+	// Save the settings
+	config.WriteSettings()
 	return nil
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func getConfigPath() string {
+func getSettingsPath() string {
 	// Find the home directory.
 	home, err := homedir.Dir()
 	if err != nil {
@@ -19,7 +19,7 @@ func getConfigPath() string {
 	return path.Join(home, ".operator.yaml")
 }
 
-func setConfigPath() {
+func setSettingsPath() {
 	// Find the home directory.
 	home, err := homedir.Dir()
 	if err != nil {
@@ -33,8 +33,8 @@ func setConfigPath() {
 	viper.SetConfigType("yaml")
 }
 
-func Read() (*TemplateConfig, error) {
-	setConfigPath()
+func ReadSettings() (*TemplateConfig, error) {
+	setSettingsPath()
 	viper.AutomaticEnv() // read in environment variables that match
 
 	// If a config file is found, read it in.
@@ -48,8 +48,8 @@ func Read() (*TemplateConfig, error) {
 	}, nil
 }
 
-func Write() {
-	configPath := getConfigPath()
+func WriteSettings() {
+	configPath := getSettingsPath()
 	if err := viper.SafeWriteConfigAs(configPath); err != nil {
 		if os.IsNotExist(err) {
 			_ = viper.WriteConfigAs(configPath)

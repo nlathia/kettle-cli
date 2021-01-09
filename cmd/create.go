@@ -33,7 +33,7 @@ var directoryPath string
 
 func init() {
 	rootCmd.AddCommand(createCmd)
-	configValues, _ = config.Read()
+	configValues, _ = config.ReadSettings()
 }
 
 func validateCreateArgs(cmd *cobra.Command, args []string) error {
