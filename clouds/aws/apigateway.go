@@ -5,6 +5,7 @@ import (
 	"errors"
 	"strings"
 
+	"github.com/janeczku/go-spinner"
 	"github.com/manifoldco/promptui"
 	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
@@ -68,10 +69,12 @@ func setApiGatewayRoot(cfg *config.TemplateConfig) error {
 	if cfg.RestApiRootID != "" {
 		return nil
 	}
-	if cfg.RestApiID == "" {
-		return errors.New("rest-api-id is not set")
+	if err := setApiGateway(cfg); err != nil {
+		return err
 	}
 
+	s := spinner.StartNew("Collecting API root resource ID...")
+	defer s.Stop()
 	output, err := command.ExecuteWithResult("aws", []string{
 		"apigateway",
 		"get-resources",
@@ -100,7 +103,67 @@ func setApiGatewayRoot(cfg *config.TemplateConfig) error {
 	return nil
 }
 
+func setApiGatewayResource(cfg *config.TemplateConfig) error {
+	if cfg.RestApiResourcePath != "" {
+		return nil
+	}
+	if err := setApiGateway(cfg); err != nil {
+		return err
+	}
+	if err := setApiGatewayRoot(cfg); err != nil {
+		return err
+	}
+
+	s := spinner.StartNew("Creating an AWS API gateway resource...")
+	defer s.Stop()
+
+	// Create a resource in the API
+	output, err := command.ExecuteWithResult("aws", []string{
+		"apigateway",
+		"create-resource",
+		"--rest-api-id",
+		cfg.RestApiID,
+		"--path-part",
+		cfg.Name,
+		"--parent-id",
+		cfg.RestApiRootID,
+	})
+	if err != nil {
+		return err
+	}
+
+	var result struct {
+		Path string `json:"path"`
+		ID   string `json:"id"`
+	}
+	if err := json.Unmarshal(output, &result); err != nil {
+		return err
+	}
+	cfg.RestApiResourcePath = result.Path
+
+	// Create POST method on the resource
+	err = command.Execute("aws", []string{
+		"apigateway",
+		"put-method",
+		"--rest-api-id",
+		cfg.RestApiID,
+		"--resource-id",
+		result.ID,
+		"--http-method",
+		"POST",
+		"--authorization-type",
+		"NONE",
+	}, true)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func getApiGateways() (map[string]string, bool, error) {
+	s := spinner.StartNew("Collecting AWS API gateways...")
+	defer s.Stop()
+
 	output, err := command.ExecuteWithResult("aws", []string{
 		"apigateway",
 		"get-rest-apis",
@@ -132,6 +195,9 @@ func getApiGateways() (map[string]string, bool, error) {
 }
 
 func createApiGateway() (string, error) {
+	s := spinner.StartNew("Creating new AWS API gateway...")
+	defer s.Stop()
+
 	output, err := command.ExecuteWithResult("aws", []string{
 		"apigateway",
 		"create-rest-api",

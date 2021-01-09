@@ -84,8 +84,11 @@ func createLambda(deploymentArchive string, cfg *config.TemplateConfig) (string,
 		return "", err
 	}
 
-	// @TODO add api gateway
-	// @TODO get api gateway root ID
+	err = setApiGatewayResource(cfg)
+	if err != nil {
+		return "", err
+	}
+	// Set the Lambda function as the destination for the POST method
 	return "function-active", nil
 }
 
