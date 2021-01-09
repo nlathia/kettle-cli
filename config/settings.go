@@ -45,6 +45,7 @@ func ReadSettings() (*TemplateConfig, error) {
 		CloudProvider:  viper.GetString(CloudProvider),
 		DeploymentType: viper.GetString(DeploymentType),
 		Runtime:        viper.GetString(Runtime),
+		RestApiID:      viper.GetString(RestApiID),
 	}, nil
 }
 
