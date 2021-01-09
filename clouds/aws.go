@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/operatorai/operator/clouds/aws"
+	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
 )
 
@@ -16,4 +17,15 @@ func (AmazonWebServices) GetService(deploymentType string) (Service, error) {
 		return aws.AWSLambdaFunction{}, nil
 	}
 	return nil, errors.New(fmt.Sprintf("unimplemented service: %s", deploymentType))
+}
+
+func (AmazonWebServices) Setup() error {
+	err := command.Execute("command", []string{
+		"-v",
+		"aws",
+	}, true)
+	if err != nil {
+		return errors.New("please install the aws cli")
+	}
+	return nil
 }

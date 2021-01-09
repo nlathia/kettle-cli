@@ -12,6 +12,8 @@ type Service interface {
 }
 
 type Cloud interface {
+	Setup() error
+
 	GetService(deploymentType string) (Service, error)
 }
 
