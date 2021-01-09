@@ -1,10 +1,7 @@
 package gcloud
 
 import (
-	"errors"
 	"fmt"
-
-	"github.com/spf13/viper"
 
 	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
@@ -13,32 +10,37 @@ import (
 type GoogleCloudRun struct{}
 
 func (GoogleCloudRun) Deploy(directory string, cfg *config.TemplateConfig) error {
-	projectID := viper.GetString(config.ProjectID)
-	if projectID == "" {
-		return errors.New("please run operator init")
+	fmt.Println("🏭  Building: ", cfg.Name, "as a Cloud Run container")
+	err := setProjectID(cfg)
+	if err != nil {
+		return err
+	}
+	err = setDeploymentRegion(cfg)
+	if err != nil {
+		return err
 	}
 
-	// Build the docker image
+	// Build the docker container
 	// gcloud builds submit --tag gcr.io/PROJECT-ID/helloworld
-	fmt.Println("🏭  Building: ", cfg.Name, "as a Cloud Run container")
-	err := command.Execute("gcloud", []string{
+	err = command.Execute("gcloud", []string{
 		"builds",
 		"submit",
-		"--tag", fmt.Sprintf("gcr.io/%s/%s", projectID, cfg.Name),
+		"--tag", fmt.Sprintf("gcr.io/%s/%s", cfg.ProjectID, cfg.Name),
 	}, false)
 	if err != nil {
 		return err
 	}
 
+	// Deploy the docker container
 	// gcloud run deploy --image gcr.io/PROJECT-ID/helloworld
 	fmt.Println("🚢  Deploying ", cfg.Name, fmt.Sprintf("as a %s function", cfg.DeploymentType))
 	return command.Execute("gcloud", []string{
 		"run",
 		"deploy",
-		cfg.Name, // The cloud run service is named the same as the directory
-		"--image", fmt.Sprintf("gcr.io/%s/%s", projectID, cfg.Name),
+		cfg.Name,
+		"--image", fmt.Sprintf("gcr.io/%s/%s", cfg.ProjectID, cfg.Name),
 		"--platform", "managed",
 		"--allow-unauthenticated",
-		"--region=europe-west2",
+		fmt.Sprintf("--region=%s", cfg.DeploymentRegion),
 	}, false)
 }

@@ -13,7 +13,10 @@ type GoogleCloudFunction struct{}
 func (GoogleCloudFunction) Deploy(directory string, cfg *config.TemplateConfig) error {
 	fmt.Println("🚢  Deploying ", cfg.Name, "as a Google Cloud function")
 	fmt.Println("⏭  Entry point: ", cfg.FunctionName, fmt.Sprintf("(%s)", cfg.Runtime))
-	setDeploymentRegion(cfg)
+	err := setDeploymentRegion(cfg)
+	if err != nil {
+		return err
+	}
 
 	return command.Execute("gcloud", []string{
 		"functions",
