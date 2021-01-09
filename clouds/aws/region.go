@@ -37,8 +37,7 @@ func getAWSRegions() (map[string]string, error) {
 	output, err := command.ExecuteWithResult("aws", []string{
 		"ec2",
 		"describe-regions",
-		"--output",
-		"json",
+		"--output", "json",
 	})
 	if err != nil {
 		return nil, err

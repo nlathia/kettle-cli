@@ -72,8 +72,7 @@ func getExecutionRoles() (map[string]string, bool, error) {
 	output, err := command.ExecuteWithResult("aws", []string{
 		"iam",
 		"list-roles",
-		"--output",
-		"json",
+		"--output", "json",
 	})
 	if err != nil {
 		return nil, false, err
@@ -142,12 +141,9 @@ func createExecutionRole() (string, error) {
 	output, err := command.ExecuteWithResult("aws", []string{
 		"iam",
 		"create-role",
-		"--role-name",
-		operatorExecutionRole,
-		"--assume-role-policy-document",
-		fmt.Sprintf("file://%s", f.Name()),
-		"--output",
-		"json",
+		"--role-name", operatorExecutionRole,
+		"--assume-role-policy-document", fmt.Sprintf("file://%s", f.Name()),
+		"--output", "json",
 	})
 	if err != nil {
 		return "", err

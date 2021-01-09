@@ -30,22 +30,28 @@ func (AWSLambdaFunction) Deploy(directory string, cfg *config.TemplateConfig) er
 			return err
 		}
 	} else {
-		waitType, err = createLambda(deploymentArchive, cfg)
+		waitType, err = createLambdaRestAPI(deploymentArchive, cfg)
 		if err != nil {
 			return err
 		}
 	}
+
+	url := fmt.Sprintf("https://%s.execute-api.%s.amazonaws.com/prod/%s",
+		cfg.RestApiID,
+		cfg.DeploymentRegion,
+		cfg.Name,
+	)
+	fmt.Println("🔍  API Endpoint: ", url)
 	return waitForLambda(waitType, cfg)
 }
 
 func lambdaFunctionExists(name string) (bool, error) {
-	s := spinner.StartNew(fmt.Sprintf("Checking if: %s exists...", name))
+	s := spinner.StartNew(fmt.Sprintf("Checking if lambda function \"%s\" exists...", name))
 	defer s.Stop()
 	err := command.Execute("aws", []string{
 		"lambda",
 		"get-function",
-		"--function-name",
-		name,
+		"--function-name", name,
 	}, true)
 	if err != nil {
 		return false, err
@@ -54,6 +60,8 @@ func lambdaFunctionExists(name string) (bool, error) {
 }
 
 func updateLambda(deploymentArchive string, cfg *config.TemplateConfig) (string, error) {
+	s := spinner.StartNew(fmt.Sprintf("Updating lambda function code: %s", cfg.Name))
+	defer s.Stop()
 	err := command.Execute("aws", []string{
 		"lambda",
 		"update-function-code",
@@ -66,12 +74,55 @@ func updateLambda(deploymentArchive string, cfg *config.TemplateConfig) (string,
 	return "function-updated", nil
 }
 
-func createLambda(deploymentArchive string, cfg *config.TemplateConfig) (string, error) {
-	err := setExecutionRole(cfg)
-	if err != nil {
+// https://docs.aws.amazon.com/lambda/latest/dg/services-apigateway-tutorial.html
+func createLambdaRestAPI(deploymentArchive string, cfg *config.TemplateConfig) (string, error) {
+	// Get the current AWS account ID
+	if err := setAccountID(cfg); err != nil {
 		return "", err
 	}
-	err = command.Execute("aws", []string{
+
+	// Select a deployment region
+	if err := setDeploymentRegion(cfg); err != nil {
+		return "", err
+	}
+
+	// Select or create the execution role
+	if err := setExecutionRole(cfg); err != nil {
+		return "", err
+	}
+
+	// Create or set the REST API
+	if err := setRestApiID(cfg); err != nil {
+		return "", err
+	}
+	if err := setRestApiRootResourceID(cfg); err != nil {
+		return "", err
+	}
+
+	// Create a resource in the API & create a POST method on the resource
+	if err := setRestApiResourceID(cfg); err != nil {
+		return "", err
+	}
+	if err := createRestApiResourceMethod(cfg); err != nil {
+		return "", err
+	}
+
+	// Set the Lambda function as the destination for the POST method
+	if err := addFunctionIntegration(cfg); err != nil {
+		return "", err
+	}
+	// Grant invoke permission to the API
+	if err := addInvocationPermission(cfg); err != nil {
+		return "", err
+	}
+
+	return "function-active", nil
+}
+
+func createFunction(deploymentArchive string, cfg *config.TemplateConfig) error {
+	s := spinner.StartNew(fmt.Sprintf("Creating new lambda function: %s", cfg.Name))
+	defer s.Stop()
+	return command.Execute("aws", []string{
 		"lambda",
 		"create-function",
 		"--function-name", cfg.Name,
@@ -81,29 +132,81 @@ func createLambda(deploymentArchive string, cfg *config.TemplateConfig) (string,
 		"--package-type", "Zip",
 		"--zip-file", fmt.Sprintf("fileb://%s", deploymentArchive),
 	}, false)
-	if err != nil {
-		return "", err
-	}
-
-	err = setApiGatewayResource(cfg)
-	if err != nil {
-		return "", err
-	}
-	// Set the Lambda function as the destination for the POST method
-	// Deploy the API
-	// Grant invoke permission to the API
-	// $ curl -X POST -d "{\"operation\":\"create\",\"tableName\":\"lambda-apigateway\",\"payload\":{\"Item\":{\"id\":\"1\",\"name\":\"Bob\"}}}" https://$API.execute-api.$REGION.amazonaws.com/prod/DynamoDBManager
-	return "function-active", nil
 }
 
 func waitForLambda(waitType string, cfg *config.TemplateConfig) error {
-	s := spinner.StartNew(fmt.Sprintf("Deploying. Waiting for: %s", waitType))
+	s := spinner.StartNew(fmt.Sprintf("Finishing up. Waiting for: %s", waitType))
 	defer s.Stop()
 	return command.Execute("aws", []string{
 		"lambda",
 		"wait",
 		waitType,
-		"--function-name",
-		cfg.Name,
+		"--function-name", cfg.Name,
 	}, false)
+}
+
+func addFunctionIntegration(cfg *config.TemplateConfig) error {
+	s := spinner.StartNew("Integrating the API and Lambda function...")
+	defer s.Stop()
+
+	// Create the integration
+	err := command.Execute("aws", []string{
+		"apigateway",
+		"put-integration",
+		"--rest-api-id", cfg.RestApiID,
+		"--resource-id", cfg.RestApiResourceID,
+		"--http-method", "POST",
+		"--type", "AWS",
+		"--integration-http-method", "POST",
+		"--uri", fmt.Sprintf("arn:aws:apigateway:%s:lambda:path/2015-03-31/functions/arn:aws:lambda:%s:%s:function:LambdaFunctionOverHttps/invocations",
+			cfg.DeploymentRegion,
+			cfg.DeploymentRegion,
+			cfg.AccountID,
+		),
+	}, true)
+	if err != nil {
+		return err
+	}
+
+	// Set the integration response to JSON
+	return command.Execute("aws", []string{
+		"apigateway",
+		"put-integration-response",
+		"--rest-api-id", cfg.RestApiID,
+		"--resource-id", cfg.RestApiResourceID,
+		"--http-method", "POST",
+		"--status-code", "200",
+		"--response-templates", "application/json=\"\"",
+	}, true)
+}
+
+func addInvocationPermission(cfg *config.TemplateConfig) error {
+	s := spinner.StartNew("Adding an invocation permissions to the Lambda function...")
+	defer s.Stop()
+	// The wildcard character (*) as the stage value indicates testing only
+	permissions := map[string]string{
+		"test": "*",
+		"prod": "prod",
+	}
+	for env, permission := range permissions {
+		err := command.Execute("aws", []string{
+			"lambda",
+			"add-permission",
+			"--function-name", cfg.Name,
+			"--statement-id", fmt.Sprintf("operator-apigateway-%s", env),
+			"--action", "lambda:InvokeFunction",
+			"--principal", "apigateway.amazonaws.com",
+			"--source-arn", fmt.Sprintf("arn:aws:execute-api:%s:%s:%s/%s/POST/%s",
+				cfg.DeploymentRegion,
+				cfg.AccountID,
+				cfg.RestApiID,
+				permission,
+				cfg.Name,
+			),
+		}, true)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

@@ -16,8 +16,7 @@ func setAccountID(cfg *config.TemplateConfig) error {
 	output, err := command.ExecuteWithResult("aws", []string{
 		"sts",
 		"get-caller-identity",
-		"--output",
-		"json",
+		"--output", "json",
 	})
 	if err != nil {
 		return err
