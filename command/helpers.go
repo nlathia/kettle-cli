@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"sort"
 
 	"github.com/manifoldco/promptui"
 )
@@ -37,6 +38,7 @@ func PromptForValue(label string, values map[string]string) (string, error) {
 	for valueLabel, _ := range values {
 		valueLabels = append(valueLabels, valueLabel)
 	}
+	sort.Strings(valueLabels)
 
 	prompt := promptui.Select{
 		Label: label,
