@@ -1,6 +1,5 @@
 /*
 Copyright © 2020 Neal Lathia <neal.lathia@gmail.com>
-
 */
 package cmd
 

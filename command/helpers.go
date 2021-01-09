@@ -1,16 +1,14 @@
-package clouds
+package command
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"os/exec"
-	"strings"
 
 	"github.com/manifoldco/promptui"
 )
 
-func executeCommand(command string, args []string, quiet bool) error {
+func Execute(command string, args []string, quiet bool) error {
 	osCmd := exec.Command(command, args...)
 	if !quiet {
 		osCmd.Stderr = os.Stderr
@@ -22,7 +20,7 @@ func executeCommand(command string, args []string, quiet bool) error {
 	return nil
 }
 
-func executeCommandWithResult(command string, args []string) ([]byte, error) {
+func ExecuteWithResult(command string, args []string) ([]byte, error) {
 	osCmd := exec.Command(command, args...)
 	osCmd.Stderr = os.Stderr
 	output, err := osCmd.Output()
@@ -32,9 +30,9 @@ func executeCommandWithResult(command string, args []string) ([]byte, error) {
 	return output, nil
 }
 
-// getValue shows a prompt (using a map's keys) to the user and returns
+// PromptForValue shows a prompt (using a map's keys) to the user and returns
 // the value that is indexed at that key
-func getValue(label string, values map[string]string) (string, error) {
+func PromptForValue(label string, values map[string]string) (string, error) {
 	valueLabels := []string{}
 	for valueLabel, _ := range values {
 		valueLabels = append(valueLabels, valueLabel)
@@ -50,16 +48,4 @@ func getValue(label string, values map[string]string) (string, error) {
 		return "", err
 	}
 	return values[result], nil
-}
-
-// mapContainsValue returns an error if a map doesn't contain a specific value
-func mapContainsValue(value string, mapValues map[string]string) error {
-	values := []string{}
-	for _, mapValue := range mapValues {
-		if mapValue == value {
-			return nil
-		}
-		values = append(values, mapValue)
-	}
-	return errors.New(fmt.Sprintf("unknown value: %s (%s)", value, strings.Join(values, ", ")))
 }

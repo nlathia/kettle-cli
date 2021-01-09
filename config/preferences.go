@@ -1,9 +1,24 @@
-package preferences
+package config
 
 import (
+	"errors"
+	"fmt"
+	"strings"
+
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/viper"
 )
+
+func MapContainsValue(value string, mapValues map[string]string) error {
+	values := []string{}
+	for _, mapValue := range mapValues {
+		if mapValue == value {
+			return nil
+		}
+		values = append(values, mapValue)
+	}
+	return errors.New(fmt.Sprintf("unknown value: %s (%s)", value, strings.Join(values, ", ")))
+}
 
 func Collect(configChoices []*ConfigChoice) error {
 	// Iterate on the flags first, which are quicker to validate

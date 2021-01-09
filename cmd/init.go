@@ -1,15 +1,11 @@
 package cmd
 
 import (
-	"errors"
-	"fmt"
-	"strings"
-
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
+	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
-	"github.com/operatorai/operator/preferences"
 )
 
 // initCmd represents the command to set up and store preferences for the CLI tool
@@ -28,61 +24,30 @@ func init() {
 }
 
 func runInit(cmd *cobra.Command, args []string) error {
-	configChoices := []*preferences.ConfigChoice{
-		{
-			// Pick a cloud provider
-			Label: "Cloud Provider",
-			Key:   config.CloudProvider,
-			CollectValuesFunc: func() (map[string]string, error) {
-				return config.CloudProviderNames, nil
-			},
-		},
-		{
-			// Pick a deployment type; assumes that the 'Pick a cloud provider'
-			// step has already run or has been set via a flag
-			Label: "Deployment type",
-			Key:   config.DeploymentType,
-			CollectValuesFunc: func() (map[string]string, error) {
-				selectedCloud := viper.GetString(config.CloudProvider)
-				if selectedCloud != "" {
-					return config.DeploymentNames[selectedCloud], nil
-				}
-				return nil, errors.New(fmt.Sprintf("unknown cloud: %s", selectedCloud))
-			},
-		},
-		{
-			// Pick the default programming language; assumes that the 'Pick a deployment type'
-			// step has already run or has been set via a flag
-			Label: "Programming language",
-			Key:   config.Runtime,
-			CollectValuesFunc: func() (map[string]string, error) {
-				selectedType := viper.GetString(config.DeploymentType)
-				if selectedType != "" {
-					return config.RuntimeNames[selectedType], nil
-				}
-				return nil, errors.New(fmt.Sprintf("unknown deployment type: %s", selectedType))
-			},
-		},
-	}
-	// Collect the remaining global preferences
-	err := preferences.Collect(configChoices)
+	// Pick a cloud provider
+	cloudProvider, err := command.PromptForValue("Cloud Provider", config.CloudProviderNames)
 	if err != nil {
 		return err
 	}
+	viper.Set(config.CloudProvider, cloudProvider)
+
+	// Pick a service
+	availableDeploymentTypes := config.DeploymentNames[cloudProvider]
+	deploymentType, err := command.PromptForValue("Deployment type", availableDeploymentTypes)
+	if err != nil {
+		return err
+	}
+	viper.Set(config.DeploymentType, deploymentType)
+
+	// Pick a programming language
+	availableLanguages := config.RuntimeNames[config.DeploymentType]
+	language, err := command.PromptForValue("Programming language", availableLanguages)
+	if err != nil {
+		return err
+	}
+	viper.Set(config.Runtime, language)
 
 	// Save the config
 	config.Write()
 	return nil
-}
-
-// mapContainsValue returns an error if a map doesn't contain a specific value
-func mapContainsValue(value string, mapValues map[string]string) error {
-	values := []string{}
-	for _, mapValue := range mapValues {
-		if mapValue == value {
-			return nil
-		}
-		values = append(values, mapValue)
-	}
-	return errors.New(fmt.Sprintf("unknown value: %s (%s)", value, strings.Join(values, ", ")))
 }

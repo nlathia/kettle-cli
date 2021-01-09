@@ -1,30 +1,37 @@
 package config
 
-// Shared constants
 const (
+	// Shared constants
 	Version          = "v0.0.2-alpha"
 	DeploymentConfig = "operator.config"
-)
 
-// Cloud providers
-const (
+	// Cloud providers
 	CloudProvider = "cloud_provider"
 	GoogleCloud   = "gcloud"
 	AWS           = "aws"
+
+	// Deployment details
+	Runtime = "language"
+
+	DeploymentType      = "deployment_type"
+	GoogleCloudFunction = "function"
+	GoogleCloudRun      = "run"
+	AWSLambda           = "lambda"
+
+	// Google Cloud deployments
+	ProjectID        = "project_id"
+	DeploymentRegion = "region"
+
+	// AWS deployments
+	RoleArn = "iam_role_arn"
 )
+
+// Mappings between prompts (shown to the user) and values (stored in config)
 
 var CloudProviderNames = map[string]string{
 	"Google Cloud (GCP)":        GoogleCloud,
 	"Amazon Web Services (AWS)": AWS,
 }
-
-// Deployment types
-const (
-	DeploymentType      = "deployment_type"
-	GoogleCloudFunction = "function"
-	GoogleCloudRun      = "run"
-	AWSLambda           = "lambda"
-)
 
 var DeploymentNames = map[string]map[string]string{
 	GoogleCloud: map[string]string{
@@ -35,12 +42,6 @@ var DeploymentNames = map[string]map[string]string{
 		"AWS Lambda": AWSLambda,
 	},
 }
-
-// Supported languages
-// The values depend on the cloud provider (e.g., "python37" or "python3.7")
-const (
-	Runtime = "language"
-)
 
 var RuntimeNames = map[string]map[string]string{
 	GoogleCloudFunction: map[string]string{
@@ -56,13 +57,3 @@ var RuntimeNames = map[string]map[string]string{
 		"Go (1.13)":    "go113",
 	},
 }
-
-// Cloud-specific config
-const (
-	// Google Cloud deployments
-	ProjectID        = "project_id"
-	DeploymentRegion = "region"
-
-	// AWS deployments
-	RoleArn = "iam_role_arn"
-)

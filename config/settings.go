@@ -33,15 +33,19 @@ func setConfigPath() {
 	viper.SetConfigType("yaml")
 }
 
-func Read() error {
+func Read() (*TemplateConfig, error) {
 	setConfigPath()
 	viper.AutomaticEnv() // read in environment variables that match
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return &TemplateConfig{
+		CloudProvider:  viper.GetString(CloudProvider),
+		DeploymentType: viper.GetString(DeploymentType),
+		Runtime:        viper.GetString(Runtime),
+	}, nil
 }
 
 func Write() {
