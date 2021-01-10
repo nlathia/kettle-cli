@@ -97,6 +97,11 @@ func createLambdaRestAPI(deploymentArchive string, cfg *config.TemplateConfig) (
 		return "", err
 	}
 
+	// Create the function
+	if err := createFunction(deploymentArchive, cfg); err != nil {
+		return "", err
+	}
+
 	// Create or set the REST API
 	newApiCreated, err := setRestApiID(cfg)
 	if err != nil {
@@ -133,9 +138,6 @@ func createLambdaRestAPI(deploymentArchive string, cfg *config.TemplateConfig) (
 }
 
 func createFunction(deploymentArchive string, cfg *config.TemplateConfig) error {
-	// s := spinner.StartNew(fmt.Sprintf("Creating new lambda function: %s", cfg.Name))
-	// defer s.Stop()
-
 	return command.Execute("aws", []string{
 		"lambda",
 		"create-function",
@@ -206,6 +208,13 @@ func addInvocationPermission(cfg *config.TemplateConfig) error {
 		"test": "*",
 		"prod": "prod",
 	}
+
+	// 	aws lambda add-permission --function-name LambdaFunctionOverHttps \
+	// --statement-id apigateway-test-2 --action lambda:InvokeFunction \
+	// --principal apigateway.amazonaws.com \
+	// --source-arn \"arn:aws:execute-api:$REGION:$ACCOUNT:$API/*/POST/DynamoDBManager"
+
+	//  --function-name hello-lambda --statement-id operator-apigateway-test --action lambda:InvokeFunction --principal apigateway.amazonaws.com --source-arn arn:aws:execute-api:eu-west-1:024933139745:xmwe6sjm87/*/POST/hello-lambda
 	for env, permission := range permissions {
 		err := command.Execute("aws", []string{
 			"lambda",
