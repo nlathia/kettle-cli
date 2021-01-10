@@ -21,7 +21,6 @@ func (AWSLambdaFunction) Deploy(directory string, cfg *config.TemplateConfig) er
 	var waitType string
 	exists, err := lambdaFunctionExists(cfg.Name)
 	if err != nil {
-		fmt.Println(err)
 		return err
 	}
 	if exists {
@@ -90,7 +89,7 @@ func createLambdaRestAPI(deploymentArchive string, cfg *config.TemplateConfig) (
 		return "", err
 	}
 
-	// Create the function
+	// Create the Lambda function
 	if err := createFunction(deploymentArchive, cfg); err != nil {
 		return "", err
 	}
@@ -106,9 +105,6 @@ func createLambdaRestAPI(deploymentArchive string, cfg *config.TemplateConfig) (
 
 	// Create a resource in the API & create a POST method on the resource
 	if err := setRestApiResourceID(cfg); err != nil {
-		return "", err
-	}
-	if err := createRestApiResourceMethod(cfg); err != nil {
 		return "", err
 	}
 
@@ -137,7 +133,7 @@ func createFunction(deploymentArchive string, cfg *config.TemplateConfig) error 
 		"--function-name", cfg.Name,
 		"--runtime", cfg.Runtime,
 		"--role", cfg.RoleArn,
-		"--handler", fmt.Sprintf("main.%s", cfg.FunctionName),
+		"--handler", fmt.Sprintf("main.%s", cfg.FunctionName), // @TODO this is Python specific
 		"--package-type", "Zip",
 		"--zip-file", fmt.Sprintf("fileb://%s", deploymentArchive),
 	}, false)
@@ -162,10 +158,11 @@ func addFunctionIntegration(cfg *config.TemplateConfig) error {
 		"--http-method", "POST",
 		"--type", "AWS",
 		"--integration-http-method", "POST",
-		"--uri", fmt.Sprintf("arn:aws:apigateway:%s:lambda:path/2015-03-31/functions/arn:aws:lambda:%s:%s:function:LambdaFunctionOverHttps/invocations",
+		"--uri", fmt.Sprintf("arn:aws:apigateway:%s:lambda:path/2015-03-31/functions/arn:aws:lambda:%s:%s:function:%s/invocations",
 			cfg.DeploymentRegion,
 			cfg.DeploymentRegion,
 			cfg.AccountID,
+			cfg.Name,
 		),
 	}, true)
 	if err != nil {

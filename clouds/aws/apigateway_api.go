@@ -34,9 +34,9 @@ func setRestApiID(cfg *config.TemplateConfig) (bool, error) {
 		}
 		newApiCreated = true
 	} else {
-		// Allow the user to create a new API gateway
+		// Allow the user to create a new REST API
 		// if the operator one doesn't alredy exist
-		restApiID, err = command.PromptForValue("AWS API Gateway", apis, !operatorApiExists)
+		restApiID, err = command.PromptForValue("AWS REST API", apis, !operatorApiExists)
 		if err != nil {
 			return false, err
 		}
@@ -73,8 +73,7 @@ func setRestApiRootResourceID(cfg *config.TemplateConfig) error {
 
 	var results struct {
 		Items []struct {
-			Path string `json:"path"`
-			ID   string `json:"id"`
+			ID string `json:"id"`
 		} `json:"items"`
 	}
 	if err := json.Unmarshal(output, &results); err != nil {
@@ -146,6 +145,6 @@ func deployRestApi(cfg *config.TemplateConfig) error {
 		"apigateway",
 		"create-deployment",
 		"--rest-api-id", cfg.RestApiID,
-		"--stage-name", "prod",
+		"--stage-name", "prod", // @TODO add support for different stages
 	}, true)
 }
