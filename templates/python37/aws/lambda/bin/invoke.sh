@@ -20,7 +20,8 @@ else
     fi
 fi
 
-aws lambda  invoke --function-name {{.FunctionName}} \
+aws lambda  invoke --function-name {{.Name}} \
     --payload "fileb://$FILE" $RESULT
 
-echo "✅  Result written to: $RESULT"
+echo "✅  Result written to: $RESULT:"
+cat $RESULT

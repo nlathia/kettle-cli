@@ -19,8 +19,11 @@ type TemplateConfig struct {
 	ProjectID string `yaml:"project_id,omitempty"`
 
 	// AWS Variables
-	RoleArn   string `yaml:"role_arn,omitempty"`
-	RestApiID string `yaml:"rest_api_id,omitempty"`
+	AccountID         string `yaml:"account_id,omitempty"`
+	RoleArn           string `yaml:"role_arn,omitempty"`
+	RestApiID         string `yaml:"rest_api_id,omitempty"`
+	RestApiRootID     string `yaml:"rest_api_root_id,omitempty"`
+	RestApiResourceID string `yaml:"rest_api_resource_id,omitempty"`
 }
 
 // A ConfigChoice is used to enumerate a set of preferences

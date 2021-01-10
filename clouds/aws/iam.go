@@ -2,16 +2,13 @@ package aws
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
-	"strings"
 
-	"github.com/janeczku/go-spinner"
-	"github.com/manifoldco/promptui"
 	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
+	"github.com/spf13/viper"
 )
 
 const (
@@ -30,26 +27,11 @@ func setExecutionRole(cfg *config.TemplateConfig) error {
 
 	var role string
 	if len(roles) == 0 {
-		prompt := promptui.Prompt{
-			Label:     "No matching AWS IAM roles. Create a new one",
-			IsConfirm: true,
-		}
-
-		confirmed, err := prompt.Run()
-		if err != nil {
-			return err
-		}
-		if strings.ToLower(confirmed) != "y" {
-			return errors.New("cancelled")
-		}
-
 		role, err = createExecutionRole()
 		if err != nil {
 			return err
 		}
 	} else {
-		// Allow the user to create a new IAM role if the operator one has not been created
-		// already
 		role, err = command.PromptForValue("IAM Role", roles, !operatorExecutionRoleExists)
 		if err != nil {
 			return err
@@ -63,19 +45,15 @@ func setExecutionRole(cfg *config.TemplateConfig) error {
 	}
 
 	cfg.RoleArn = role
+	viper.Set(config.RoleArn, role)
 	return nil
 }
 
 func getExecutionRoles() (map[string]string, bool, error) {
-	s := spinner.StartNew("Collecting AWS IAM roles...")
-	defer s.Stop()
-
-	//  aws iam list-roles --output json
 	output, err := command.ExecuteWithResult("aws", []string{
 		"iam",
 		"list-roles",
-		"--output",
-		"json",
+		"--output", "json",
 	})
 	if err != nil {
 		return nil, false, err
@@ -114,9 +92,6 @@ func getExecutionRoles() (map[string]string, bool, error) {
 }
 
 func createExecutionRole() (string, error) {
-	s := spinner.StartNew("Creating AWS IAM role for lambda.amazonaws.com...")
-	defer s.Stop()
-
 	// Write the trust policy to a temp file
 	f, err := ioutil.TempFile(".", "trust_policy*.json")
 	if err != nil {
@@ -140,16 +115,12 @@ func createExecutionRole() (string, error) {
 		return "", err
 	}
 
-	// $ aws iam create-role --role-name lambda-ex --assume-role-policy-document file://trust-policy.json
 	output, err := command.ExecuteWithResult("aws", []string{
 		"iam",
 		"create-role",
-		"--role-name",
-		operatorExecutionRole,
-		"--assume-role-policy-document",
-		fmt.Sprintf("file://%s", f.Name()),
-		"--output",
-		"json",
+		"--role-name", operatorExecutionRole,
+		"--assume-role-policy-document", fmt.Sprintf("file://%s", f.Name()),
+		"--output", "json",
 	})
 	if err != nil {
 		return "", err
@@ -157,14 +128,11 @@ func createExecutionRole() (string, error) {
 
 	var result struct {
 		Role struct {
-			RoleName string `json:"RoleName"`
-			Path     string `json:"Path"`
-			Arn      string `json:"Arn"`
+			Arn string `json:"Arn"`
 		} `json:"Role"`
 	}
 	if err := json.Unmarshal(output, &result); err != nil {
 		return "", err
 	}
-
 	return result.Role.Arn, nil
 }

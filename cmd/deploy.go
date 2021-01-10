@@ -85,6 +85,7 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 	// and run the deployment command
 	os.Chdir(deploymentPath)
 	if err := service.Deploy(deploymentPath, deploymentConfig); err != nil {
+		fmt.Println(err)
 		return err
 	}
 

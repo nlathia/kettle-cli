@@ -29,7 +29,6 @@ func createDeploymentArchive(cfg *config.TemplateConfig) (string, error) {
 	// Create the zip file, starting with the contents
 	// of the current working directory
 	deploymentFile := path.Join(rootDir, deploymentArchiveName)
-	fmt.Println(fmt.Sprintf("🧱  Building deployment archive: %s", deploymentFile))
 	err = command.Execute("zip", []string{
 		"-g",
 		deploymentArchiveName,
@@ -54,7 +53,6 @@ func createDeploymentArchive(cfg *config.TemplateConfig) (string, error) {
 		// Change to the directory where the site-packages are stored
 		// So that we can add them to the zip file as a directory
 		os.Chdir(sitePackages)
-		fmt.Println(fmt.Sprintf("🧱  Updating deployment archive: %s", sitePackages))
 		err = command.Execute("zip", []string{
 			"-r",
 			deploymentFile,
