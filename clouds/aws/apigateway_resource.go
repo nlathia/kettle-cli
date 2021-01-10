@@ -13,34 +13,39 @@ func setRestApiResourceID(cfg *config.TemplateConfig) error {
 	}
 
 	// Look for existing resource ID
-	resourceID, _, err := getRestApiResource(cfg)
+	resourceID, resourceHasPOSTMethod, err := getRestApiResource(cfg)
 	if err != nil {
 		return err
 	}
-	if resourceID != "" {
+	if resourceID == "" {
+		// Create a resource in the API
+		output, err := command.ExecuteWithResult("aws", []string{
+			"apigateway",
+			"create-resource",
+			"--rest-api-id", cfg.RestApiID,
+			"--path-part", cfg.Name,
+			"--parent-id", cfg.RestApiRootID,
+		})
+		if err != nil {
+			return err
+		}
+
+		var result struct {
+			ID string `json:"id"`
+		}
+		if err := json.Unmarshal(output, &result); err != nil {
+			return err
+		}
+		cfg.RestApiResourceID = result.ID
+	} else {
+		// Use the existing resource ID
 		cfg.RestApiResourceID = resourceID
-		return nil
 	}
-
-	// Create a resource in the API
-	output, err := command.ExecuteWithResult("aws", []string{
-		"apigateway",
-		"create-resource",
-		"--rest-api-id", cfg.RestApiID,
-		"--path-part", cfg.Name,
-		"--parent-id", cfg.RestApiRootID,
-	})
-	if err != nil {
-		return err
+	if !resourceHasPOSTMethod {
+		if err := addResourcePOSTMethod(cfg); err != nil {
+			return err
+		}
 	}
-
-	var result struct {
-		ID string `json:"id"`
-	}
-	if err := json.Unmarshal(output, &result); err != nil {
-		return err
-	}
-	cfg.RestApiResourceID = result.ID
 	return nil
 }
 
@@ -75,7 +80,7 @@ func getRestApiResource(cfg *config.TemplateConfig) (string, bool, error) {
 	return "", false, nil
 }
 
-func createRestApiResourceMethod(cfg *config.TemplateConfig) error {
+func addResourcePOSTMethod(cfg *config.TemplateConfig) error {
 	_, resourceHasPOSTMethod, err := getRestApiResource(cfg)
 	if err != nil {
 		return err
