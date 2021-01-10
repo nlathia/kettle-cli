@@ -63,9 +63,6 @@ func setRestApiRootResourceID(cfg *config.TemplateConfig) error {
 		return errors.New("rest api id not set")
 	}
 
-	// fmt.Println("Collecting API root resource ID...")
-	// s := spinner.StartNew("Querying...")
-	// defer s.Stop()
 	output, err := command.ExecuteWithResult("aws", []string{
 		"apigateway",
 		"get-resources",
@@ -94,10 +91,6 @@ func setRestApiRootResourceID(cfg *config.TemplateConfig) error {
 }
 
 func getRestApis() (map[string]string, bool, error) {
-	// fmt.Println("Collecting AWS REST APIs...")
-	// s := spinner.StartNew("Querying...")
-	// defer s.Stop()
-
 	output, err := command.ExecuteWithResult("aws", []string{
 		"apigateway",
 		"get-rest-apis",
@@ -132,9 +125,6 @@ func getRestApis() (map[string]string, bool, error) {
 }
 
 func createRestApi() (string, error) {
-	// s := spinner.StartNew("Creating an AWS REST API...")
-	// defer s.Stop()
-
 	output, err := command.ExecuteWithResult("aws", []string{
 		"apigateway",
 		"create-rest-api",
@@ -154,8 +144,6 @@ func createRestApi() (string, error) {
 }
 
 func deployRestApi(cfg *config.TemplateConfig) error {
-	// s := spinner.StartNew("Deploying the AWS REST API...")
-	// defer s.Stop()
 	return command.Execute("aws", []string{
 		"apigateway",
 		"create-deployment",

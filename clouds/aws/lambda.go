@@ -3,7 +3,6 @@ package aws
 import (
 	"fmt"
 
-	"github.com/janeczku/go-spinner"
 	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
 )
@@ -47,10 +46,6 @@ func (AWSLambdaFunction) Deploy(directory string, cfg *config.TemplateConfig) er
 }
 
 func lambdaFunctionExists(name string) (bool, error) {
-	fmt.Println(fmt.Sprintf("Checking if lambda function \"%s\" exists...", name))
-	s := spinner.StartNew("Querying...")
-	defer s.Stop()
-
 	err := command.Execute("aws", []string{
 		"lambda",
 		"get-function",
@@ -66,8 +61,6 @@ func lambdaFunctionExists(name string) (bool, error) {
 }
 
 func updateLambda(deploymentArchive string, cfg *config.TemplateConfig) (string, error) {
-	s := spinner.StartNew(fmt.Sprintf("Updating lambda function code: %s", cfg.Name))
-	defer s.Stop()
 	err := command.Execute("aws", []string{
 		"lambda",
 		"update-function-code",
@@ -151,9 +144,6 @@ func createFunction(deploymentArchive string, cfg *config.TemplateConfig) error 
 }
 
 func waitForLambda(waitType string, cfg *config.TemplateConfig) error {
-	// s := spinner.StartNew(fmt.Sprintf("Finishing up. Waiting for: %s", waitType))
-	// defer s.Stop()
-
 	return command.Execute("aws", []string{
 		"lambda",
 		"wait",
@@ -163,10 +153,6 @@ func waitForLambda(waitType string, cfg *config.TemplateConfig) error {
 }
 
 func addFunctionIntegration(cfg *config.TemplateConfig) error {
-	// fmt.Println("Integrating the API and Lambda function...")
-	// s := spinner.StartNew("Querying...")
-	// defer s.Stop()
-
 	// Create the integration
 	err := command.Execute("aws", []string{
 		"apigateway",
@@ -199,22 +185,12 @@ func addFunctionIntegration(cfg *config.TemplateConfig) error {
 }
 
 func addInvocationPermission(cfg *config.TemplateConfig) error {
-	// fmt.Println("Adding an invocation permissions to the Lambda function...")
-	// s := spinner.StartNew("Querying...")
-	// defer s.Stop()
-
 	// The wildcard character (*) as the stage value indicates testing only
 	permissions := map[string]string{
 		"test": "*",
 		"prod": "prod",
 	}
 
-	// 	aws lambda add-permission --function-name LambdaFunctionOverHttps \
-	// --statement-id apigateway-test-2 --action lambda:InvokeFunction \
-	// --principal apigateway.amazonaws.com \
-	// --source-arn \"arn:aws:execute-api:$REGION:$ACCOUNT:$API/*/POST/DynamoDBManager"
-
-	//  --function-name hello-lambda --statement-id operator-apigateway-test --action lambda:InvokeFunction --principal apigateway.amazonaws.com --source-arn arn:aws:execute-api:eu-west-1:024933139745:xmwe6sjm87/*/POST/hello-lambda
 	for env, permission := range permissions {
 		err := command.Execute("aws", []string{
 			"lambda",

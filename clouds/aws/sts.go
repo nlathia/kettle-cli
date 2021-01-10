@@ -13,9 +13,6 @@ func setAccountID(cfg *config.TemplateConfig) error {
 		return nil
 	}
 
-	// fmt.Println("Retrieving AWS identity...")
-	// s := spinner.StartNew("Querying...")
-	// defer s.Stop()
 	output, err := command.ExecuteWithResult("aws", []string{
 		"sts",
 		"get-caller-identity",

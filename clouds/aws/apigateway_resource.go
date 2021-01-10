@@ -23,8 +23,6 @@ func setRestApiResourceID(cfg *config.TemplateConfig) error {
 	}
 
 	// Create a resource in the API
-	// s := spinner.StartNew("Creating an AWS API gateway resource...")
-	// defer s.Stop()
 	output, err := command.ExecuteWithResult("aws", []string{
 		"apigateway",
 		"create-resource",
@@ -47,10 +45,6 @@ func setRestApiResourceID(cfg *config.TemplateConfig) error {
 }
 
 func getRestApiResource(cfg *config.TemplateConfig) (string, bool, error) {
-	// fmt.Println("Collecting AWS API resources...")
-	// s := spinner.StartNew("Querying...")
-	// defer s.Stop()
-
 	output, err := command.ExecuteWithResult("aws", []string{
 		"apigateway",
 		"get-resources",
@@ -89,10 +83,6 @@ func createRestApiResourceMethod(cfg *config.TemplateConfig) error {
 	if resourceHasPOSTMethod {
 		return nil
 	}
-
-	// fmt.Println("Creating POST method in API resource...")
-	// s := spinner.StartNew("Querying...")
-	// defer s.Stop()
 
 	// Create the method
 	err = command.Execute("aws", []string{

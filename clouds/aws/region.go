@@ -30,10 +30,6 @@ func setDeploymentRegion(cfg *config.TemplateConfig) error {
 
 // aws ec2 describe-regions --output json
 func getAWSRegions() (map[string]string, error) {
-	// fmt.Println("Collecting AWS regions...")
-	// s := spinner.StartNew("Querying...")
-	// defer s.Stop()
-
 	output, err := command.ExecuteWithResult("aws", []string{
 		"ec2",
 		"describe-regions",

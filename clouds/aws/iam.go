@@ -50,10 +50,6 @@ func setExecutionRole(cfg *config.TemplateConfig) error {
 }
 
 func getExecutionRoles() (map[string]string, bool, error) {
-	// fmt.Println("Collecting AWS IAM roles...")
-	// s := spinner.StartNew("Querying...")
-	// defer s.Stop()
-
 	output, err := command.ExecuteWithResult("aws", []string{
 		"iam",
 		"list-roles",
@@ -96,10 +92,6 @@ func getExecutionRoles() (map[string]string, bool, error) {
 }
 
 func createExecutionRole() (string, error) {
-	// fmt.Println("Creating AWS IAM role for lambda.amazonaws.com...")
-	// s := spinner.StartNew("Querying...")
-	// defer s.Stop()
-
 	// Write the trust policy to a temp file
 	f, err := ioutil.TempFile(".", "trust_policy*.json")
 	if err != nil {
@@ -123,7 +115,6 @@ func createExecutionRole() (string, error) {
 		return "", err
 	}
 
-	// $ aws iam create-role --role-name lambda-ex --assume-role-policy-document file://trust-policy.json
 	output, err := command.ExecuteWithResult("aws", []string{
 		"iam",
 		"create-role",
