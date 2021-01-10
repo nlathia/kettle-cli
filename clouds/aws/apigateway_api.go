@@ -3,7 +3,6 @@ package aws
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 
 	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
@@ -115,7 +114,6 @@ func getRestApis() (map[string]string, bool, error) {
 	restApis := map[string]string{}
 	operatorApiGatewayExists := false
 	for _, restApi := range results.Items {
-		fmt.Println(restApi.Name, restApi.ID)
 		restApis[restApi.Name] = restApi.ID
 		if restApi.Name == operatorApiName {
 			operatorApiGatewayExists = true
