@@ -24,23 +24,36 @@ func (AWSLambdaFunction) Deploy(directory string, cfg *config.TemplateConfig) er
 		return err
 	}
 	if exists {
-		waitType, err = updateLambda(deploymentArchive, cfg)
-		if err != nil {
+		waitType = "function-updated"
+		if err := updateLambda(deploymentArchive, cfg); err != nil {
 			return err
 		}
 	} else {
-		waitType, err = createLambdaRestAPI(deploymentArchive, cfg)
+		waitType = "function-active"
+		addToApi, err := command.PromptToConfirm("Add Lambda function to a REST API")
 		if err != nil {
 			return err
 		}
+
+		// Create the Lambda function
+		if err := createLambdaFunction(deploymentArchive, cfg); err != nil {
+			return err
+		}
+
+		if addToApi {
+			if err := createLambdaRestAPI(deploymentArchive, cfg); err != nil {
+				return err
+			}
+
+			url := fmt.Sprintf("https://%s.execute-api.%s.amazonaws.com/prod/%s",
+				cfg.RestApiID,
+				cfg.DeploymentRegion,
+				cfg.Name,
+			)
+			fmt.Println("🔍  API Endpoint: ", url)
+		}
 	}
 
-	url := fmt.Sprintf("https://%s.execute-api.%s.amazonaws.com/prod/%s",
-		cfg.RestApiID,
-		cfg.DeploymentRegion,
-		cfg.Name,
-	)
-	fmt.Println("🔍  API Endpoint: ", url)
 	return waitForLambda(waitType, cfg)
 }
 
@@ -59,74 +72,66 @@ func lambdaFunctionExists(name string) (bool, error) {
 	return true, nil
 }
 
-func updateLambda(deploymentArchive string, cfg *config.TemplateConfig) (string, error) {
-	err := command.Execute("aws", []string{
+func updateLambda(deploymentArchive string, cfg *config.TemplateConfig) error {
+	return command.Execute("aws", []string{
 		"lambda",
 		"update-function-code",
 		"--function-name", cfg.Name,
 		"--zip-file", fmt.Sprintf("fileb://%s", deploymentArchive),
 	}, false)
-	if err != nil {
-		return "", err
-	}
-	return "function-updated", nil
 }
 
 // https://docs.aws.amazon.com/lambda/latest/dg/services-apigateway-tutorial.html
-func createLambdaRestAPI(deploymentArchive string, cfg *config.TemplateConfig) (string, error) {
-	// Get the current AWS account ID
-	if err := setAccountID(cfg); err != nil {
-		return "", err
-	}
+func createLambdaRestAPI(deploymentArchive string, cfg *config.TemplateConfig) error {
 
 	// Select a deployment region
 	if err := setDeploymentRegion(cfg); err != nil {
-		return "", err
-	}
-
-	// Select or create the execution role
-	if err := setExecutionRole(cfg); err != nil {
-		return "", err
-	}
-
-	// Create the Lambda function
-	if err := createFunction(deploymentArchive, cfg); err != nil {
-		return "", err
+		return err
 	}
 
 	// Create or set the REST API
 	newApiCreated, err := setRestApiID(cfg)
 	if err != nil {
-		return "", err
+		return err
 	}
 	if err := setRestApiRootResourceID(cfg); err != nil {
-		return "", err
+		return err
 	}
 
 	// Create a resource in the API & create a POST method on the resource
 	if err := setRestApiResourceID(cfg); err != nil {
-		return "", err
+		return err
 	}
 
 	// Set the Lambda function as the destination for the POST method
 	if err := addFunctionIntegration(cfg); err != nil {
-		return "", err
+		return err
 	}
 	if newApiCreated {
 		if err := deployRestApi(cfg); err != nil {
-			return "", err
+			return err
 		}
 	}
 
 	// Grant invoke permission to the API
 	if err := addInvocationPermission(cfg); err != nil {
-		return "", err
+		return err
 	}
-
-	return "function-active", nil
+	return nil
 }
 
-func createFunction(deploymentArchive string, cfg *config.TemplateConfig) error {
+func createLambdaFunction(deploymentArchive string, cfg *config.TemplateConfig) error {
+	// Get the current AWS account ID
+	if err := setAccountID(cfg); err != nil {
+		return err
+	}
+
+	// Select or create the execution role
+	if err := setExecutionRole(cfg); err != nil {
+		return err
+	}
+
+	// Create the function
 	return command.Execute("aws", []string{
 		"lambda",
 		"create-function",

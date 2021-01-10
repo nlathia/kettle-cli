@@ -69,3 +69,20 @@ func PromptForValue(label string, values map[string]string, addNoneOfThese bool)
 	}
 	return values[result], nil
 }
+
+func PromptToConfirm(label string) (bool, error) {
+	prompt := promptui.Prompt{
+		Label:     label,
+		IsConfirm: true,
+	}
+
+	result, err := prompt.Run()
+	if err != nil {
+		return false, err
+	}
+
+	if strings.ToLower(result) == "y" {
+		return true, nil
+	}
+	return false, nil
+}
