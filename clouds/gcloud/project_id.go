@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/janeczku/go-spinner"
 	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
 )
@@ -29,9 +28,6 @@ func setProjectID(cfg *config.TemplateConfig) error {
 }
 
 func getGoogleCloudProjects() (map[string]string, error) {
-	s := spinner.StartNew("Collecting Google Cloud projects...")
-	defer s.Stop()
-
 	// gcloud projects list --format="json"
 	projectListLimit := 50
 	output, err := command.ExecuteWithResult("gcloud", []string{

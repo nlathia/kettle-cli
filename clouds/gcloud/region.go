@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/janeczku/go-spinner"
 	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
 	"github.com/spf13/viper"
@@ -32,9 +31,6 @@ func setDeploymentRegion(cfg *config.TemplateConfig) error {
 
 // gcloud functions regions list --format="json"
 func getGoogleCloudRegions() (map[string]string, error) {
-	s := spinner.StartNew("Collecting Google Cloud regions...")
-	defer s.Stop()
-
 	output, err := command.ExecuteWithResult("gcloud", []string{
 		"functions",
 		"regions",
