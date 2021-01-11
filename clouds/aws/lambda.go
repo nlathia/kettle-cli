@@ -87,6 +87,7 @@ func updateLambda(deploymentArchive string, cfg *config.TemplateConfig) error {
 func createLambdaRestAPI(deploymentArchive string, cfg *config.TemplateConfig) error {
 
 	// Select a deployment region
+	// @TODO this leads to unnecessary repetition
 	if err := setDeploymentRegion(cfg); err != nil {
 		return err
 	}
