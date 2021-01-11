@@ -1,25 +1,20 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-type RequestEvent struct {
-	Name string `json:"name"`
-}
+type RequestEvent struct{}
 
 type ResponseEvent struct {
-	Message string `json:"answer:"`
+	Message string `json:"prediction:"`
 }
 
-func init() {
-}
+func init() {}
 
 func LambdaHandler(event RequestEvent) (ResponseEvent, error) {
 	return ResponseEvent{
-		Message: fmt.Sprintf("Hello, %s", event.Name),
+		Message: "hello world!",
 	}, nil
 }
 
