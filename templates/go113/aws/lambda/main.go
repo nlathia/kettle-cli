@@ -1,27 +1,28 @@
 package main
- 
+
 import (
-        "fmt"
-        "github.com/aws/aws-lambda-go/lambda"
+	"fmt"
+
+	"github.com/aws/aws-lambda-go/lambda"
 )
 
 type RequestEvent struct {
-        Name string `json:"What is your name?"`
-        Age int     `json:"How old are you?"`
+	Name string `json:"name"`
 }
- 
+
 type ResponseEvent struct {
-        Message string `json:"Answer:"`
+	Message string `json:"answer:"`
 }
 
 func init() {
-	
 }
- 
-func {{.FunctionName}}(event RequestEvent) (ResponseEvent, error) {
-        return ResponseEvent{Message: fmt.Sprintf("%s is %d years old!", event.Name, event.Age)}, nil
+
+func LambdaHandler(event RequestEvent) (ResponseEvent, error) {
+	return ResponseEvent{
+		Message: fmt.Sprintf("Hello, %s", event.Name),
+	}, nil
 }
- 
+
 func main() {
-        lambda.Start({{.FunctionName}})
+	lambda.Start(LambdaHandler)
 }
