@@ -136,11 +136,14 @@ func createLambdaFunction(deploymentArchive string, cfg *config.TemplateConfig) 
 	// The --handler option in the create-function command changes based on the
 	// programming language
 	var handler string
+	var runtime string
 	switch {
 	case strings.HasPrefix(cfg.Runtime, "python"):
 		handler = fmt.Sprintf("main.%s", cfg.FunctionName)
+		runtime = cfg.Runtime
 	case strings.HasPrefix(cfg.Runtime, "go"):
 		handler = "main"
+		runtime = "go1.x"
 	default:
 		return errors.New(fmt.Sprintf("unknown runtime: %s", cfg.Runtime))
 	}
@@ -150,7 +153,7 @@ func createLambdaFunction(deploymentArchive string, cfg *config.TemplateConfig) 
 		"lambda",
 		"create-function",
 		"--function-name", cfg.Name,
-		"--runtime", cfg.Runtime,
+		"--runtime", runtime,
 		"--role", cfg.RoleArn,
 		"--handler", handler,
 		"--package-type", "Zip",
