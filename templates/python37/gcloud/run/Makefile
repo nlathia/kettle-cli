@@ -1,4 +1,4 @@
-VIRTUALENV_NAME=$(shell pwd | rev | cut -d '/' -f 1 | rev)-dev
+VIRTUALENV_NAME=gcloud-run.$(shell pwd | rev | cut -d '/' -f 1 | rev)
 IMAGE_URL=gcr.io/{{ .ProjectID }}/{{ .FunctionName }}:latest
 
 .PHONY: install uninstall test clean docker localhost
