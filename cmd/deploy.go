@@ -59,6 +59,9 @@ func validateDeployArgs(cmd *cobra.Command, args []string) error {
 	if err := cloud.Setup(); err != nil {
 		return err
 	}
+
+	// Store the settings for future re-use
+	config.WriteSettings()
 	return nil
 }
 
