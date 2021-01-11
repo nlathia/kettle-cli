@@ -1,7 +1,9 @@
 package aws
 
 import (
+	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
@@ -131,6 +133,18 @@ func createLambdaFunction(deploymentArchive string, cfg *config.TemplateConfig) 
 		return err
 	}
 
+	// The --handler option in the create-function command changes based on the
+	// programming language
+	var handler string
+	switch {
+	case strings.HasPrefix(cfg.Runtime, "python"):
+		handler = fmt.Sprintf("main.%s", cfg.FunctionName)
+	case strings.HasPrefix(cfg.Runtime, "go"):
+		handler = "main"
+	default:
+		return errors.New(fmt.Sprintf("unknown runtime: %s", cfg.Runtime))
+	}
+
 	// Create the function
 	return command.Execute("aws", []string{
 		"lambda",
@@ -138,7 +152,7 @@ func createLambdaFunction(deploymentArchive string, cfg *config.TemplateConfig) 
 		"--function-name", cfg.Name,
 		"--runtime", cfg.Runtime,
 		"--role", cfg.RoleArn,
-		"--handler", fmt.Sprintf("main.%s", cfg.FunctionName), // @TODO this is Python specific
+		"--handler", handler,
 		"--package-type", "Zip",
 		"--zip-file", fmt.Sprintf("fileb://%s", deploymentArchive),
 	}, false)

@@ -20,50 +20,24 @@ func createDeploymentArchive(cfg *config.TemplateConfig) (string, error) {
 		return "", err
 	}
 
-	// Store the current working directory before navigating away
+	// Create a path to the deployment archive
 	rootDir, err := os.Getwd()
 	if err != nil {
 		return "", err
 	}
-
-	// Create the zip file, starting with the contents
-	// of the current working directory
 	deploymentFile := path.Join(rootDir, deploymentArchiveName)
-	err = command.Execute("zip", []string{
-		"-g",
-		deploymentArchiveName,
-		"-r",
-		".",
-	}, true)
-	if err != nil {
-		return "", err
-	}
 
-	if !strings.HasPrefix(cfg.Runtime, "python") {
-		return deploymentArchiveName, nil
-	}
-
-	// Python builds need to add the site-packages contents
-	sitePackages, err := getPyenvSitePackagesDirectory(cfg.Runtime)
-	if err != nil {
-		return "", err
-	}
-
-	if _, err := os.Stat(sitePackages); !os.IsNotExist(err) {
-		// Change to the directory where the site-packages are stored
-		// So that we can add them to the zip file as a directory
-		os.Chdir(sitePackages)
-		err = command.Execute("zip", []string{
-			"-r",
-			deploymentFile,
-			".",
-		}, true)
-		if err != nil {
+	switch {
+	case strings.HasPrefix(cfg.Runtime, "python"):
+		// https://docs.aws.amazon.com/lambda/latest/dg/python-package.html
+		if err := addPythonLambdaToArchive(deploymentFile, cfg); err != nil {
 			return "", err
 		}
-
-		// Return to root directory to deploy the .zip file
-		os.Chdir(rootDir)
+	case strings.HasPrefix(cfg.Runtime, "go"):
+		// https://docs.aws.amazon.com/lambda/latest/dg/golang-package.html
+		if err := addGoLambdaToArchive(deploymentFile, cfg); err != nil {
+			return "", err
+		}
 	}
 	return deploymentFile, nil
 }
@@ -77,6 +51,47 @@ func removeDeploymentArchiveIfExists() error {
 		return err
 	}
 	return os.Remove(deploymentArchiveName)
+}
+
+func addPythonLambdaToArchive(deploymentFile string, cfg *config.TemplateConfig) error {
+	// Add the contents of the lambda function directory
+	err := command.Execute("zip", []string{
+		"-g",
+		deploymentArchiveName,
+		"-r",
+		".",
+	}, true)
+	if err != nil {
+		return err
+	}
+
+	// Python builds need to add the site-packages contents
+	sitePackages, err := getPyenvSitePackagesDirectory(cfg.Runtime)
+	if err != nil {
+		return err
+	}
+	if _, err := os.Stat(sitePackages); !os.IsNotExist(err) {
+		// Change to the directory where the site-packages are stored
+		// So that we can add them to the zip file as a directory
+		rootDir, err := os.Getwd()
+		if err != nil {
+			return err
+		}
+
+		os.Chdir(sitePackages)
+		err = command.Execute("zip", []string{
+			"-r",
+			deploymentFile,
+			".",
+		}, true)
+		if err != nil {
+			return err
+		}
+
+		// Return to root directory to deploy the .zip file
+		os.Chdir(rootDir)
+	}
+	return nil
 }
 
 func getPyenvSitePackagesDirectory(pythonVersion string) (string, error) {
@@ -95,4 +110,31 @@ func getPyenvSitePackagesDirectory(pythonVersion string) (string, error) {
 		strings.Trim(string(pyenvLocal), "\n"),
 		pythonVersion,
 	), nil
+}
+
+func addGoLambdaToArchive(deploymentFile string, cfg *config.TemplateConfig) error {
+	// go get github.com/aws/aws-lambda-go/lambda
+	err := command.Execute("go", []string{
+		"get",
+		"./...",
+	}, true)
+	if err != nil {
+		return err
+	}
+
+	// Build the function
+	err = command.Execute("GOOS=linux", []string{
+		"go",
+		"build",
+		"main.go",
+	}, true)
+	if err != nil {
+		return err
+	}
+
+	// zip function.zip main
+	return command.Execute("zip", []string{
+		deploymentFile,
+		"main",
+	}, true)
 }

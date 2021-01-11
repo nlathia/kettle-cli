@@ -60,6 +60,6 @@ var RuntimeNames = map[string]map[string]string{
 	},
 	AWSLambda: map[string]string{
 		"Python (3.7)": "python3.7", // Unlike gcloud, requires the "3.7"
-		"Go (1.13)":    "go113",
+		"Go (1.13)":    "go1.13",
 	},
 }
