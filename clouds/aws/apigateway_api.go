@@ -149,5 +149,5 @@ func deployRestApi(cfg *config.TemplateConfig) error {
 		"create-deployment",
 		"--rest-api-id", cfg.RestApiID,
 		"--stage-name", "prod", // @TODO add support for different stages
-	}, true)
+	})
 }

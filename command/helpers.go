@@ -6,25 +6,30 @@ import (
 	"os/exec"
 	"sort"
 	"strings"
+	"time"
 
-	"github.com/janeczku/go-spinner"
+	"github.com/briandowns/spinner"
 	"github.com/manifoldco/promptui"
 	"github.com/operatorai/operator/config"
 )
 
-func Execute(command string, args []string, quiet bool) error {
+func getSpinner() *spinner.Spinner {
+	s := spinner.New(spinner.CharSets[39], 100*time.Millisecond)
+	s.Suffix = "  Working..."
+	s.Start()
+	return s
+}
+
+func Execute(command string, args []string) error {
+	osCmd := exec.Command(command, args...)
 	if config.DebugMode {
 		fmt.Println("\n", command, strings.Join(args, " "))
+		osCmd.Stderr = os.Stderr
+		osCmd.Stdout = os.Stdout
 	}
 
-	osCmd := exec.Command(command, args...)
-	osCmd.Stderr = os.Stderr
-	if !quiet {
-		osCmd.Stdout = os.Stdout
-	} else {
-		s := spinner.StartNew("Working...")
-		defer s.Stop()
-	}
+	s := getSpinner()
+	defer s.Stop()
 	if err := osCmd.Run(); err != nil {
 		return err
 	}
@@ -32,14 +37,14 @@ func Execute(command string, args []string, quiet bool) error {
 }
 
 func ExecuteWithResult(command string, args []string) ([]byte, error) {
+	osCmd := exec.Command(command, args...)
 	if config.DebugMode {
 		fmt.Println("\n", command, strings.Join(args, " "))
+		osCmd.Stderr = os.Stderr
 	}
 
-	s := spinner.StartNew("Working...")
+	s := getSpinner()
 	defer s.Stop()
-	osCmd := exec.Command(command, args...)
-	osCmd.Stderr = os.Stderr
 	output, err := osCmd.Output()
 	if err != nil {
 		return nil, err

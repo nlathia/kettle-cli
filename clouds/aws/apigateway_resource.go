@@ -97,7 +97,7 @@ func addResourcePOSTMethod(cfg *config.TemplateConfig) error {
 		"--resource-id", cfg.RestApiResourceID,
 		"--http-method", "POST",
 		"--authorization-type", "NONE",
-	}, true)
+	})
 	if err != nil {
 		return err
 	}
@@ -111,7 +111,7 @@ func addResourcePOSTMethod(cfg *config.TemplateConfig) error {
 		"--http-method", "POST",
 		"--status-code", "200",
 		"--response-models", "application/json=Empty",
-	}, true)
+	})
 	if err != nil {
 		return err
 	}

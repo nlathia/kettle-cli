@@ -182,7 +182,7 @@ func templatesGo113AwsLambdaMainGo() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/go113/aws/lambda/main.go", size: 347, mode: os.FileMode(420), modTime: time.Unix(1610401896, 0)}
+	info := bindataFileInfo{name: "templates/go113/aws/lambda/main.go", size: 347, mode: os.FileMode(420), modTime: time.Unix(1610404172, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }

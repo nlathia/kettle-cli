@@ -60,7 +60,7 @@ func addPythonLambdaToArchive(deploymentFile string, cfg *config.TemplateConfig)
 		deploymentArchiveName,
 		"-r",
 		".",
-	}, true)
+	})
 	if err != nil {
 		return err
 	}
@@ -83,7 +83,7 @@ func addPythonLambdaToArchive(deploymentFile string, cfg *config.TemplateConfig)
 			"-r",
 			deploymentFile,
 			".",
-		}, true)
+		})
 		if err != nil {
 			return err
 		}
@@ -117,7 +117,7 @@ func addGoLambdaToArchive(deploymentFile string, cfg *config.TemplateConfig) err
 	err := command.Execute("go", []string{
 		"get",
 		"./...",
-	}, true)
+	})
 	if err != nil {
 		return err
 	}
@@ -128,7 +128,7 @@ func addGoLambdaToArchive(deploymentFile string, cfg *config.TemplateConfig) err
 		"go",
 		"build",
 		"main.go",
-	}, true)
+	})
 	if err != nil {
 		return err
 	}
@@ -137,5 +137,5 @@ func addGoLambdaToArchive(deploymentFile string, cfg *config.TemplateConfig) err
 	return command.Execute("zip", []string{
 		deploymentFile,
 		"main",
-	}, true)
+	})
 }

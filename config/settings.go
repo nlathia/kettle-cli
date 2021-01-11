@@ -51,10 +51,5 @@ func ReadSettings() (*TemplateConfig, error) {
 
 func WriteSettings() {
 	configPath := getSettingsPath()
-	if err := viper.SafeWriteConfigAs(configPath); err != nil {
-		if os.IsNotExist(err) {
-			_ = viper.WriteConfigAs(configPath)
-		}
-	}
 	viper.WriteConfigAs(configPath)
 }
