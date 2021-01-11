@@ -89,6 +89,15 @@ func addResourcePOSTMethod(cfg *config.TemplateConfig) error {
 		return nil
 	}
 
+	apiKeySetting := "--no-api-key-required"
+	requireApiKey, err := command.PromptToConfirm("Require an API key to call the URL")
+	if err != nil {
+		return err
+	}
+	if requireApiKey {
+		apiKeySetting = "--api-key-required"
+	}
+
 	// Create the method
 	err = command.Execute("aws", []string{
 		"apigateway",
@@ -97,6 +106,7 @@ func addResourcePOSTMethod(cfg *config.TemplateConfig) error {
 		"--resource-id", cfg.RestApiResourceID,
 		"--http-method", "POST",
 		"--authorization-type", "NONE",
+		apiKeySetting,
 	})
 	if err != nil {
 		return err
