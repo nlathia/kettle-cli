@@ -13,15 +13,15 @@ const (
 	operatorApiName = "operator-api-gateway"
 )
 
-func setRestApiID(cfg *config.TemplateConfig) (bool, error) {
+func setRestApiID(cfg *config.TemplateConfig) error {
 	if cfg.RestApiID != "" {
-		return false, nil
+		return nil
 	}
 
 	// Look for existing REST APIs
 	apis, operatorApiExists, err := getRestApis()
 	if err != nil {
-		return false, err
+		return err
 	}
 
 	var restApiID string
@@ -30,7 +30,7 @@ func setRestApiID(cfg *config.TemplateConfig) (bool, error) {
 		// Create a new rest API
 		restApiID, err = createRestApi()
 		if err != nil {
-			return false, err
+			return err
 		}
 		newApiCreated = true
 	} else {
@@ -38,20 +38,19 @@ func setRestApiID(cfg *config.TemplateConfig) (bool, error) {
 		// if the operator one doesn't alredy exist
 		restApiID, err = command.PromptForValue("AWS REST API", apis, !operatorApiExists)
 		if err != nil {
-			return false, err
+			return err
 		}
 		if restApiID == "" {
 			restApiID, err = createRestApi()
 			if err != nil {
-				return false, err
+				return err
 			}
-			newApiCreated = true
 		}
 	}
 
 	cfg.RestApiID = restApiID
 	viper.Set(config.RestApiID, cfg.RestApiID)
-	return newApiCreated, nil
+	return nil
 }
 
 func setRestApiRootResourceID(cfg *config.TemplateConfig) error {

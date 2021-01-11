@@ -31,19 +31,18 @@ func (AWSLambdaFunction) Deploy(directory string, cfg *config.TemplateConfig) er
 			return err
 		}
 	} else {
-		waitType = "function-active"
-		addToApi, err := command.PromptToConfirm("Add Lambda function to a REST API")
-		if err != nil {
-			return err
-		}
-
 		// Create the Lambda function
+		waitType = "function-active"
 		if err := createLambdaFunction(deploymentArchive, cfg); err != nil {
 			return err
 		}
 
+		addToApi, err := command.PromptToConfirm("Add Lambda function to a REST API")
+		if err != nil {
+			return err
+		}
 		if addToApi {
-			if err := createLambdaRestAPI(deploymentArchive, cfg); err != nil {
+			if err := addLambdaToRestAPI(deploymentArchive, cfg); err != nil {
 				return err
 			}
 
@@ -84,7 +83,7 @@ func updateLambda(deploymentArchive string, cfg *config.TemplateConfig) error {
 }
 
 // https://docs.aws.amazon.com/lambda/latest/dg/services-apigateway-tutorial.html
-func createLambdaRestAPI(deploymentArchive string, cfg *config.TemplateConfig) error {
+func addLambdaToRestAPI(deploymentArchive string, cfg *config.TemplateConfig) error {
 
 	// Select a deployment region
 	// @TODO this leads to unnecessary repetition
@@ -93,8 +92,7 @@ func createLambdaRestAPI(deploymentArchive string, cfg *config.TemplateConfig) e
 	}
 
 	// Create or set the REST API
-	newApiCreated, err := setRestApiID(cfg)
-	if err != nil {
+	if err := setRestApiID(cfg); err != nil {
 		return err
 	}
 	if err := setRestApiRootResourceID(cfg); err != nil {
@@ -106,15 +104,13 @@ func createLambdaRestAPI(deploymentArchive string, cfg *config.TemplateConfig) e
 	if err := setRestApiResourceID(cfg); err != nil {
 		return err
 	}
+	if err := deployRestApi(cfg); err != nil {
+		return err
+	}
 
 	// Set the Lambda function as the destination for the POST method
 	if err := addFunctionIntegration(cfg); err != nil {
 		return err
-	}
-	if newApiCreated {
-		if err := deployRestApi(cfg); err != nil {
-			return err
-		}
 	}
 
 	// Grant invoke permission to the API
