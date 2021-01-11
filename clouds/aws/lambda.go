@@ -1,7 +1,9 @@
 package aws
 
 import (
+	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
@@ -85,6 +87,7 @@ func updateLambda(deploymentArchive string, cfg *config.TemplateConfig) error {
 func createLambdaRestAPI(deploymentArchive string, cfg *config.TemplateConfig) error {
 
 	// Select a deployment region
+	// @TODO this leads to unnecessary repetition
 	if err := setDeploymentRegion(cfg); err != nil {
 		return err
 	}
@@ -99,6 +102,7 @@ func createLambdaRestAPI(deploymentArchive string, cfg *config.TemplateConfig) e
 	}
 
 	// Create a resource in the API & create a POST method on the resource
+	// @TODO this leads to the same aws cli call as the previous function
 	if err := setRestApiResourceID(cfg); err != nil {
 		return err
 	}
@@ -131,14 +135,29 @@ func createLambdaFunction(deploymentArchive string, cfg *config.TemplateConfig) 
 		return err
 	}
 
+	// The --handler option in the create-function command changes based on the
+	// programming language
+	var handler string
+	var runtime string
+	switch {
+	case strings.HasPrefix(cfg.Runtime, "python"):
+		handler = fmt.Sprintf("main.%s", cfg.FunctionName)
+		runtime = cfg.Runtime
+	case strings.HasPrefix(cfg.Runtime, "go"):
+		handler = "main"
+		runtime = "go1.x"
+	default:
+		return errors.New(fmt.Sprintf("unknown runtime: %s", cfg.Runtime))
+	}
+
 	// Create the function
 	return command.Execute("aws", []string{
 		"lambda",
 		"create-function",
 		"--function-name", cfg.Name,
-		"--runtime", cfg.Runtime,
+		"--runtime", runtime,
 		"--role", cfg.RoleArn,
-		"--handler", fmt.Sprintf("main.%s", cfg.FunctionName), // @TODO this is Python specific
+		"--handler", handler,
 		"--package-type", "Zip",
 		"--zip-file", fmt.Sprintf("fileb://%s", deploymentArchive),
 	}, false)
