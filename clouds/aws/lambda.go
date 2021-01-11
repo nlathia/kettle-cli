@@ -102,6 +102,7 @@ func createLambdaRestAPI(deploymentArchive string, cfg *config.TemplateConfig) e
 	}
 
 	// Create a resource in the API & create a POST method on the resource
+	// @TODO this leads to the same aws cli call as the previous function
 	if err := setRestApiResourceID(cfg); err != nil {
 		return err
 	}
