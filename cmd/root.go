@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/operatorai/operator/config"
 	"github.com/spf13/cobra"
 )
 
@@ -13,6 +14,10 @@ var rootCmd = &cobra.Command{
 	Short: "A CLI tool for creating http functions or services",
 	Long: "\n🎯 Operator is a command line tool for creating and deploying" +
 		"\n http functions or services.",
+}
+
+func init() {
+	rootCmd.PersistentFlags().BoolVar(&config.DebugMode, "debug", false, "Enable debug mode")
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.

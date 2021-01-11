@@ -32,6 +32,9 @@ const (
 	RestApiRootResource = "rest_api_root_resource"
 )
 
+// Debug mode
+var DebugMode bool
+
 // Mappings between prompts (shown to the user) and values (stored in config)
 
 var CloudProviderNames = map[string]string{

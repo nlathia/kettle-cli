@@ -13,11 +13,13 @@ import (
 )
 
 func Execute(command string, args []string, quiet bool) error {
-	fmt.Println("\n", command, strings.Join(args, " "))
+	if config.DebugMode {
+		fmt.Println("\n", command, strings.Join(args, " "))
+	}
 
 	osCmd := exec.Command(command, args...)
+	osCmd.Stderr = os.Stderr
 	if !quiet {
-		osCmd.Stderr = os.Stderr
 		osCmd.Stdout = os.Stdout
 	} else {
 		s := spinner.StartNew("Working...")
@@ -30,10 +32,12 @@ func Execute(command string, args []string, quiet bool) error {
 }
 
 func ExecuteWithResult(command string, args []string) ([]byte, error) {
-	fmt.Println("\n", command, strings.Join(args, " "))
+	if config.DebugMode {
+		fmt.Println("\n", command, strings.Join(args, " "))
+	}
+
 	s := spinner.StartNew("Working...")
 	defer s.Stop()
-
 	osCmd := exec.Command(command, args...)
 	osCmd.Stderr = os.Stderr
 	output, err := osCmd.Output()

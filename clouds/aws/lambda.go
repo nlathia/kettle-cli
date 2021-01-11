@@ -104,12 +104,14 @@ func addLambdaToRestAPI(deploymentArchive string, cfg *config.TemplateConfig) er
 	if err := setRestApiResourceID(cfg); err != nil {
 		return err
 	}
-	if err := deployRestApi(cfg); err != nil {
-		return err
-	}
 
 	// Set the Lambda function as the destination for the POST method
 	if err := addFunctionIntegration(cfg); err != nil {
+		return err
+	}
+
+	// Deploy the API with the new resource & integration
+	if err := deployRestApi(cfg); err != nil {
 		return err
 	}
 
