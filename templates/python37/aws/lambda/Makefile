@@ -1,4 +1,4 @@
-VIRTUALENV_NAME=$(shell pwd | rev | cut -d '/' -f 1 | rev)-dev
+VIRTUALENV_NAME=aws-lambda.$(shell pwd | rev | cut -d '/' -f 1 | rev)
 
 .PHONY: install uninstall test clean invoke-local invoke
 
