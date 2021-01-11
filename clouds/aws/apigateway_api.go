@@ -25,14 +25,12 @@ func setRestApiID(cfg *config.TemplateConfig) error {
 	}
 
 	var restApiID string
-	var newApiCreated bool
 	if len(apis) == 0 {
 		// Create a new rest API
 		restApiID, err = createRestApi()
 		if err != nil {
 			return err
 		}
-		newApiCreated = true
 	} else {
 		// Allow the user to create a new REST API
 		// if the operator one doesn't alredy exist
