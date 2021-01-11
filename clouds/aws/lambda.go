@@ -63,7 +63,7 @@ func lambdaFunctionExists(name string) (bool, error) {
 		"lambda",
 		"get-function",
 		"--function-name", name,
-	}, true)
+	})
 	if err != nil {
 		if err.Error() == "exit status 254" {
 			return false, nil
@@ -79,7 +79,7 @@ func updateLambda(deploymentArchive string, cfg *config.TemplateConfig) error {
 		"update-function-code",
 		"--function-name", cfg.Name,
 		"--zip-file", fmt.Sprintf("fileb://%s", deploymentArchive),
-	}, false)
+	})
 }
 
 // https://docs.aws.amazon.com/lambda/latest/dg/services-apigateway-tutorial.html
@@ -158,7 +158,7 @@ func createLambdaFunction(deploymentArchive string, cfg *config.TemplateConfig) 
 		"--handler", handler,
 		"--package-type", "Zip",
 		"--zip-file", fmt.Sprintf("fileb://%s", deploymentArchive),
-	}, false)
+	})
 }
 
 func waitForLambda(waitType string, cfg *config.TemplateConfig) error {
@@ -167,7 +167,7 @@ func waitForLambda(waitType string, cfg *config.TemplateConfig) error {
 		"wait",
 		waitType,
 		"--function-name", cfg.Name,
-	}, false)
+	})
 }
 
 func addFunctionIntegration(cfg *config.TemplateConfig) error {
@@ -186,7 +186,7 @@ func addFunctionIntegration(cfg *config.TemplateConfig) error {
 			cfg.AccountID,
 			cfg.Name,
 		),
-	}, true)
+	})
 	if err != nil {
 		return err
 	}
@@ -200,7 +200,7 @@ func addFunctionIntegration(cfg *config.TemplateConfig) error {
 		"--http-method", "POST",
 		"--status-code", "200",
 		"--response-templates", "application/json=\"\"",
-	}, true)
+	})
 }
 
 func addInvocationPermission(cfg *config.TemplateConfig) error {
@@ -225,7 +225,7 @@ func addInvocationPermission(cfg *config.TemplateConfig) error {
 				permission,
 				cfg.Name,
 			),
-		}, true)
+		})
 		if err != nil {
 			return err
 		}
