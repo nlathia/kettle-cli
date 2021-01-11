@@ -122,8 +122,9 @@ func addGoLambdaToArchive(deploymentFile string, cfg *config.TemplateConfig) err
 		return err
 	}
 
-	// Build the function
-	err = command.Execute("GOOS=linux", []string{
+	// Build the function for linux
+	err = command.Execute("env", []string{
+		"GOOS=linux",
 		"go",
 		"build",
 		"main.go",
