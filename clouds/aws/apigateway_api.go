@@ -73,7 +73,8 @@ func setRestApiRootResourceID(cfg *config.TemplateConfig) error {
 
 	var results struct {
 		Items []struct {
-			ID string `json:"id"`
+			ID   string `json:"id"`
+			Path string `json:"path"`
 		} `json:"items"`
 	}
 	if err := json.Unmarshal(output, &results); err != nil {
@@ -83,9 +84,14 @@ func setRestApiRootResourceID(cfg *config.TemplateConfig) error {
 		return errors.New("no matching apigateway resource")
 	}
 
-	cfg.RestApiRootID = results.Items[0].ID
-	viper.Set(config.RestApiRootResource, results.Items[0].ID)
-	return nil
+	for _, result := range results.Items {
+		if result.Path == "/" {
+			cfg.RestApiRootID = result.ID
+			viper.Set(config.RestApiRootResource, result.ID)
+			return nil
+		}
+	}
+	return errors.New("did not find root apigateway resource")
 }
 
 func getRestApis() (map[string]string, bool, error) {
