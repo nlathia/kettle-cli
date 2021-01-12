@@ -222,7 +222,7 @@ func templatesPython37AwsLambdaMakefile() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/aws/lambda/Makefile", size: 343, mode: os.FileMode(420), modTime: time.Unix(1610407008, 0)}
+	info := bindataFileInfo{name: "templates/python37/aws/lambda/Makefile", size: 343, mode: os.FileMode(420), modTime: time.Unix(1610407627, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -682,7 +682,7 @@ func templatesPython37GcloudFunctionsMakefile() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/functions/Makefile", size: 294, mode: os.FileMode(420), modTime: time.Unix(1610407347, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/functions/Makefile", size: 294, mode: os.FileMode(420), modTime: time.Unix(1610407670, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -1142,7 +1142,7 @@ func templatesPython37GcloudRunMakefile() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/python37/gcloud/run/Makefile", size: 432, mode: os.FileMode(420), modTime: time.Unix(1610407362, 0)}
+	info := bindataFileInfo{name: "templates/python37/gcloud/run/Makefile", size: 432, mode: os.FileMode(420), modTime: time.Unix(1610407670, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }

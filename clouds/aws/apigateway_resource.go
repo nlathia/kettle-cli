@@ -96,6 +96,15 @@ func addResourcePOSTMethod(cfg *config.TemplateConfig) error {
 	}
 	if requireApiKey {
 		apiKeySetting = "--api-key-required"
+		// Note: if an api key is required, then there is more set up to do:
+
+		// 1. Create a usage plan and add the usage plan to the rest api (& stage)
+		// aws apigateway [get-usage-plans | create-usage-plan]
+		// aws apigateway create-usage-plan --name "New Usage Plan" --description "A new usage plan" --throttle burstLimit=10,rateLimit=5 --quota limit=500,offset=0,period=MONTH --stage-keys restApiId='a1b2c3d4e5',stageName='dev'
+		// apiId
+
+		// 3. Generate an API key each user and add it to a usage plan in the console
+		// aws apigateway create-api-key --name 'Dev API Key' --description 'Used for development' --enabled --stage-keys restApiId='a1b2c3d4e5',stageName='dev'
 	}
 
 	// Create the method

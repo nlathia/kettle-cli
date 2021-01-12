@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	operatorApiName = "operator-api-gateway"
+	operatorApiName = "operator-apigateway"
 )
 
 func setRestApiID(cfg *config.TemplateConfig) error {
