@@ -15,20 +15,58 @@ type RestApiResource struct {
 	HasPostMethod bool
 }
 
+func getRestApiResources(cfg *config.TemplateConfig) ([]*RestApiResource, error) {
+	output, err := command.ExecuteWithResult("aws", []string{
+		"apigateway",
+		"get-resources",
+		"--rest-api-id", cfg.RestApiID,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	var results struct {
+		Items []struct {
+			PathPart        string `json:"pathPart"`
+			ID              string `json:"id"`
+			ResourceMethods struct {
+				POST *struct{} `json:"POST"`
+			} `json:"resourceMethods"`
+		} `json:"items"`
+	}
+	if err := json.Unmarshal(output, &results); err != nil {
+		return nil, err
+	}
+
+	resources := []*RestApiResource{}
+	for _, result := range results.Items {
+		resources = append(resources, &RestApiResource{
+			PathPart:      result.PathPart,
+			ID:            result.ID,
+			HasPostMethod: (result.ResourceMethods.POST != nil),
+		})
+	}
+	return resources, nil
+}
+
+func getResourceWithPath(resources []*RestApiResource, pathPart string) *RestApiResource {
+	var restApiResource *RestApiResource
+	for _, resource := range resources {
+		if resource.PathPart == pathPart {
+			restApiResource = resource
+			break
+		}
+	}
+	return restApiResource
+}
+
 func setRestApiResourceID(resources []*RestApiResource, cfg *config.TemplateConfig) error {
 	if cfg.RestApiResourceID != "" {
 		return nil
 	}
 
 	// Look for existing resource ID
-	var restApiResource *RestApiResource
-	for _, resource := range resources {
-		if resource.PathPart == cfg.Name {
-			restApiResource = resource
-			break
-		}
-	}
-
+	restApiResource := getResourceWithPath(resources, cfg.Name)
 	if restApiResource != nil {
 		// Use the existing resource ID
 		cfg.RestApiResourceID = restApiResource.ID
@@ -69,48 +107,14 @@ func setRestApiRootResourceID(resources []*RestApiResource, cfg *config.Template
 		return errors.New("rest api id not set")
 	}
 
-	for _, resource := range resources {
-		if resource.PathPart == "/" {
-			cfg.RestApiRootID = resource.ID
-			viper.Set(config.RestApiRootResource, resource.ID)
-			return nil
-		}
-	}
-	return errors.New("did not find root apigateway resource")
-}
-
-func getRestApiResources(cfg *config.TemplateConfig) ([]*RestApiResource, error) {
-	output, err := command.ExecuteWithResult("aws", []string{
-		"apigateway",
-		"get-resources",
-		"--rest-api-id", cfg.RestApiID,
-	})
-	if err != nil {
-		return nil, err
+	resource := getResourceWithPath(resources, "/")
+	if resource == nil {
+		return errors.New("did not find root apigateway resource")
 	}
 
-	var results struct {
-		Items []struct {
-			PathPart        string `json:"pathPart"`
-			ID              string `json:"id"`
-			ResourceMethods struct {
-				POST *struct{} `json:"POST"`
-			} `json:"resourceMethods"`
-		} `json:"items"`
-	}
-	if err := json.Unmarshal(output, &results); err != nil {
-		return nil, err
-	}
-
-	resources := []*RestApiResource{}
-	for _, result := range results.Items {
-		resources = append(resources, &RestApiResource{
-			PathPart:      result.PathPart,
-			ID:            result.ID,
-			HasPostMethod: (result.ResourceMethods.POST != nil),
-		})
-	}
-	return resources, nil
+	cfg.RestApiRootID = resource.ID
+	viper.Set(config.RestApiRootResource, resource.ID)
+	return nil
 }
 
 func addResourcePOSTMethod(resource *RestApiResource, cfg *config.TemplateConfig) error {
