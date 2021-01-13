@@ -2,7 +2,6 @@ package aws
 
 import (
 	"encoding/json"
-	"errors"
 
 	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
@@ -10,7 +9,7 @@ import (
 )
 
 const (
-	operatorApiName = "operator-api-gateway"
+	operatorApiName = "operator-apigateway"
 )
 
 func setRestApiID(cfg *config.TemplateConfig) error {
@@ -49,46 +48,6 @@ func setRestApiID(cfg *config.TemplateConfig) error {
 	cfg.RestApiID = restApiID
 	viper.Set(config.RestApiID, cfg.RestApiID)
 	return nil
-}
-
-func setRestApiRootResourceID(cfg *config.TemplateConfig) error {
-	if cfg.RestApiRootID != "" {
-		return nil
-	}
-	if cfg.RestApiID == "" {
-		return errors.New("rest api id not set")
-	}
-
-	output, err := command.ExecuteWithResult("aws", []string{
-		"apigateway",
-		"get-resources",
-		"--rest-api-id", cfg.RestApiID,
-	})
-	if err != nil {
-		return err
-	}
-
-	var results struct {
-		Items []struct {
-			ID   string `json:"id"`
-			Path string `json:"path"`
-		} `json:"items"`
-	}
-	if err := json.Unmarshal(output, &results); err != nil {
-		return err
-	}
-	if len(results.Items) == 0 {
-		return errors.New("no matching apigateway resource")
-	}
-
-	for _, result := range results.Items {
-		if result.Path == "/" {
-			cfg.RestApiRootID = result.ID
-			viper.Set(config.RestApiRootResource, result.ID)
-			return nil
-		}
-	}
-	return errors.New("did not find root apigateway resource")
 }
 
 func getRestApis() (map[string]string, bool, error) {

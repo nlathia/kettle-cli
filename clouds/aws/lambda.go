@@ -86,7 +86,7 @@ func updateLambda(deploymentArchive string, cfg *config.TemplateConfig) error {
 func addLambdaToRestAPI(deploymentArchive string, cfg *config.TemplateConfig) error {
 
 	// Select a deployment region
-	// @TODO this leads to unnecessary repetition
+	// @TODO this leads to unnecessary repetition and should be set in global settings
 	if err := setDeploymentRegion(cfg); err != nil {
 		return err
 	}
@@ -95,13 +95,20 @@ func addLambdaToRestAPI(deploymentArchive string, cfg *config.TemplateConfig) er
 	if err := setRestApiID(cfg); err != nil {
 		return err
 	}
-	if err := setRestApiRootResourceID(cfg); err != nil {
+
+	// Collect the available resources in the API
+	resources, err := getRestApiResources(cfg)
+	if err != nil {
+		return err
+	}
+
+	// Set the root resource ID
+	if err := setRestApiRootResourceID(resources, cfg); err != nil {
 		return err
 	}
 
 	// Create a resource in the API & create a POST method on the resource
-	// @TODO this leads to the same aws cli call as the previous function
-	if err := setRestApiResourceID(cfg); err != nil {
+	if err := setRestApiResourceID(resources, cfg); err != nil {
 		return err
 	}
 

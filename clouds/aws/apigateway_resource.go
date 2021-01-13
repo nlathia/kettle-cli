@@ -2,23 +2,76 @@ package aws
 
 import (
 	"encoding/json"
+	"errors"
 
 	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
+	"github.com/spf13/viper"
 )
 
-func setRestApiResourceID(cfg *config.TemplateConfig) error {
+type RestApiResource struct {
+	PathPart      string
+	ID            string
+	HasPostMethod bool
+}
+
+func getRestApiResources(cfg *config.TemplateConfig) ([]*RestApiResource, error) {
+	output, err := command.ExecuteWithResult("aws", []string{
+		"apigateway",
+		"get-resources",
+		"--rest-api-id", cfg.RestApiID,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	var results struct {
+		Items []struct {
+			PathPart        string `json:"pathPart"`
+			ID              string `json:"id"`
+			ResourceMethods struct {
+				POST *struct{} `json:"POST"`
+			} `json:"resourceMethods"`
+		} `json:"items"`
+	}
+	if err := json.Unmarshal(output, &results); err != nil {
+		return nil, err
+	}
+
+	resources := []*RestApiResource{}
+	for _, result := range results.Items {
+		resources = append(resources, &RestApiResource{
+			PathPart:      result.PathPart,
+			ID:            result.ID,
+			HasPostMethod: (result.ResourceMethods.POST != nil),
+		})
+	}
+	return resources, nil
+}
+
+func getResourceWithPath(resources []*RestApiResource, pathPart string) *RestApiResource {
+	var restApiResource *RestApiResource
+	for _, resource := range resources {
+		if resource.PathPart == pathPart {
+			restApiResource = resource
+			break
+		}
+	}
+	return restApiResource
+}
+
+func setRestApiResourceID(resources []*RestApiResource, cfg *config.TemplateConfig) error {
 	if cfg.RestApiResourceID != "" {
 		return nil
 	}
 
 	// Look for existing resource ID
-	resourceID, resourceHasPOSTMethod, err := getRestApiResource(cfg)
-	if err != nil {
-		return err
-	}
-	if resourceID == "" {
-		// Create a resource in the API
+	restApiResource := getResourceWithPath(resources, cfg.Name)
+	if restApiResource != nil {
+		// Use the existing resource ID
+		cfg.RestApiResourceID = restApiResource.ID
+	} else {
+		// Not found: create a resource in the API
 		output, err := command.ExecuteWithResult("aws", []string{
 			"apigateway",
 			"create-resource",
@@ -37,56 +90,54 @@ func setRestApiResourceID(cfg *config.TemplateConfig) error {
 			return err
 		}
 		cfg.RestApiResourceID = result.ID
-	} else {
-		// Use the existing resource ID
-		cfg.RestApiResourceID = resourceID
 	}
-	if !resourceHasPOSTMethod {
-		if err := addResourcePOSTMethod(cfg); err != nil {
-			return err
-		}
+
+	// Check for POST method
+	if err := addResourcePOSTMethod(restApiResource, cfg); err != nil {
+		return err
 	}
 	return nil
 }
 
-func getRestApiResource(cfg *config.TemplateConfig) (string, bool, error) {
-	output, err := command.ExecuteWithResult("aws", []string{
-		"apigateway",
-		"get-resources",
-		"--rest-api-id", cfg.RestApiID,
-	})
-	if err != nil {
-		return "", false, err
+func setRestApiRootResourceID(resources []*RestApiResource, cfg *config.TemplateConfig) error {
+	if cfg.RestApiRootID != "" {
+		return nil
+	}
+	if cfg.RestApiID == "" {
+		return errors.New("rest api id not set")
 	}
 
-	var results struct {
-		Items []struct {
-			PathPart        string `json:"pathPart"`
-			ID              string `json:"id"`
-			ResourceMethods struct {
-				POST *struct{} `json:"POST"`
-			} `json:"resourceMethods"`
-		} `json:"items"`
-	}
-	if err := json.Unmarshal(output, &results); err != nil {
-		return "", false, err
+	resource := getResourceWithPath(resources, "/")
+	if resource == nil {
+		return errors.New("did not find root apigateway resource")
 	}
 
-	for _, result := range results.Items {
-		if result.PathPart == cfg.Name {
-			return result.ID, (result.ResourceMethods.POST != nil), nil
-		}
-	}
-	return "", false, nil
+	cfg.RestApiRootID = resource.ID
+	viper.Set(config.RestApiRootResource, resource.ID)
+	return nil
 }
 
-func addResourcePOSTMethod(cfg *config.TemplateConfig) error {
-	_, resourceHasPOSTMethod, err := getRestApiResource(cfg)
+func addResourcePOSTMethod(resource *RestApiResource, cfg *config.TemplateConfig) error {
+	if resource.HasPostMethod {
+		return nil
+	}
+
+	apiKeySetting := "--no-api-key-required"
+	requireApiKey, err := command.PromptToConfirm("Require an API key to call the URL")
 	if err != nil {
 		return err
 	}
-	if resourceHasPOSTMethod {
-		return nil
+	if requireApiKey {
+		apiKeySetting = "--api-key-required"
+		// Note: if an api key is required, then there is more set up to do:
+
+		// 1. Create a usage plan and add the usage plan to the rest api (& stage)
+		// aws apigateway [get-usage-plans | create-usage-plan]
+		// aws apigateway create-usage-plan --name "New Usage Plan" --description "A new usage plan" --throttle burstLimit=10,rateLimit=5 --quota limit=500,offset=0,period=MONTH --stage-keys restApiId='a1b2c3d4e5',stageName='dev'
+		// apiId
+
+		// 3. Generate an API key each user and add it to a usage plan in the console
+		// aws apigateway create-api-key --name 'Dev API Key' --description 'Used for development' --enabled --stage-keys restApiId='a1b2c3d4e5',stageName='dev'
 	}
 
 	// Create the method
@@ -97,6 +148,7 @@ func addResourcePOSTMethod(cfg *config.TemplateConfig) error {
 		"--resource-id", cfg.RestApiResourceID,
 		"--http-method", "POST",
 		"--authorization-type", "NONE",
+		apiKeySetting,
 	})
 	if err != nil {
 		return err
