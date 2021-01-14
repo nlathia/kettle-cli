@@ -21,19 +21,8 @@ func getSpinner() *spinner.Spinner {
 }
 
 func Execute(command string, args []string) error {
-	osCmd := exec.Command(command, args...)
-	if config.DebugMode {
-		fmt.Println("\n", command, strings.Join(args, " "))
-		osCmd.Stderr = os.Stderr
-		osCmd.Stdout = os.Stdout
-	}
-
-	s := getSpinner()
-	defer s.Stop()
-	if err := osCmd.Run(); err != nil {
-		return err
-	}
-	return nil
+	_, err := ExecuteWithResult(command, args)
+	return err
 }
 
 func ExecuteWithResult(command string, args []string) ([]byte, error) {
