@@ -127,7 +127,8 @@ func addGoLambdaToArchive(deploymentFile string, cfg *config.TemplateConfig) err
 		"GOOS=linux",
 		"go",
 		"build",
-		"main.go",
+		"-o", "main",
+		"./...",
 	})
 	if err != nil {
 		return err
