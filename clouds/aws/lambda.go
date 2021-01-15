@@ -37,6 +37,10 @@ func (AWSLambdaFunction) Deploy(directory string, cfg *config.TemplateConfig) er
 			return err
 		}
 
+		// Note: if the first deployment of a function fails after the function has
+		// been created, then there is currently no way to re-deploy and create the
+		// REST API. This should be changed so that a deployment asks whether to add
+		// a function to an API if e.g. it hasn't already been added to one
 		addToApi, err := command.PromptToConfirm("Add Lambda function to a REST API")
 		if err != nil {
 			return err
@@ -59,7 +63,7 @@ func (AWSLambdaFunction) Deploy(directory string, cfg *config.TemplateConfig) er
 }
 
 func lambdaFunctionExists(name string) (bool, error) {
-	err := command.Execute("aws", []string{
+	_, err := command.ExecuteWithResult("aws", []string{
 		"lambda",
 		"get-function",
 		"--function-name", name,

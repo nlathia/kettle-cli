@@ -3,6 +3,7 @@ package aws
 import (
 	"encoding/json"
 	"errors"
+	"strings"
 
 	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
@@ -10,7 +11,7 @@ import (
 )
 
 type RestApiResource struct {
-	PathPart      string
+	Path          string
 	ID            string
 	HasPostMethod bool
 }
@@ -27,7 +28,7 @@ func getRestApiResources(cfg *config.TemplateConfig) ([]*RestApiResource, error)
 
 	var results struct {
 		Items []struct {
-			PathPart        string `json:"pathPart"`
+			Path            string `json:"path"`
 			ID              string `json:"id"`
 			ResourceMethods struct {
 				POST *struct{} `json:"POST"`
@@ -41,7 +42,7 @@ func getRestApiResources(cfg *config.TemplateConfig) ([]*RestApiResource, error)
 	resources := []*RestApiResource{}
 	for _, result := range results.Items {
 		resources = append(resources, &RestApiResource{
-			PathPart:      result.PathPart,
+			Path:          result.Path,
 			ID:            result.ID,
 			HasPostMethod: (result.ResourceMethods.POST != nil),
 		})
@@ -50,14 +51,12 @@ func getRestApiResources(cfg *config.TemplateConfig) ([]*RestApiResource, error)
 }
 
 func getResourceWithPath(resources []*RestApiResource, pathPart string) *RestApiResource {
-	var restApiResource *RestApiResource
 	for _, resource := range resources {
-		if resource.PathPart == pathPart {
-			restApiResource = resource
-			break
+		if resource.Path == strings.Join([]string{"/", pathPart}, "") {
+			return resource
 		}
 	}
-	return restApiResource
+	return nil
 }
 
 func setRestApiResourceID(resources []*RestApiResource, cfg *config.TemplateConfig) error {
@@ -90,6 +89,11 @@ func setRestApiResourceID(resources []*RestApiResource, cfg *config.TemplateConf
 			return err
 		}
 		cfg.RestApiResourceID = result.ID
+		restApiResource = &RestApiResource{
+			Path:          cfg.Name,
+			ID:            result.ID,
+			HasPostMethod: false,
+		}
 	}
 
 	// Check for POST method
@@ -107,7 +111,7 @@ func setRestApiRootResourceID(resources []*RestApiResource, cfg *config.Template
 		return errors.New("rest api id not set")
 	}
 
-	resource := getResourceWithPath(resources, "/")
+	resource := getResourceWithPath(resources, "")
 	if resource == nil {
 		return errors.New("did not find root apigateway resource")
 	}
