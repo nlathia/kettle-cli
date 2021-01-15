@@ -3,7 +3,6 @@ package aws
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"strings"
 
 	"github.com/operatorai/operator/command"
@@ -42,7 +41,6 @@ func getRestApiResources(cfg *config.TemplateConfig) ([]*RestApiResource, error)
 
 	resources := []*RestApiResource{}
 	for _, result := range results.Items {
-		fmt.Println(fmt.Sprintf("Found resource: %s, %s", result.Path, result.ID))
 		resources = append(resources, &RestApiResource{
 			Path:          result.Path,
 			ID:            result.ID,
