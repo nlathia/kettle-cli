@@ -30,7 +30,7 @@ func (GoogleCloud) Setup(settings *config.Settings) error {
 		return errors.New("please install the gcloud cli")
 	}
 
-	if err := gcloud.SetAccountID(settings); err != nil {
+	if err := gcloud.SetProjectID(settings); err != nil {
 		return err
 	}
 	if err := gcloud.SetDeploymentRegion(settings); err != nil {
