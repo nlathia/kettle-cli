@@ -12,11 +12,12 @@ import (
 
 const (
 	deploymentArchiveName = "deployment.zip"
+	goBuildFileName       = "main"
 )
 
 func createDeploymentArchive(cfg *config.TemplateConfig) (string, error) {
 	// Remove any existing deployment package
-	if err := removeDeploymentArchiveIfExists(); err != nil {
+	if err := removeDeploymentArchive(cfg); err != nil {
 		return "", err
 	}
 
@@ -42,15 +43,26 @@ func createDeploymentArchive(cfg *config.TemplateConfig) (string, error) {
 	return deploymentFile, nil
 }
 
-// removeDeploymentArchiveIfExists removes the deployment.zip file if present
-func removeDeploymentArchiveIfExists() error {
-	if _, err := os.Stat(deploymentArchiveName); err != nil {
+func removeDeploymentArchive(cfg *config.TemplateConfig) error {
+	if err := removeFile(deploymentArchiveName); err != nil {
+		return err
+	}
+	if strings.HasPrefix(cfg.Settings.Runtime, "go") {
+		if err := removeFile(goBuildFileName); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func removeFile(fileName string) error {
+	if _, err := os.Stat(fileName); err != nil {
 		if os.IsNotExist(err) {
 			return nil
 		}
 		return err
 	}
-	return os.Remove(deploymentArchiveName)
+	return os.Remove(fileName)
 }
 
 func addPythonLambdaToArchive(deploymentFile string, cfg *config.TemplateConfig) error {
@@ -127,7 +139,7 @@ func addGoLambdaToArchive(deploymentFile string, cfg *config.TemplateConfig) err
 		"GOOS=linux",
 		"go",
 		"build",
-		"-o", "main",
+		"-o", goBuildFileName,
 		"./...",
 	})
 	if err != nil {
