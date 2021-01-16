@@ -59,6 +59,9 @@ func (AWSLambdaFunction) Deploy(directory string, cfg *config.TemplateConfig) er
 		}
 	}
 
+	// Clean up deployment package (ignore errors)
+	_ = removeDeploymentArchive(cfg)
+
 	return waitForLambda(waitType, cfg)
 }
 
