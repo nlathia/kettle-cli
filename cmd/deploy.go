@@ -51,15 +51,6 @@ func validateDeployArgs(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	// Validate that the cloud provider is set up locally
-	cloud, err := clouds.GetCloudProvider(deploymentConfig.CloudProvider)
-	if err != nil {
-		return err
-	}
-	if err := cloud.Setup(); err != nil {
-		return err
-	}
-
 	// Store the settings for future re-use
 	config.WriteSettings(deploymentConfig.Settings)
 	return nil
@@ -68,12 +59,12 @@ func validateDeployArgs(cmd *cobra.Command, args []string) error {
 // runDeploy creates or updates a cloud function
 func runDeploy(cmd *cobra.Command, args []string) error {
 	// Get the cloud provider & service type
-	cloudProvider, err := clouds.GetCloudProvider(deploymentConfig.CloudProvider)
+	cloudProvider, err := clouds.GetCloudProvider(deploymentConfig.Settings.CloudProvider)
 	if err != nil {
 		return err
 	}
 
-	service, err := cloudProvider.GetService(deploymentConfig.DeploymentType)
+	service, err := cloudProvider.GetService(deploymentConfig.Settings.DeploymentType)
 	if err != nil {
 		return err
 	}
@@ -100,6 +91,7 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 	}
 
 	// Write the settings back (they may have been changed)
+	_ = config.WriteSettings(deploymentConfig.Settings)
 
 	// Return to the original root directory
 	os.Chdir(rootDir)

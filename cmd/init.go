@@ -38,7 +38,7 @@ func runInit(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
-	if err := cloud.Setup(); err != nil {
+	if err := cloud.Setup(settings); err != nil {
 		return err
 	}
 
