@@ -61,7 +61,7 @@ func validateDeployArgs(cmd *cobra.Command, args []string) error {
 	}
 
 	// Store the settings for future re-use
-	config.WriteSettings()
+	config.WriteSettings(deploymentConfig.Settings)
 	return nil
 }
 
@@ -98,6 +98,8 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
+
+	// Write the settings back (they may have been changed)
 
 	// Return to the original root directory
 	os.Chdir(rootDir)

@@ -12,7 +12,7 @@ type Service interface {
 }
 
 type Cloud interface {
-	Setup() error
+	Setup(settings *config.Settings) error
 
 	GetService(deploymentType string) (Service, error)
 }

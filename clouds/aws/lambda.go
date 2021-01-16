@@ -13,7 +13,7 @@ type AWSLambdaFunction struct{}
 
 func (AWSLambdaFunction) Deploy(directory string, cfg *config.TemplateConfig) error {
 	fmt.Println("🚢  Deploying ", cfg.Name, "as an AWS Lambda function")
-	fmt.Println("⏭  Entry point: ", cfg.FunctionName, fmt.Sprintf("(%s)", cfg.Runtime))
+	fmt.Println("⏭  Entry point: ", cfg.FunctionName, fmt.Sprintf("(%s)", cfg.Settings.Runtime))
 
 	deploymentArchive, err := createDeploymentArchive(cfg)
 	if err != nil {
@@ -51,8 +51,8 @@ func (AWSLambdaFunction) Deploy(directory string, cfg *config.TemplateConfig) er
 			}
 
 			url := fmt.Sprintf("https://%s.execute-api.%s.amazonaws.com/prod/%s",
-				cfg.RestApiID,
-				cfg.DeploymentRegion,
+				cfg.Settings.RestApiID,
+				cfg.Settings.DeploymentRegion,
 				cfg.Name,
 			)
 			fmt.Println("🔍  API Endpoint: ", url)
@@ -89,14 +89,13 @@ func updateLambda(deploymentArchive string, cfg *config.TemplateConfig) error {
 // https://docs.aws.amazon.com/lambda/latest/dg/services-apigateway-tutorial.html
 func addLambdaToRestAPI(deploymentArchive string, cfg *config.TemplateConfig) error {
 
-	// Select a deployment region
-	// @TODO this leads to unnecessary repetition and should be set in global settings
-	if err := setDeploymentRegion(cfg); err != nil {
+	// Select a deployment region (if not already set)
+	if err := SetDeploymentRegion(cfg.Settings); err != nil {
 		return err
 	}
 
 	// Create or set the REST API
-	if err := setRestApiID(cfg); err != nil {
+	if err := setRestApiID(cfg.Settings); err != nil {
 		return err
 	}
 
@@ -107,7 +106,7 @@ func addLambdaToRestAPI(deploymentArchive string, cfg *config.TemplateConfig) er
 	}
 
 	// Set the root resource ID
-	if err := setRestApiRootResourceID(resources, cfg); err != nil {
+	if err := setRestApiRootResourceID(resources, cfg.Settings); err != nil {
 		return err
 	}
 
@@ -135,7 +134,7 @@ func addLambdaToRestAPI(deploymentArchive string, cfg *config.TemplateConfig) er
 
 func createLambdaFunction(deploymentArchive string, cfg *config.TemplateConfig) error {
 	// Get the current AWS account ID
-	if err := setAccountID(cfg); err != nil {
+	if err := SetAccountID(cfg.Settings); err != nil {
 		return err
 	}
 
@@ -149,14 +148,14 @@ func createLambdaFunction(deploymentArchive string, cfg *config.TemplateConfig) 
 	var handler string
 	var runtime string
 	switch {
-	case strings.HasPrefix(cfg.Runtime, "python"):
+	case strings.HasPrefix(cfg.Settings.Runtime, "python"):
 		handler = fmt.Sprintf("main.%s", cfg.FunctionName)
-		runtime = cfg.Runtime
-	case strings.HasPrefix(cfg.Runtime, "go"):
+		runtime = cfg.Settings.Runtime
+	case strings.HasPrefix(cfg.Settings.Runtime, "go"):
 		handler = "main"
 		runtime = "go1.x"
 	default:
-		return errors.New(fmt.Sprintf("unknown runtime: %s", cfg.Runtime))
+		return errors.New(fmt.Sprintf("unknown runtime: %s", cfg.Settings.Runtime))
 	}
 
 	// Create the function
@@ -165,7 +164,7 @@ func createLambdaFunction(deploymentArchive string, cfg *config.TemplateConfig) 
 		"create-function",
 		"--function-name", cfg.Name,
 		"--runtime", runtime,
-		"--role", cfg.RoleArn,
+		"--role", cfg.Settings.RoleArn,
 		"--handler", handler,
 		"--package-type", "Zip",
 		"--zip-file", fmt.Sprintf("fileb://%s", deploymentArchive),
@@ -186,15 +185,15 @@ func addFunctionIntegration(cfg *config.TemplateConfig) error {
 	err := command.Execute("aws", []string{
 		"apigateway",
 		"put-integration",
-		"--rest-api-id", cfg.RestApiID,
+		"--rest-api-id", cfg.Settings.RestApiID,
 		"--resource-id", cfg.RestApiResourceID,
 		"--http-method", "POST",
 		"--type", "AWS",
 		"--integration-http-method", "POST",
 		"--uri", fmt.Sprintf("arn:aws:apigateway:%s:lambda:path/2015-03-31/functions/arn:aws:lambda:%s:%s:function:%s/invocations",
-			cfg.DeploymentRegion,
-			cfg.DeploymentRegion,
-			cfg.AccountID,
+			cfg.Settings.DeploymentRegion,
+			cfg.Settings.DeploymentRegion,
+			cfg.Settings.AccountID,
 			cfg.Name,
 		),
 	})
@@ -206,7 +205,7 @@ func addFunctionIntegration(cfg *config.TemplateConfig) error {
 	return command.Execute("aws", []string{
 		"apigateway",
 		"put-integration-response",
-		"--rest-api-id", cfg.RestApiID,
+		"--rest-api-id", cfg.Settings.RestApiID,
 		"--resource-id", cfg.RestApiResourceID,
 		"--http-method", "POST",
 		"--status-code", "200",
@@ -230,9 +229,9 @@ func addInvocationPermission(cfg *config.TemplateConfig) error {
 			"--action", "lambda:InvokeFunction",
 			"--principal", "apigateway.amazonaws.com",
 			"--source-arn", fmt.Sprintf("arn:aws:execute-api:%s:%s:%s/%s/POST/%s",
-				cfg.DeploymentRegion,
-				cfg.AccountID,
-				cfg.RestApiID,
+				cfg.Settings.DeploymentRegion,
+				cfg.Settings.AccountID,
+				cfg.Settings.RestApiID,
 				permission,
 				cfg.Name,
 			),

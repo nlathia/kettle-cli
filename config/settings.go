@@ -1,55 +1,58 @@
 package config
 
 import (
-	"fmt"
-	"os"
+	"io/ioutil"
 	"path"
 
 	"github.com/mitchellh/go-homedir"
-	"github.com/spf13/viper"
+	"gopkg.in/yaml.v2"
 )
 
-func getSettingsPath() string {
+func getSettingsFilePath() (string, error) {
 	// Find the home directory.
 	home, err := homedir.Dir()
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		return "", err
 	}
-	return path.Join(home, ".operator.yaml")
+	return path.Join(home, ".operator.yaml"), nil
 }
 
-func setSettingsPath() {
-	// Find the home directory.
-	home, err := homedir.Dir()
+func WriteSettings(cfg *Settings) error {
+	// Get the path to the settings file
+	filePath, err := getSettingsFilePath()
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		return err
 	}
 
-	// Search config in home directory with name ".operator" (without extension).
-	viper.AddConfigPath(home)
-	viper.SetConfigName(".operator")
-	viper.SetConfigType("yaml")
+	// Marshal & write the data
+	data, err := yaml.Marshal(cfg)
+	if err != nil {
+		return err
+	}
+
+	err = ioutil.WriteFile(filePath, []byte(data), 0644)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
-func ReadSettings() (*TemplateConfig, error) {
-	setSettingsPath()
-	viper.AutomaticEnv() // read in environment variables that match
-
-	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err != nil {
+func ReadSettings() (*Settings, error) {
+	// Get the path to the settings file
+	filePath, err := getSettingsFilePath()
+	if err != nil {
 		return nil, err
 	}
-	return &TemplateConfig{
-		CloudProvider:  viper.GetString(CloudProvider),
-		DeploymentType: viper.GetString(DeploymentType),
-		Runtime:        viper.GetString(Runtime),
-		RestApiID:      viper.GetString(RestApiID),
-	}, nil
-}
 
-func WriteSettings() {
-	configPath := getSettingsPath()
-	viper.WriteConfigAs(configPath)
+	// Read and unmarshal the file
+	contents, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		return nil, err
+	}
+
+	values := Settings{}
+	if err := yaml.Unmarshal(contents, &values); err != nil {
+		return nil, err
+	}
+	return &values, nil
 }

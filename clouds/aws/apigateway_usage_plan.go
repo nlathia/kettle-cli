@@ -42,7 +42,7 @@ func getUsagePlans(cfg *config.TemplateConfig) (map[string]string, bool, error) 
 	usagePlans := map[string]string{}
 	for _, result := range results.Items {
 		for _, stage := range result.ApiStages {
-			if stage.ID == cfg.RestApiID && stage.Stage == "prod" {
+			if stage.ID == cfg.Settings.RestApiID && stage.Stage == "prod" {
 				usagePlans[result.Name] = result.ID
 				if result.Name == operatorUsagePlanName {
 					operatorUsagePlanExists = true

@@ -21,13 +21,20 @@ func (GoogleCloud) GetService(deploymentType string) (Service, error) {
 	return nil, errors.New(fmt.Sprintf("unimplemented service: %s", deploymentType))
 }
 
-func (GoogleCloud) Setup() error {
+func (GoogleCloud) Setup(settings *config.Settings) error {
 	err := command.Execute("command", []string{
 		"-v",
 		"gcloud",
 	})
 	if err != nil {
 		return errors.New("please install the gcloud cli")
+	}
+
+	if err := gcloud.SetAccountID(settings); err != nil {
+		return err
+	}
+	if err := gcloud.SetDeploymentRegion(settings); err != nil {
+		return err
 	}
 	return nil
 }

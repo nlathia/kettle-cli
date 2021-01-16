@@ -7,7 +7,6 @@ import (
 
 	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
-	"github.com/spf13/viper"
 )
 
 type RestApiResource struct {
@@ -20,7 +19,7 @@ func getRestApiResources(cfg *config.TemplateConfig) ([]*RestApiResource, error)
 	output, err := command.ExecuteWithResult("aws", []string{
 		"apigateway",
 		"get-resources",
-		"--rest-api-id", cfg.RestApiID,
+		"--rest-api-id", cfg.Settings.RestApiID,
 	})
 	if err != nil {
 		return nil, err
@@ -74,9 +73,9 @@ func setRestApiResourceID(resources []*RestApiResource, cfg *config.TemplateConf
 		output, err := command.ExecuteWithResult("aws", []string{
 			"apigateway",
 			"create-resource",
-			"--rest-api-id", cfg.RestApiID,
+			"--rest-api-id", cfg.Settings.RestApiID,
 			"--path-part", cfg.Name,
-			"--parent-id", cfg.RestApiRootID,
+			"--parent-id", cfg.Settings.RestApiRootID,
 		})
 		if err != nil {
 			return err
@@ -103,11 +102,11 @@ func setRestApiResourceID(resources []*RestApiResource, cfg *config.TemplateConf
 	return nil
 }
 
-func setRestApiRootResourceID(resources []*RestApiResource, cfg *config.TemplateConfig) error {
-	if cfg.RestApiRootID != "" {
+func setRestApiRootResourceID(resources []*RestApiResource, settings *config.Settings) error {
+	if settings.RestApiRootID != "" {
 		return nil
 	}
-	if cfg.RestApiID == "" {
+	if settings.RestApiID == "" {
 		return errors.New("rest api id not set")
 	}
 
@@ -116,8 +115,7 @@ func setRestApiRootResourceID(resources []*RestApiResource, cfg *config.Template
 		return errors.New("did not find root apigateway resource")
 	}
 
-	cfg.RestApiRootID = resource.ID
-	viper.Set(config.RestApiRootResource, resource.ID)
+	settings.RestApiRootID = resource.ID
 	return nil
 }
 
@@ -148,7 +146,7 @@ func addResourcePOSTMethod(resource *RestApiResource, cfg *config.TemplateConfig
 	err = command.Execute("aws", []string{
 		"apigateway",
 		"put-method",
-		"--rest-api-id", cfg.RestApiID,
+		"--rest-api-id", cfg.Settings.RestApiID,
 		"--resource-id", cfg.RestApiResourceID,
 		"--http-method", "POST",
 		"--authorization-type", "NONE",
@@ -162,7 +160,7 @@ func addResourcePOSTMethod(resource *RestApiResource, cfg *config.TemplateConfig
 	err = command.Execute("aws", []string{
 		"apigateway",
 		"put-method-response",
-		"--rest-api-id", cfg.RestApiID,
+		"--rest-api-id", cfg.Settings.RestApiID,
 		"--resource-id", cfg.RestApiResourceID,
 		"--http-method", "POST",
 		"--status-code", "200",

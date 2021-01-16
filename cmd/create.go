@@ -28,7 +28,7 @@ The create command will create a directory with all the code to get you started.
 
 // When we create a deployment, we store everything in a yaml config file
 // we will need this later to deploy the function
-var configValues *config.TemplateConfig
+var settings *config.Settings
 var directoryPath string
 
 func init() {
@@ -37,8 +37,8 @@ func init() {
 }
 
 func validateCreateArgs(cmd *cobra.Command, args []string) error {
-	if configValues == nil {
-		return errors.New("config not found. Please run operator init.")
+	if settings == nil {
+		return errors.New("settings not found. Please run operator init.")
 	}
 
 	// Validate that args exist
@@ -65,6 +65,10 @@ func validateCreateArgs(cmd *cobra.Command, args []string) error {
 }
 
 func runCreate(cmd *cobra.Command, args []string) error {
+	// Create new config for this deployment, and copy over the global settings
+	configValues := &config.TemplateConfig{}
+	configValues.Settings = settings
+
 	// Set the directory and function name
 	configValues.Name = templates.CreateFunctionName(args)
 	configValues.FunctionName = templates.CreateEntryFunctionName(args, configValues.Runtime)
