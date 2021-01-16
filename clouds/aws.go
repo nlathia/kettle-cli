@@ -19,13 +19,20 @@ func (AmazonWebServices) GetService(deploymentType string) (Service, error) {
 	return nil, errors.New(fmt.Sprintf("unimplemented service: %s", deploymentType))
 }
 
-func (AmazonWebServices) Setup() error {
+func (AmazonWebServices) Setup(settings *config.Settings) error {
 	err := command.Execute("command", []string{
 		"-v",
 		"aws",
 	})
 	if err != nil {
 		return errors.New("please install the aws cli")
+	}
+
+	if err := aws.SetAccountID(settings); err != nil {
+		return err
+	}
+	if err := aws.SetDeploymentRegion(settings); err != nil {
+		return err
 	}
 	return nil
 }

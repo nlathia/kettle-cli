@@ -3,7 +3,6 @@ package cmd
 import (
 	"github.com/operatorai/operator/clouds"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 
 	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
@@ -25,19 +24,21 @@ func init() {
 }
 
 func runInit(cmd *cobra.Command, args []string) error {
+	settings := &config.Settings{}
+
 	// Pick a cloud provider
 	cloudProvider, err := command.PromptForValue("Cloud Provider", config.CloudProviderNames, false)
 	if err != nil {
 		return err
 	}
-	viper.Set(config.CloudProvider, cloudProvider)
+	settings.CloudProvider = cloudProvider
 
 	// Validate that the cloud provider is set up (e.g., the cli tool is installed)
 	cloud, err := clouds.GetCloudProvider(cloudProvider)
 	if err != nil {
 		return err
 	}
-	if err := cloud.Setup(); err != nil {
+	if err := cloud.Setup(settings); err != nil {
 		return err
 	}
 
@@ -47,7 +48,7 @@ func runInit(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
-	viper.Set(config.DeploymentType, deploymentType)
+	settings.DeploymentType = deploymentType
 
 	// Pick a programming language
 	availableLanguages := config.RuntimeNames[deploymentType]
@@ -55,9 +56,9 @@ func runInit(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
-	viper.Set(config.Runtime, language)
+	settings.Runtime = language
 
 	// Save the settings
-	config.WriteSettings()
+	config.WriteSettings(settings)
 	return nil
 }

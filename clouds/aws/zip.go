@@ -28,12 +28,12 @@ func createDeploymentArchive(cfg *config.TemplateConfig) (string, error) {
 	deploymentFile := path.Join(rootDir, deploymentArchiveName)
 
 	switch {
-	case strings.HasPrefix(cfg.Runtime, "python"):
+	case strings.HasPrefix(cfg.Settings.Runtime, "python"):
 		// https://docs.aws.amazon.com/lambda/latest/dg/python-package.html
 		if err := addPythonLambdaToArchive(deploymentFile, cfg); err != nil {
 			return "", err
 		}
-	case strings.HasPrefix(cfg.Runtime, "go"):
+	case strings.HasPrefix(cfg.Settings.Runtime, "go"):
 		// https://docs.aws.amazon.com/lambda/latest/dg/golang-package.html
 		if err := addGoLambdaToArchive(deploymentFile, cfg); err != nil {
 			return "", err
@@ -66,7 +66,7 @@ func addPythonLambdaToArchive(deploymentFile string, cfg *config.TemplateConfig)
 	}
 
 	// Python builds need to add the site-packages contents
-	sitePackages, err := getPyenvSitePackagesDirectory(cfg.Runtime)
+	sitePackages, err := getPyenvSitePackagesDirectory(cfg.Settings.Runtime)
 	if err != nil {
 		return err
 	}

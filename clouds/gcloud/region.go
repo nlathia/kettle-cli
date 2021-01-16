@@ -6,11 +6,10 @@ import (
 
 	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
-	"github.com/spf13/viper"
 )
 
-func setDeploymentRegion(cfg *config.TemplateConfig) error {
-	if cfg.DeploymentRegion != "" {
+func SetDeploymentRegion(settings *config.Settings) error {
+	if settings.DeploymentRegion != "" {
 		return nil
 	}
 
@@ -24,8 +23,7 @@ func setDeploymentRegion(cfg *config.TemplateConfig) error {
 		return err
 	}
 
-	cfg.DeploymentRegion = region
-	viper.Set(config.DeploymentRegion, region)
+	settings.DeploymentRegion = region
 	return nil
 }
 

@@ -5,15 +5,14 @@ import (
 
 	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
-	"github.com/spf13/viper"
 )
 
 const (
 	operatorApiName = "operator-apigateway"
 )
 
-func setRestApiID(cfg *config.TemplateConfig) error {
-	if cfg.RestApiID != "" {
+func setRestApiID(settings *config.Settings) error {
+	if settings.RestApiID != "" {
 		return nil
 	}
 
@@ -45,8 +44,7 @@ func setRestApiID(cfg *config.TemplateConfig) error {
 		}
 	}
 
-	cfg.RestApiID = restApiID
-	viper.Set(config.RestApiID, cfg.RestApiID)
+	settings.RestApiID = restApiID
 	return nil
 }
 
@@ -106,7 +104,7 @@ func deployRestApi(cfg *config.TemplateConfig) error {
 	return command.Execute("aws", []string{
 		"apigateway",
 		"create-deployment",
-		"--rest-api-id", cfg.RestApiID,
+		"--rest-api-id", cfg.Settings.RestApiID,
 		"--stage-name", "prod", // @TODO add support for different stages
 	})
 }

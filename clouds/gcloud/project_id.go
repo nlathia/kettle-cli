@@ -8,8 +8,8 @@ import (
 	"github.com/operatorai/operator/config"
 )
 
-func setProjectID(cfg *config.TemplateConfig) error {
-	if cfg.ProjectID != "" {
+func SetProjectID(settings *config.Settings) error {
+	if settings.ProjectID != "" {
 		return nil
 	}
 
@@ -23,7 +23,7 @@ func setProjectID(cfg *config.TemplateConfig) error {
 		return err
 	}
 
-	cfg.ProjectID = project
+	settings.ProjectID = project
 	return nil
 }
 

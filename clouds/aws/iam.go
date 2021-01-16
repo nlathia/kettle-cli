@@ -8,7 +8,6 @@ import (
 
 	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
-	"github.com/spf13/viper"
 )
 
 const (
@@ -16,7 +15,7 @@ const (
 )
 
 func setExecutionRole(cfg *config.TemplateConfig) error {
-	if cfg.RoleArn != "" {
+	if cfg.Settings.RoleArn != "" {
 		return nil
 	}
 
@@ -44,8 +43,7 @@ func setExecutionRole(cfg *config.TemplateConfig) error {
 		}
 	}
 
-	cfg.RoleArn = role
-	viper.Set(config.RoleArn, role)
+	cfg.Settings.RoleArn = role
 	return nil
 }
 

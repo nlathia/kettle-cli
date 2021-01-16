@@ -5,11 +5,10 @@ import (
 
 	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
-	"github.com/spf13/viper"
 )
 
-func setAccountID(cfg *config.TemplateConfig) error {
-	if cfg.AccountID != "" {
+func SetAccountID(settings *config.Settings) error {
+	if settings.AccountID != "" {
 		return nil
 	}
 
@@ -29,7 +28,6 @@ func setAccountID(cfg *config.TemplateConfig) error {
 		return err
 	}
 
-	cfg.AccountID = result.Account
-	viper.Set(config.AccountID, result.Account)
+	settings.AccountID = result.Account
 	return nil
 }

@@ -28,17 +28,21 @@ The create command will create a directory with all the code to get you started.
 
 // When we create a deployment, we store everything in a yaml config file
 // we will need this later to deploy the function
-var configValues *config.TemplateConfig
+var settings *config.Settings
 var directoryPath string
 
 func init() {
 	rootCmd.AddCommand(createCmd)
-	configValues, _ = config.ReadSettings()
+	var err error
+	settings, err = config.ReadSettings()
+	if err != nil {
+		settings = nil
+	}
 }
 
 func validateCreateArgs(cmd *cobra.Command, args []string) error {
-	if configValues == nil {
-		return errors.New("config not found. Please run operator init.")
+	if settings == nil {
+		return errors.New("settings not found. Please run operator init.")
 	}
 
 	// Validate that args exist
@@ -66,12 +70,16 @@ func validateCreateArgs(cmd *cobra.Command, args []string) error {
 
 func runCreate(cmd *cobra.Command, args []string) error {
 	// Set the directory and function name
-	configValues.Name = templates.CreateFunctionName(args)
-	configValues.FunctionName = templates.CreateEntryFunctionName(args, configValues.Runtime)
+	// Create new config for this deployment, and copy over the global settings
+	configValues := &config.TemplateConfig{
+		Name:         templates.CreateFunctionName(args),
+		FunctionName: templates.CreateEntryFunctionName(args, settings.Runtime),
+		Settings:     settings,
+	}
 
 	// Print out the config
-	fmt.Println("🎇  Type: ", configValues.DeploymentType)
-	fmt.Println("🎇  Language: ", configValues.Runtime)
+	fmt.Println("🎇  Type: ", configValues.Settings.DeploymentType)
+	fmt.Println("🎇  Language: ", configValues.Settings.Runtime)
 
 	// Create a directory with the function name
 	err := os.Mkdir(directoryPath, os.ModePerm)
@@ -80,7 +88,7 @@ func runCreate(cmd *cobra.Command, args []string) error {
 	}
 
 	// Collect template root path and files
-	templateRoot, templateFiles, err := getTemplateFiles()
+	templateRoot, templateFiles, err := getTemplateFiles(configValues.Settings)
 	if err != nil {
 		return err
 	}
@@ -138,14 +146,14 @@ func runCreate(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func getTemplateFiles() (string, []string, error) {
+func getTemplateFiles(settings *config.Settings) (string, []string, error) {
 	// Iterate on all of the template files
 	// Root: templates/<language>/<cloud-provider>/<type>/
 	templateRoot := fmt.Sprintf(
 		"templates/%s/%s/%s/",
-		strings.Replace(configValues.Runtime, ".", "", 1),
-		configValues.CloudProvider,
-		configValues.DeploymentType,
+		strings.Replace(settings.Runtime, ".", "", 1),
+		settings.CloudProvider,
+		settings.DeploymentType,
 	)
 
 	assetNames := templates.AssetNames()
