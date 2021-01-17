@@ -23,7 +23,7 @@ func (AmazonWebServices) Setup(settings *config.Settings) error {
 	err := command.Execute("command", []string{
 		"-v",
 		"aws",
-	})
+	}, "Looking for aws cli")
 	if err != nil {
 		return errors.New("please install the aws cli")
 	}

@@ -16,7 +16,7 @@ func SetAccountID(settings *config.Settings) error {
 		"sts",
 		"get-caller-identity",
 		"--output", "json",
-	})
+	}, "Retrieving aws caller identity")
 	if err != nil {
 		return err
 	}

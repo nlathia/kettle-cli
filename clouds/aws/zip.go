@@ -72,7 +72,7 @@ func addPythonLambdaToArchive(deploymentFile string, cfg *config.TemplateConfig)
 		deploymentArchiveName,
 		"-r",
 		".",
-	})
+	}, "Adding code to the deployment archive")
 	if err != nil {
 		return err
 	}
@@ -95,7 +95,7 @@ func addPythonLambdaToArchive(deploymentFile string, cfg *config.TemplateConfig)
 			"-r",
 			deploymentFile,
 			".",
-		})
+		}, "Adding site-packages to the deployment archive")
 		if err != nil {
 			return err
 		}
@@ -107,12 +107,16 @@ func addPythonLambdaToArchive(deploymentFile string, cfg *config.TemplateConfig)
 }
 
 func getPyenvSitePackagesDirectory(pythonVersion string) (string, error) {
-	pyenvRoot, err := command.ExecuteWithResult("pyenv", []string{"root"})
+	pyenvRoot, err := command.ExecuteWithResult("pyenv", []string{
+		"root",
+	}, "Finding pyenv root")
 	if err != nil {
 		return "", err
 	}
 
-	pyenvLocal, err := command.ExecuteWithResult("pyenv", []string{"local"})
+	pyenvLocal, err := command.ExecuteWithResult("pyenv", []string{
+		"local",
+	}, "Finding pyenv local version")
 	if err != nil {
 		return "", err
 	}
@@ -129,7 +133,7 @@ func addGoLambdaToArchive(deploymentFile string, cfg *config.TemplateConfig) err
 	err := command.Execute("go", []string{
 		"get",
 		"./...",
-	})
+	}, "Running go get ./...")
 	if err != nil {
 		return err
 	}
@@ -141,7 +145,7 @@ func addGoLambdaToArchive(deploymentFile string, cfg *config.TemplateConfig) err
 		"build",
 		"-o", goBuildFileName,
 		"./...",
-	})
+	}, "Building Go binary for GOOS=linux")
 	if err != nil {
 		return err
 	}
@@ -150,5 +154,5 @@ func addGoLambdaToArchive(deploymentFile string, cfg *config.TemplateConfig) err
 	return command.Execute("zip", []string{
 		deploymentFile,
 		"main",
-	})
+	}, "Adding Go binary to deployment archive")
 }

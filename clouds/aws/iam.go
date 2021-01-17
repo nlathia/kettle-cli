@@ -52,7 +52,7 @@ func getExecutionRoles() (map[string]string, bool, error) {
 		"iam",
 		"list-roles",
 		"--output", "json",
-	})
+	}, "Collecting available IAM roles")
 	if err != nil {
 		return nil, false, err
 	}
@@ -119,7 +119,7 @@ func createExecutionRole() (string, error) {
 		"--role-name", operatorExecutionRole,
 		"--assume-role-policy-document", fmt.Sprintf("file://%s", f.Name()),
 		"--output", "json",
-	})
+	}, fmt.Sprintf("Creating an IAM role called: %s", operatorExecutionRole))
 	if err != nil {
 		return "", err
 	}

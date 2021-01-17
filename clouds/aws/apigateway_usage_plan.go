@@ -16,7 +16,7 @@ func getUsagePlans(cfg *config.TemplateConfig) (map[string]string, bool, error) 
 		"apigateway",
 		"get-usage-plans",
 		"--output", "json",
-	})
+	}, "Collecting available usage plans")
 	if err != nil {
 		if err.Error() == "exit status 254" {
 			return map[string]string{}, false, nil

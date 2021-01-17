@@ -35,7 +35,7 @@ func getGoogleCloudProjects() (map[string]string, error) {
 		"list",
 		"--format=\"json\"",
 		fmt.Sprintf("--limit=%d", projectListLimit),
-	})
+	}, "Collecting gcloud projects")
 	if err != nil {
 		return nil, err
 	}
