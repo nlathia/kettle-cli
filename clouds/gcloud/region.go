@@ -34,7 +34,7 @@ func getGoogleCloudRegions() (map[string]string, error) {
 		"regions",
 		"list",
 		"--format=\"json\"",
-	})
+	}, "Collecting gcloud regions")
 	if err != nil {
 		return nil, err
 	}

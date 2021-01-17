@@ -52,7 +52,7 @@ func getRestApis() (map[string]string, bool, error) {
 	output, err := command.ExecuteWithResult("aws", []string{
 		"apigateway",
 		"get-rest-apis",
-	})
+	}, "Collecting available REST APIs")
 	if err != nil {
 		if err.Error() == "exit status 254" {
 			return map[string]string{}, false, nil
@@ -86,7 +86,7 @@ func createRestApi() (string, error) {
 		"apigateway",
 		"create-rest-api",
 		"--name", operatorApiName,
-	})
+	}, "Creating a new REST API")
 	if err != nil {
 		return "", err
 	}
@@ -106,5 +106,5 @@ func deployRestApi(cfg *config.TemplateConfig) error {
 		"create-deployment",
 		"--rest-api-id", cfg.Settings.RestApiID,
 		"--stage-name", "prod", // @TODO add support for different stages
-	})
+	}, "Deploying the REST API")
 }

@@ -3,6 +3,7 @@ package aws
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/operatorai/operator/command"
@@ -20,7 +21,7 @@ func getRestApiResources(cfg *config.TemplateConfig) ([]*RestApiResource, error)
 		"apigateway",
 		"get-resources",
 		"--rest-api-id", cfg.Settings.RestApiID,
-	})
+	}, "Collecting API resources")
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +77,7 @@ func setRestApiResourceID(resources []*RestApiResource, cfg *config.TemplateConf
 			"--rest-api-id", cfg.Settings.RestApiID,
 			"--path-part", cfg.Name,
 			"--parent-id", cfg.Settings.RestApiRootID,
-		})
+		}, fmt.Sprintf("Creating /%s API resource", cfg.Name))
 		if err != nil {
 			return err
 		}
@@ -151,7 +152,7 @@ func addResourcePOSTMethod(resource *RestApiResource, cfg *config.TemplateConfig
 		"--http-method", "POST",
 		"--authorization-type", "NONE",
 		apiKeySetting,
-	})
+	}, "Adding a POST method to the API resource")
 	if err != nil {
 		return err
 	}
@@ -165,7 +166,7 @@ func addResourcePOSTMethod(resource *RestApiResource, cfg *config.TemplateConfig
 		"--http-method", "POST",
 		"--status-code", "200",
 		"--response-models", "application/json=Empty",
-	})
+	}, "Setting the resource response type to JSON")
 	if err != nil {
 		return err
 	}

@@ -26,5 +26,5 @@ func (GoogleCloudFunction) Deploy(directory string, cfg *config.TemplateConfig) 
 		fmt.Sprintf("--entry-point=%s", cfg.FunctionName),
 		fmt.Sprintf("--region=%s", cfg.Settings.DeploymentRegion),
 		"--allow-unauthenticated",
-	})
+	}, "Deploying Cloud Function")
 }

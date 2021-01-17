@@ -25,7 +25,7 @@ func (GoogleCloud) Setup(settings *config.Settings) error {
 	err := command.Execute("command", []string{
 		"-v",
 		"gcloud",
-	})
+	}, "Looking for gcloud cli")
 	if err != nil {
 		return errors.New("please install the gcloud cli")
 	}

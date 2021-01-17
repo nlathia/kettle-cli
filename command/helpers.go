@@ -13,27 +13,28 @@ import (
 	"github.com/operatorai/operator/config"
 )
 
-func getSpinner() *spinner.Spinner {
+func getSpinner(statusMessage string) *spinner.Spinner {
 	s := spinner.New(spinner.CharSets[39], 100*time.Millisecond)
-	s.Suffix = "  Working..."
+	s.Suffix = fmt.Sprintf("  %s...", statusMessage)
 	s.Start()
 	return s
 }
 
-func Execute(command string, args []string) error {
-	_, err := ExecuteWithResult(command, args)
+func Execute(command string, args []string, statusMessage string) error {
+	_, err := ExecuteWithResult(command, args, statusMessage)
 	return err
 }
 
-func ExecuteWithResult(command string, args []string) ([]byte, error) {
+func ExecuteWithResult(command string, args []string, statusMessage string) ([]byte, error) {
 	osCmd := exec.Command(command, args...)
 	if config.DebugMode {
 		fmt.Println("\n", command, strings.Join(args, " "))
 		osCmd.Stderr = os.Stderr
+	} else {
+		s := getSpinner(statusMessage)
+		defer s.Stop()
 	}
 
-	s := getSpinner()
-	defer s.Stop()
 	output, err := osCmd.Output()
 	if err != nil {
 		return nil, err

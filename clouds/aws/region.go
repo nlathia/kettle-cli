@@ -32,7 +32,7 @@ func getAWSRegions() (map[string]string, error) {
 		"ec2",
 		"describe-regions",
 		"--output", "json",
-	})
+	}, "Collecting ec2 regions")
 	if err != nil {
 		return nil, err
 	}
