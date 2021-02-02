@@ -41,11 +41,7 @@ func (AWSLambdaFunction) Deploy(directory string, cfg *config.TemplateConfig) er
 		// been created, then there is currently no way to re-deploy and create the
 		// REST API. This should be changed so that a deployment asks whether to add
 		// a function to an API if e.g. it hasn't already been added to one
-		addToApi, err := command.PromptToConfirm("Add Lambda function to a REST API")
-		if err != nil {
-			return err
-		}
-		if addToApi {
+		if command.PromptToConfirm("Add Lambda function to a REST API") {
 			if err := addLambdaToRestAPI(deploymentArchive, cfg); err != nil {
 				return err
 			}
