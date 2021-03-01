@@ -22,8 +22,7 @@ func (GoogleCloud) GetService(deploymentType string) (Service, error) {
 }
 
 func (GoogleCloud) Setup(settings *config.Settings) error {
-	err := command.Execute("command", []string{
-		"-v",
+	err := command.Execute("type", []string{
 		"gcloud",
 	}, "Looking for gcloud cli")
 	if err != nil {
