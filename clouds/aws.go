@@ -20,8 +20,7 @@ func (AmazonWebServices) GetService(deploymentType string) (Service, error) {
 }
 
 func (AmazonWebServices) Setup(settings *config.Settings) error {
-	err := command.Execute("command", []string{
-		"-v",
+	err := command.Execute("type", []string{
 		"aws",
 	}, "Looking for aws cli")
 	if err != nil {
