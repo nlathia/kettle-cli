@@ -24,7 +24,7 @@ func (GoogleCloud) GetService(deploymentType string) (Service, error) {
 func (GoogleCloud) Setup(settings *config.Settings) error {
 	_, err := exec.LookPath("gcloud")
 	if err != nil {
-		return errors.New("please install the gcloud cli")
+		return errors.New(fmt.Sprintf("please install the gcloud cli: %s", err))
 	}
 
 	if err := gcloud.SetProjectID(settings); err != nil {

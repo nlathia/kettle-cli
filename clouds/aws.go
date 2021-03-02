@@ -22,7 +22,7 @@ func (AmazonWebServices) GetService(deploymentType string) (Service, error) {
 func (AmazonWebServices) Setup(settings *config.Settings) error {
 	_, err := exec.LookPath("aws")
 	if err != nil {
-		return errors.New("please install the aws cli")
+		return errors.New(fmt.Sprintf("please install the aws cli: %s", err))
 	}
 
 	if err := aws.SetAccountID(settings); err != nil {
