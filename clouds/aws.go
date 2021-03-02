@@ -22,9 +22,6 @@ func (AmazonWebServices) GetService(deploymentType string) (Service, error) {
 func (AmazonWebServices) Setup(settings *config.Settings) error {
 	_, err := exec.LookPath("aws")
 	if err != nil {
-		return errors.New("please install the gcloud cli")
-	}
-	if err != nil {
 		return errors.New("please install the aws cli")
 	}
 
