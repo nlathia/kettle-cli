@@ -27,4 +27,5 @@ RUN mkdir -p "${TARGET}" \
 	&& cd "${TARGET}" \
 	&& git clone https://github.com/operatorai/operator.git \
 	&& cd operator \
-	&& make full-install 
+	&& make get \
+	&& make install 
