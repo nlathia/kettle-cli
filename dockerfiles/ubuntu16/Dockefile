@@ -7,7 +7,8 @@ RUN apt-get update \
 # Install Golang
 RUN wget https://dl.google.com/go/go1.15.2.linux-amd64.tar.gz \
 	&& tar -xvf go1.15.2.linux-amd64.tar.gz \
-	&& mv go /usr/local 
+	&& mv go /usr/local \
+	&& rm go1.15.2.linux-amd64.tar.gz
 
 # Configure Go root, path, bin
 ENV GOROOT="/usr/local/go"
