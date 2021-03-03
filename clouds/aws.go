@@ -3,9 +3,9 @@ package clouds
 import (
 	"errors"
 	"fmt"
+	"os/exec"
 
 	"github.com/operatorai/operator/clouds/aws"
-	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
 )
 
@@ -20,11 +20,9 @@ func (AmazonWebServices) GetService(deploymentType string) (Service, error) {
 }
 
 func (AmazonWebServices) Setup(settings *config.Settings) error {
-	err := command.Execute("type", []string{
-		"aws",
-	}, "Looking for aws cli")
+	_, err := exec.LookPath("aws")
 	if err != nil {
-		return errors.New("please install the aws cli")
+		return errors.New(fmt.Sprintf("please install the aws cli: %s", err))
 	}
 
 	if err := aws.SetAccountID(settings); err != nil {

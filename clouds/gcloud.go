@@ -3,9 +3,9 @@ package clouds
 import (
 	"errors"
 	"fmt"
+	"os/exec"
 
 	"github.com/operatorai/operator/clouds/gcloud"
-	"github.com/operatorai/operator/command"
 	"github.com/operatorai/operator/config"
 )
 
@@ -22,11 +22,9 @@ func (GoogleCloud) GetService(deploymentType string) (Service, error) {
 }
 
 func (GoogleCloud) Setup(settings *config.Settings) error {
-	err := command.Execute("type", []string{
-		"gcloud",
-	}, "Looking for gcloud cli")
+	_, err := exec.LookPath("gcloud")
 	if err != nil {
-		return errors.New("please install the gcloud cli")
+		return errors.New(fmt.Sprintf("please install the gcloud cli: %s", err))
 	}
 
 	if err := gcloud.SetProjectID(settings); err != nil {
