@@ -2,26 +2,28 @@ FROM ubuntu:16.04
 
 RUN apt-get update \
 	&& apt-get -y upgrade \
-	&& apt-get install -y wget git curl
+	&& apt-get install -y wget git curl make
 
 # Install Golang
 RUN wget https://dl.google.com/go/go1.15.2.linux-amd64.tar.gz \
 	&& tar -xvf go1.15.2.linux-amd64.tar.gz \
 	&& mv go /usr/local 
 
+# Configure Go root, path, bin
 ENV GOROOT="/usr/local/go"
-ENV GOPATH="${HOME}/src"
+ENV GOPATH="${HOME}/"
 ENV GOBIN="${GOPATH}/bin"
 ENV PATH="${GOPATH}/bin:$GOROOT/bin:${PATH}"
+RUN apt-get install -y go-bindata
 
-# Install the Google Cloud CLI (gcloud init will still need to be run manually)
+# Install the Google Cloud CLI 
+# Note: gcloud init will still need to be run manually
 RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg  add - && apt-get update -y && apt-get install google-cloud-sdk -y
 
 # Install the operator CLI from source
-ARG TARGET="${GOPATH}/github.com/operatorai/"
+ARG TARGET="${GOPATH}/src/github.com/operatorai/"
 RUN mkdir -p "${TARGET}" \
 	&& cd "${TARGET}" \
 	&& git clone https://github.com/operatorai/operator.git \
 	&& cd operator \
-	&& go get ./... \
-	&& go install .
+	&& make full-install 
