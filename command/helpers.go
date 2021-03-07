@@ -85,3 +85,21 @@ func PromptToConfirm(label string) bool {
 	}
 	return false
 }
+
+func PromptForKeyValue(label string, values map[string]string) (string, string, error) {
+	valueLabels := []string{}
+	for valueLabel, _ := range values {
+		valueLabels = append(valueLabels, valueLabel)
+	}
+	sort.Strings(valueLabels)
+
+	prompt := promptui.Select{
+		Label: label,
+		Items: valueLabels,
+	}
+	_, result, err := prompt.Run()
+	if err != nil {
+		return "", "", err
+	}
+	return result, values[result], nil
+}
