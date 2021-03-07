@@ -9,7 +9,7 @@ import (
 )
 
 func SetProjectID(settings *config.Settings) error {
-	if settings.ProjectID != "" {
+	if settings.ProjectName != "" && settings.ProjectID == "" {
 		return nil
 	}
 
@@ -18,12 +18,13 @@ func SetProjectID(settings *config.Settings) error {
 		return err
 	}
 
-	project, err := command.PromptForValue("Google Cloud Project", projects, false)
+	projectName, projectID, err := command.PromptForKeyValue("Google Cloud Project", projects)
 	if err != nil {
 		return err
 	}
 
-	settings.ProjectID = project
+	settings.ProjectName = projectName
+	settings.ProjectID = projectID
 	return nil
 }
 
@@ -57,8 +58,7 @@ func getGoogleCloudProjects() (map[string]string, error) {
 
 	projectIDs := map[string]string{}
 	for _, project := range results {
-		displayName := fmt.Sprintf("%s (%s)", project.Name, project.ProjectID)
-		projectIDs[displayName] = project.Name
+		projectIDs[project.Name] = project.ProjectID
 	}
 	return projectIDs, nil
 }

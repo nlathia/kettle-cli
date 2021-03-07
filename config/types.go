@@ -8,7 +8,8 @@ type Settings struct {
 	DeploymentRegion string `yaml:"region"`
 
 	// GCP Variables
-	ProjectID string `yaml:"project_id,omitempty"`
+	ProjectName string `yaml:"project_name,omitempty"`
+	ProjectID   string `yaml:"project_id,omitempty"`
 
 	// AWS Variables
 	AccountID     string `yaml:"account_id,omitempty"`

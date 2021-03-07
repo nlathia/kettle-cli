@@ -18,12 +18,13 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.TemplateConfig) error
 		return err
 	}
 
+	containerTag := fmt.Sprintf("gcr.io/%s/%s", cfg.Settings.ProjectName, cfg.Name)
 	// Build the docker container
 	// gcloud builds submit --tag gcr.io/PROJECT-ID/helloworld
 	err := command.Execute("gcloud", []string{
 		"builds",
 		"submit",
-		"--tag", fmt.Sprintf("gcr.io/%s/%s", cfg.Settings.ProjectID, cfg.Name),
+		"--tag", containerTag,
 	}, "Building docker container")
 	if err != nil {
 		return err
@@ -36,7 +37,7 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.TemplateConfig) error
 		"run",
 		"deploy",
 		cfg.Name,
-		"--image", fmt.Sprintf("gcr.io/%s/%s", cfg.Settings.ProjectID, cfg.Name),
+		"--image", containerTag,
 		"--platform", "managed",
 		"--allow-unauthenticated",
 		fmt.Sprintf("--region=%s", cfg.Settings.DeploymentRegion),

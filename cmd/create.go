@@ -80,6 +80,7 @@ func runCreate(cmd *cobra.Command, args []string) error {
 	// Print out the config
 	fmt.Println("🎇  Type: ", configValues.Settings.DeploymentType)
 	fmt.Println("🎇  Language: ", configValues.Settings.Runtime)
+	fmt.Println("🎇  Name: ", configValues.Name)
 
 	// Create a directory with the function name
 	err := os.Mkdir(directoryPath, os.ModePerm)
@@ -90,7 +91,7 @@ func runCreate(cmd *cobra.Command, args []string) error {
 	// Collect template root path and files
 	templateRoot, templateFiles, err := getTemplateFiles(configValues.Settings)
 	if err != nil {
-		return err
+		return cleanUp(directoryPath, err)
 	}
 
 	for _, assetName := range templateFiles {

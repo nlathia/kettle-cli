@@ -29,12 +29,12 @@ func CreateEntryFunctionName(args []string, runtime string) string {
 		}
 		return strcase.ToSnake(entryName)
 	case strings.Contains(runtime, "go"):
-		// Note: entry names are not actually used for Go lambdas
-		entryName, err := removePunctuation(args[0], "_")
+		entryName, err := removePunctuation(args[0], " ")
 		if err != nil {
 			log.Fatal(err)
 		}
-		return strcase.ToSnake(entryName)
+		entryName = strings.Title(entryName)
+		return strings.ReplaceAll(entryName, " ", "")
 	default:
 		// Currently unreachable, as the `runtime` args
 		// is checked before starting

@@ -17,6 +17,11 @@ func (GoogleCloudFunction) Deploy(directory string, cfg *config.TemplateConfig) 
 		return err
 	}
 
+	fmt.Println(fmt.Sprintf("🔍  https://%s-%s.cloudfunctions.net/%s",
+		cfg.Settings.DeploymentRegion,
+		cfg.Settings.ProjectID,
+		cfg.Name,
+	))
 	return command.Execute("gcloud", []string{
 		"functions",
 		"deploy",
