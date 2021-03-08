@@ -9,7 +9,7 @@ import (
 )
 
 func SetProjectID(settings *config.Settings) error {
-	if settings.ProjectName != "" && settings.ProjectID == "" {
+	if settings.ProjectName != "" && settings.ProjectID != "" {
 		return nil
 	}
 
