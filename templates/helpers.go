@@ -5,7 +5,6 @@ import (
 	"os"
 	"path"
 	"regexp"
-	"strings"
 
 	"github.com/iancoleman/strcase"
 )
@@ -16,30 +15,6 @@ func removePunctuation(input, replaceWith string) (string, error) {
 		return "", err
 	}
 	return reg.ReplaceAllString(input, replaceWith), nil
-}
-
-// The entry function's case will vary based on the language;
-// Right now, we're only supporting Python & Go so we use ToSnake()
-func CreateEntryFunctionName(args []string, runtime string) string {
-	switch {
-	case strings.Contains(runtime, "python"):
-		entryName, err := removePunctuation(args[0], "_")
-		if err != nil {
-			log.Fatal(err)
-		}
-		return strcase.ToSnake(entryName)
-	case strings.Contains(runtime, "go"):
-		entryName, err := removePunctuation(args[0], " ")
-		if err != nil {
-			log.Fatal(err)
-		}
-		entryName = strings.Title(entryName)
-		return strings.ReplaceAll(entryName, " ", "")
-	default:
-		// Currently unreachable, as the `runtime` args
-		// is checked before starting
-		return args[0]
-	}
 }
 
 // The cloud function name is derived from the directory name
