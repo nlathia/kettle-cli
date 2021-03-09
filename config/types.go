@@ -2,8 +2,6 @@ package config
 
 // Values that do not change across multiple deployments
 type Settings struct {
-	CloudProvider    string `yaml:"cloud_provider"`
-	DeploymentType   string `yaml:"deployment_type"`
 	Runtime          string `yaml:"runtime"`
 	DeploymentRegion string `yaml:"region"`
 
@@ -20,6 +18,9 @@ type Settings struct {
 
 // Values that are specific to each deployment
 type TemplateConfig struct {
+	CloudProvider  string `yaml:"cloud_provider"`
+	DeploymentType string `yaml:"deployment_type"`
+
 	Settings *Settings `yaml:"settings"`
 
 	// operator create values

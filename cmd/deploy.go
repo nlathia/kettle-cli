@@ -38,6 +38,7 @@ func validateDeployArgs(cmd *cobra.Command, args []string) error {
 		return errors.New("please specify a path or directory name")
 	}
 
+	// @TODO future -- deploy from git PR
 	// Validate that the function path exists
 	var err error
 	deploymentPath, err = getDeploymentPath(args)
@@ -59,12 +60,12 @@ func validateDeployArgs(cmd *cobra.Command, args []string) error {
 // runDeploy creates or updates a cloud function
 func runDeploy(cmd *cobra.Command, args []string) error {
 	// Get the cloud provider & service type
-	cloudProvider, err := clouds.GetCloudProvider(deploymentConfig.Settings.CloudProvider)
+	cloudProvider, err := clouds.GetCloudProvider(deploymentConfig.CloudProvider)
 	if err != nil {
 		return err
 	}
 
-	service, err := cloudProvider.GetService(deploymentConfig.Settings.DeploymentType)
+	service, err := cloudProvider.GetService(deploymentConfig.DeploymentType)
 	if err != nil {
 		return err
 	}
