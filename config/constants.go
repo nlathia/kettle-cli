@@ -43,25 +43,25 @@ var CloudProviderNames = map[string]string{
 }
 
 var DeploymentNames = map[string]map[string]string{
-	GoogleCloud: map[string]string{
+	GoogleCloud: {
 		"Google Cloud Function": GoogleCloudFunction,
 		"Google Cloud Run":      GoogleCloudRun,
 	},
-	AWS: map[string]string{
+	AWS: {
 		"AWS Lambda": AWSLambda,
 	},
 }
 
 var RuntimeNames = map[string]map[string]string{
-	GoogleCloudFunction: map[string]string{
+	GoogleCloudFunction: {
 		"Python (3.7)": "python37", // Unlike aws, requires "37"
 		"Go (1.13)":    "go113",
 	},
-	GoogleCloudRun: map[string]string{
+	GoogleCloudRun: {
 		"Python (3.7)": "python37", // Unlike aws, requires "37"
 		"Go (1.13)":    "go113",
 	},
-	AWSLambda: map[string]string{
+	AWSLambda: {
 		"Python (3.7)": "python3.7", // Unlike gcloud, requires the "3.7"
 		"Go (1.13)":    "go1.13",
 	},
