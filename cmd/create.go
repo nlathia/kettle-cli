@@ -44,16 +44,39 @@ func validateCreateArgs(cmd *cobra.Command, args []string) error {
 }
 
 func runCreate(cmd *cobra.Command, args []string) error {
+	var err error
+	templatePath := args[0]
+
+	// Inspect templatePath, which can be a local directory or git repo
+	if strings.HasSuffix(templatePath, ".git") {
+		// If it's a git repo: clone it into a tmp directory
+		templatePath, err = ioutil.TempDir("", "operator")
+		if err != nil {
+
+			return err
+		}
+		defer os.RemoveAll(templatePath)
+
+		err = command.Execute("git", []string{
+			"clone",
+			args[0],
+			templatePath,
+		}, "Cloning template...")
+		if err != nil {
+			return err
+		}
+	}
+
 	// Create the directory where the template will be populated
 	projectName, directoryPath, err := createProjectDirectory()
 	if err != nil {
-		return err
+		return cleanUp(directoryPath, err)
 	}
 
 	// Read the template config
-	templateConfig, err := templates.ReadConfig(args[0])
+	templateConfig, err := templates.ReadConfig(templatePath)
 	if err != nil {
-		return err
+		return cleanUp(directoryPath, err)
 	}
 
 	templateValues := map[string]string{
@@ -62,7 +85,7 @@ func runCreate(cmd *cobra.Command, args []string) error {
 	for _, templateValue := range templateConfig.Template {
 		userInput, err := command.PromptForString(templateValue.Prompt)
 		if err != nil {
-			return err
+			return cleanUp(directoryPath, err)
 		}
 		templateValues[templateValue.Key] = userInput
 	}
@@ -77,7 +100,7 @@ func runCreate(cmd *cobra.Command, args []string) error {
 	// 	Runtime:        jsonConfig.Config.Runtime,
 	// }
 
-	templateDirectory := path.Join(args[0], "template")
+	templateDirectory := path.Join(templatePath, "template")
 	err = filepath.Walk(templateDirectory, func(filePath string, info fs.FileInfo, err error) error {
 		if err != nil {
 			if config.DebugMode {
@@ -144,7 +167,7 @@ func runCreate(cmd *cobra.Command, args []string) error {
 }
 
 func createProjectDirectory() (string, string, error) {
-	directoryName, err := command.PromptForString("Project name:")
+	directoryName, err := command.PromptForString("Project name")
 	if err != nil {
 		return "", "", err
 	}
