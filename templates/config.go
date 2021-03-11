@@ -11,7 +11,8 @@ const (
 )
 
 type Template struct {
-	Config struct {
+	ProjectName string `json:"name"`
+	Config      struct {
 		Runtime        string `json:"runtime"`
 		CloudProvider  string `json:"cloud_provider"`
 		DeploymentType string `json:"deployment_type"`
@@ -21,7 +22,8 @@ type Template struct {
 		Prompt string `json:"prompt"`
 		Type   string `json:"type"`
 		Key    string `json:"key"`
-	} `json:"template"`
+		Value  string `json:"value"`
+	} `json:"template,omitempty"`
 }
 
 func ReadConfig(templatePath string) (*Template, error) {
@@ -37,4 +39,14 @@ func ReadConfig(templatePath string) (*Template, error) {
 		return nil, err
 	}
 	return template, nil
+}
+
+func WriteConfig(projectPath string, config *Template) error {
+	data, err := json.MarshalIndent(config, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	configPath := path.Join(projectPath, configFileName)
+	return ioutil.WriteFile(configPath, data, 0644)
 }

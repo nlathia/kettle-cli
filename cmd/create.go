@@ -70,19 +70,25 @@ func runCreate(cmd *cobra.Command, args []string) error {
 	// Create the directory where the template will be populated
 	projectName, directoryPath, err := createProjectDirectory()
 	if err != nil {
-		return cleanUp(directoryPath, err)
+		if strings.HasPrefix(err.Error(), "directory already") {
+			fmt.Println(fmt.Sprintf("\n❌ %s", err.Error()))
+			return nil
+		}
+		return err
 	}
 
 	// Ask the user for any input that is required
+	templateConfig.ProjectName = projectName
 	templateValues := map[string]string{
 		"ProjectName": projectName,
 	}
-	for _, templateValue := range templateConfig.Template {
-		userInput, err := command.PromptForString(templateValue.Prompt)
+	for i, templateEntry := range templateConfig.Template {
+		userInput, err := command.PromptForString(templateEntry.Prompt)
 		if err != nil {
 			return cleanUp(directoryPath, err)
 		}
-		templateValues[templateValue.Key] = userInput
+		templateConfig.Template[i].Value = userInput
+		templateValues[templateEntry.Key] = userInput
 	}
 
 	// The template files are in a subdirectory of templatePath
@@ -115,12 +121,10 @@ func runCreate(cmd *cobra.Command, args []string) error {
 		return cleanUp(directoryPath, err)
 	}
 
-	// @TODO re-enable
-	// err = config.WriteConfig(configValues, directoryPath)
-	// if err != nil {
-	// 	return cleanUp(directoryPath, err)
-	// }
-
+	err = templates.WriteConfig(directoryPath, templateConfig)
+	if err != nil {
+		return cleanUp(directoryPath, err)
+	}
 	fmt.Println("\n✅  Created: ", directoryPath)
 	return nil
 }
@@ -142,7 +146,7 @@ func createProjectDirectory() (string, string, error) {
 		return "", "", err
 	}
 	if exists {
-		return "", "", fmt.Errorf("directory already exists")
+		return "", "", fmt.Errorf("directory already exists: %s", directoryPath)
 	}
 
 	// Create a directory with the function name
