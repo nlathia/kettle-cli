@@ -2,7 +2,7 @@ package config
 
 const (
 	// Shared constants
-	Version                 = "v0.0.2-alpha"
+	Version                 = "v0.0.3"
 	DeploymentConfig        = "operator.config"
 	PromptNoneOfTheseOption = "None of these (create a new one)"
 
