@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/operatorai/operator/command"
-	"github.com/operatorai/operator/config"
+	"github.com/operatorai/kettle/command"
+	"github.com/operatorai/kettle/config"
 )
 
 type AWSLambdaFunction struct{}

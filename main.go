@@ -1,6 +1,6 @@
 package main
 
-import "github.com/operatorai/operator/cmd"
+import "github.com/operatorai/kettle/cmd"
 
 func main() {
 	cmd.Execute()

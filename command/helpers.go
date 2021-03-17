@@ -10,7 +10,7 @@ import (
 
 	"github.com/briandowns/spinner"
 	"github.com/manifoldco/promptui"
-	"github.com/operatorai/operator/config"
+	"github.com/operatorai/kettle/config"
 )
 
 func getSpinner(statusMessage string) *spinner.Spinner {

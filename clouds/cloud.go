@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/operatorai/operator/config"
+	"github.com/operatorai/kettle/config"
 )
 
 type Service interface {

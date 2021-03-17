@@ -1,11 +1,11 @@
 package cmd
 
 import (
-	"github.com/operatorai/operator/clouds"
 	"github.com/spf13/cobra"
 
-	"github.com/operatorai/operator/command"
-	"github.com/operatorai/operator/config"
+	"github.com/operatorai/kettle/clouds"
+	"github.com/operatorai/kettle/command"
+	"github.com/operatorai/kettle/config"
 )
 
 // initCmd represents the command to set up and store preferences for the CLI tool

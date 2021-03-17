@@ -6,7 +6,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/operatorai/operator/config"
+	"github.com/operatorai/kettle/config"
 	"github.com/spf13/cobra"
 )
 

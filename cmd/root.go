@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/operatorai/operator/config"
 	"github.com/spf13/cobra"
+
+	"github.com/operatorai/kettle/config"
 )
 
 // rootCmd represents the base command when called without any subcommands
