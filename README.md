@@ -1,6 +1,6 @@
 # kettle
 
-⚠️ This repo is currently being renamed
+⚠️ This repo is currently being renamed (it used to be called `operator`) and it has not been fully tested with its new name yet.
 
 Kettle is a command line tool for creating and deploying http-triggered functions that run in the cloud.
 
