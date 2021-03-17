@@ -1,6 +1,8 @@
-# operator
+# kettle
 
-Operator is a command line tool for creating and deploying http-triggered functions that run in the cloud.
+⚠️ This repo is currently being renamed
+
+Kettle is a command line tool for creating and deploying http-triggered functions that run in the cloud.
 
 You can use it to generate and deploy AWS [Lambda](https://aws.amazon.com/lambda/)s, Google [Cloud Functions](https://cloud.google.com/functions) and Google [Cloud Run](https://cloud.google.com/run) containerised applications, in either Go or Python.
 
@@ -8,9 +10,9 @@ The Python functions have been specifically designed to support deploying machin
 
 This CLI has three primary commands:
 
-* `operator init` is a one-off command that sets up the tool with your preferences (for cloud provider, programming language, etc.)
-* `operator create <name>` creates a directory containing all the boiler plate code that you need to get going. 
-* `operator deploy <path>` deploys the code in that directory to the cloud.
+* `kettle init` is a one-off command that sets up the tool with your preferences (for cloud provider, programming language, etc.)
+* `kettle create <name>` creates a directory containing all the boiler plate code that you need to get going. 
+* `kettle deploy <path>` deploys the code in that directory to the cloud.
 
 ## Pre-requisites
 
@@ -57,7 +59,7 @@ You can install `operator` using `brew` and [the operatorai tap](https://github.
 First, set up the CLI tool using `operator init`. It will take you through a one-off set up, and store your preferences.
 
 ```bash
-❯ operator init
+❯ kettle init
 [...]
 Use the arrow keys to navigate: ↓ ↑ → ← 
 ? Deployment type: 
@@ -68,7 +70,7 @@ Use the arrow keys to navigate: ↓ ↑ → ←
 Create a new deployment with `operator create` (check out `operator create --help` for a full list of options).
 
 ```bash
-❯ operator create hello-world
+❯ kettle create hello-world
 ```
 
 This will create a directory called (in this example) `hello-world` and it will add all the boiler plate you need to get going. For details about the generated boiler plate, see below.
@@ -89,44 +91,7 @@ Launch it locally:
 ... and, when you're ready, deploy it!
 
 ```bash
-❯ operator deploy .
-```
-
-## Generated Python boiler plate
-
-The boiler plate that is generated is very similar all deployment types. The main differences are whether a `Dockerfile` gets created, and there is different syntax in the `main.py` files.
-
-An overview of the files that are shared in the template:
-
-```bash
-.
-├── Makefile
-├── README.md
-├── bin  # Scripts that are used by the Makefile commands
-│   ├── _config.sh
-│   ├── cleanup.sh
-│   ├── launch.sh
-│   ├── remove_pyenv.sh
-│   └── setup_pyenv.sh
-├── main.py
-├── model
-│   ├── __init__.py
-│   ├── artifacts # Store your serialised models in this directory
-│   │   ├── README.md
-│   │   ├── __init__.py
-│   │   └── files.py
-│   └── model.py
-├── operator.config
-├── requirements-dev.txt # Requirements that are needed for development
-├── requirements.txt # Requirements that are needed for the production deployment
-└── tests # Unit tests!
-    ├── __init__.py
-    └── model
-        ├── __init__.py
-        ├── artifacts
-        │   ├── __init__.py
-        │   └── test_files.py
-        └── test_model.py
+❯ kettle deploy .
 ```
 
 ## Bug Reports
