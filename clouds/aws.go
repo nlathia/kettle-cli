@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os/exec"
 
-	"github.com/operatorai/operator/clouds/aws"
-	"github.com/operatorai/operator/config"
+	"github.com/operatorai/kettle/clouds/aws"
+	"github.com/operatorai/kettle/config"
 )
 
 type AmazonWebServices struct{}

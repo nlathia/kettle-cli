@@ -10,8 +10,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/operatorai/operator/config"
-	"github.com/operatorai/operator/templates"
+	"github.com/operatorai/kettle/config"
+	"github.com/operatorai/kettle/templates"
 )
 
 // createCmd represents the create command
