@@ -70,7 +70,7 @@ func searchTemplates(templateName string) (string, error) {
 		"--depth", "1",
 		"--filter=blob:none",
 		"--sparse",
-		"https://github.com/nlathia/kettle-templates.git",
+		"https://github.com/operatorai/kettle-templates",
 		tempDirectory,
 	}, "Searching for template..."); err != nil {
 		return "", err
