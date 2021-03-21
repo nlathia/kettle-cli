@@ -13,8 +13,8 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "operator",
 	Short: "A CLI tool for creating http functions or services",
-	Long: "\n🎯 Operator is a command line tool for creating and deploying" +
-		"\n http functions or services.",
+	Long: "\n🎯 The kettle CLI creates machine learning pipelines" +
+		"\n or microservices from templates.",
 }
 
 func init() {

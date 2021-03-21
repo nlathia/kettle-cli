@@ -103,3 +103,15 @@ func PromptForKeyValue(label string, values map[string]string) (string, string, 
 	}
 	return result, values[result], nil
 }
+
+func PromptForString(label string) (string, error) {
+	prompt := promptui.Prompt{
+		Label: label,
+	}
+
+	result, err := prompt.Run()
+	if err != nil {
+		return "", err
+	}
+	return result, nil
+}

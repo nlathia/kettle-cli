@@ -1,55 +1,10 @@
 package templates
 
 import (
-	"log"
 	"os"
 	"path"
-	"regexp"
 	"strings"
-
-	"github.com/iancoleman/strcase"
 )
-
-func removePunctuation(input, replaceWith string) (string, error) {
-	reg, err := regexp.Compile("[^a-zA-Z0-9]+")
-	if err != nil {
-		return "", err
-	}
-	return reg.ReplaceAllString(input, replaceWith), nil
-}
-
-// The entry function's case will vary based on the language;
-// Right now, we're only supporting Python & Go so we use ToSnake()
-func CreateEntryFunctionName(args []string, runtime string) string {
-	switch {
-	case strings.Contains(runtime, "python"):
-		entryName, err := removePunctuation(args[0], "_")
-		if err != nil {
-			log.Fatal(err)
-		}
-		return strcase.ToSnake(entryName)
-	case strings.Contains(runtime, "go"):
-		entryName, err := removePunctuation(args[0], " ")
-		if err != nil {
-			log.Fatal(err)
-		}
-		entryName = strings.Title(entryName)
-		return strings.ReplaceAll(entryName, " ", "")
-	default:
-		// Currently unreachable, as the `runtime` args
-		// is checked before starting
-		return args[0]
-	}
-}
-
-// The cloud function name is derived from the directory name
-func CreateFunctionName(args []string) string {
-	functionName, err := removePunctuation(args[0], "-")
-	if err != nil {
-		log.Fatal(err)
-	}
-	return strcase.ToKebab(functionName)
-}
 
 // Returns a path that is relative to the current working directory
 func GetRelativeDirectory(directoryName string) (string, error) {
@@ -68,4 +23,14 @@ func PathExists(path string) (bool, error) {
 		return false, err
 	}
 	return true, nil
+}
+
+// isGitRepository returns true if templatePath appears to be a git repo
+func isGitRepository(templatePath string) bool {
+	if strings.HasSuffix(templatePath, ".git") {
+		if strings.HasSuffix(templatePath, "git") || strings.HasSuffix(templatePath, "http") {
+			return true
+		}
+	}
+	return false
 }

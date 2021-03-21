@@ -53,7 +53,7 @@ func getGoogleCloudProjects() (map[string]string, error) {
 	// if len(results) >= projectListLimit {
 	// 	// Bail if the user has too many projects to 'reasonably' display
 	// 	return nil, errors.New(fmt.Sprintf("you have %d or more Google Cloud projects. "+
-	// 		"Please use operator init --gcp-project-id <id> to specify a project.", projectListLimit))
+	// 		"Please use kettle init --gcp-project-id <id> to specify a project.", projectListLimit))
 	// }
 
 	projectIDs := map[string]string{}

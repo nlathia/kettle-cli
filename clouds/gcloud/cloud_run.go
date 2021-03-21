@@ -41,7 +41,7 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.TemplateConfig) error
 
 	// Deploy the docker container
 	// gcloud run deploy --image gcr.io/PROJECT-ID/helloworld
-	fmt.Println("🚢  Deploying ", cfg.Name, fmt.Sprintf("as a %s function", cfg.Settings.DeploymentType))
+	fmt.Println("🚢  Deploying ", cfg.Name, "as a Cloud Run container")
 	err = command.Execute("gcloud", []string{
 		"run",
 		"deploy",

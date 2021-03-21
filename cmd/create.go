@@ -3,13 +3,17 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"html/template"
+	"io/fs"
+	"io/ioutil"
 	"os"
 	"path"
+	"path/filepath"
 	"strings"
+	"text/template"
 
 	"github.com/spf13/cobra"
 
+	"github.com/operatorai/kettle/command"
 	"github.com/operatorai/kettle/config"
 	"github.com/operatorai/kettle/templates"
 )
@@ -17,163 +21,170 @@ import (
 // createCmd represents the create command
 var createCmd = &cobra.Command{
 	Use:   "create",
-	Short: "Create a new directory with boiler plate code to deploy.",
-	Long: `The operator CLI tool can automatically create a directory
- with all of the boiler plate that you need to get started.
+	Short: "Create a new project from a template.",
+	Long: `🆕 The kettle CLI tool automatically creates a directory
+ with all of the boiler plate that you need from a template.
 	
 The create command will create a directory with all the code to get you started.`,
 	Args: validateCreateArgs,
 	RunE: runCreate,
 }
 
-// When we create a deployment, we store everything in a yaml config file
-// we will need this later to deploy the function
-var settings *config.Settings
-var directoryPath string
-
 func init() {
 	rootCmd.AddCommand(createCmd)
-	var err error
-	settings, err = config.ReadSettings()
-	if err != nil {
-		settings = nil
-	}
 }
 
 func validateCreateArgs(cmd *cobra.Command, args []string) error {
-	if settings == nil {
-		return errors.New("settings not found. Please run operator init.")
-	}
-
-	// Validate that args exist
+	// Validate that a template was given
 	if len(args) == 0 {
-		return errors.New("please specify a name")
-	}
-
-	// Construct the path where we are going to generate the boiler plate
-	var err error // Avoid shadowing global directoryPath
-	directoryPath, err = templates.GetRelativeDirectory(args[0])
-	if err != nil {
-		return err
-	}
-
-	// Validate that the function path does *not* already exist
-	exists, err := templates.PathExists(directoryPath)
-	if err != nil {
-		return err
-	}
-	if exists {
-		return fmt.Errorf("directory already exists")
+		return errors.New("please specify a template")
 	}
 	return nil
 }
 
 func runCreate(cmd *cobra.Command, args []string) error {
-	// Set the directory and function name
-	// Create new config for this deployment, and copy over the global settings
-	configValues := &config.TemplateConfig{
-		Name:         templates.CreateFunctionName(args),
-		FunctionName: templates.CreateEntryFunctionName(args, settings.Runtime),
-		Settings:     settings,
-	}
-
-	// Print out the config
-	fmt.Println("🎇  Type: ", configValues.Settings.DeploymentType)
-	fmt.Println("🎇  Language: ", configValues.Settings.Runtime)
-	fmt.Println("🎇  Name: ", configValues.Name)
-
-	// Create a directory with the function name
-	err := os.Mkdir(directoryPath, os.ModePerm)
+	// Get the directory where the template is (or has been cloned to)
+	templatePath, isTempDir, err := templates.GetTemplate(args[0])
 	if err != nil {
-		return err
+		fmt.Println(fmt.Sprintf("\n❌ %s", err.Error()))
+		return nil
+	}
+	if isTempDir {
+		defer os.RemoveAll(templatePath)
 	}
 
-	// Collect template root path and files
-	templateRoot, templateFiles, err := getTemplateFiles(configValues.Settings)
+	// Read the template config
+	templateConfig, err := templates.ReadConfig(templatePath)
 	if err != nil {
-		return cleanUp(directoryPath, err)
+		fmt.Println(fmt.Sprintf("\n❌ %s", err.Error()))
+		return nil
 	}
 
-	for _, assetName := range templateFiles {
+	// Create the directory where the template will be populated
+	projectName, directoryPath, err := createProjectDirectory()
+	if err != nil {
+		fmt.Println(fmt.Sprintf("\n❌ %s", err.Error()))
+		return nil
+	}
+
+	// Ask the user for any input that is required
+	templateConfig.ProjectName = projectName
+	templateValues := map[string]string{
+		"ProjectName": projectName,
+	}
+	for i, templateEntry := range templateConfig.Template {
+		userInput, err := command.PromptForString(templateEntry.Prompt)
+		if err != nil {
+			return cleanUp(directoryPath, err)
+		}
+		templateConfig.Template[i].Value = userInput
+		templateValues[templateEntry.Key] = userInput
+	}
+
+	// The template files are in a subdirectory of templatePath
+	templateDirectory := path.Join(templatePath, "template")
+	err = filepath.Walk(templateDirectory, func(filePath string, info fs.FileInfo, err error) error {
+		if err != nil {
+			if config.DebugMode {
+				fmt.Printf("error accessing a path %q: %v\n", filePath, err)
+				return err
+			}
+			return nil
+		}
+
+		// Skip directories
+		if info.IsDir() {
+			return nil
+		}
+
 		// Create the target path
-		targetPath := strings.Replace(assetName, templateRoot, "", 1)
+		targetPath := strings.Replace(filePath, templateDirectory, "", 1)
 		targetPath = path.Join(directoryPath, targetPath)
 
-		// Create the parent directory
-		parentDir, _ := path.Split(targetPath)
-		err = os.MkdirAll(parentDir, os.ModePerm)
-		if err != nil {
-			return cleanUp(directoryPath, err)
+		// Create the target file
+		if err := createFile(targetPath, filePath, templateValues); err != nil {
+			return err
 		}
-
-		// Read the asset out of go-bindata
-		content, err := templates.Asset(assetName)
-		if err != nil {
-			return cleanUp(directoryPath, err)
-		}
-
-		// Create the file itself
-		f, err := os.Create(targetPath)
-		if err != nil {
-			return cleanUp(directoryPath, err)
-		}
-		defer f.Close()
-
-		// Render the template into the target file
-		tmpl, err := template.New(assetName).Parse(string(content))
-		if err != nil {
-			return cleanUp(directoryPath, err)
-		}
-
-		err = tmpl.Execute(f, configValues)
-		if err != nil {
-			return cleanUp(directoryPath, err)
-		}
-
-		// If it is a .sh file, chmod u+x it
-		if strings.HasSuffix(targetPath, ".sh") {
-			if err := os.Chmod(targetPath, 0700); err != nil {
-				return cleanUp(directoryPath, err)
-			}
-		}
-	}
-
-	err = config.WriteConfig(configValues, directoryPath)
+		return nil
+	})
 	if err != nil {
 		return cleanUp(directoryPath, err)
 	}
 
+	err = templates.WriteConfig(directoryPath, templateConfig)
+	if err != nil {
+		return cleanUp(directoryPath, err)
+	}
 	fmt.Println("\n✅  Created: ", directoryPath)
 	return nil
 }
 
-func getTemplateFiles(settings *config.Settings) (string, []string, error) {
-	// Iterate on all of the template files
-	// Root: templates/<language>/<cloud-provider>/<type>/
-	templateRoot := fmt.Sprintf(
-		"templates/%s/%s/%s/",
-		strings.Replace(settings.Runtime, ".", "", 1),
-		settings.CloudProvider,
-		settings.DeploymentType,
-	)
+func createProjectDirectory() (string, string, error) {
+	directoryName, err := command.PromptForString("Directory name")
+	if err != nil {
+		return "", "", err
+	}
 
-	assetNames := templates.AssetNames()
-	templateFiles := []string{}
-	for _, assetName := range assetNames {
-		if strings.Contains(assetName, templateRoot) {
-			templateFiles = append(templateFiles, assetName)
-		}
+	directoryPath, err := templates.GetRelativeDirectory(directoryName)
+	if err != nil {
+		return "", "", err
 	}
-	if len(templateFiles) == 0 {
-		return "", nil, errors.New(fmt.Sprintf("no matching template for: %s", templateRoot))
+
+	// Validate that the function path does *not* already exist
+	exists, err := templates.PathExists(directoryPath)
+	if err != nil {
+		return "", "", err
 	}
-	return templateRoot, templateFiles, nil
+	if exists {
+		return "", "", fmt.Errorf("directory already exists: %s", directoryPath)
+	}
+
+	// Create a directory with the function name
+	if err := os.Mkdir(directoryPath, os.ModePerm); err != nil {
+		return "", "", err
+	}
+	return directoryName, directoryPath, nil
+}
+
+func createFile(targetPath, filePath string, templateValues interface{}) error {
+	// Read the source file
+	data, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		return err
+	}
+
+	// Create the parent directory
+	parentDir, _ := path.Split(targetPath)
+	err = os.MkdirAll(parentDir, os.ModePerm)
+	if err != nil {
+		return err
+	}
+
+	// Create the target file
+	f, err := os.Create(targetPath)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	// Populate the target file by executing the template
+	_, fileName := path.Split(filePath)
+	tmpl, err := template.New(fileName).Parse(string(data))
+	if err != nil {
+		return err
+	}
+
+	err = tmpl.Execute(f, templateValues)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func cleanUp(directoryPath string, err error) error {
 	cleanupErr := os.RemoveAll(directoryPath)
 	if cleanupErr != nil {
-		fmt.Println("\n  Failed to clean up: ", directoryPath, cleanupErr)
+		fmt.Println("\n Failed to clean up: ", directoryPath, cleanupErr)
 	}
 	return err
 }
