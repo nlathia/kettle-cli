@@ -25,7 +25,13 @@ func GetTemplate(templatePath string) (string, bool, error) {
 		tempDirectory, err := cloneRepository(templatePath)
 		return tempDirectory, true, err
 	}
-	return "", false, errors.New(fmt.Sprintf("%s not found", templatePath))
+
+	// Look for the template in the kettle-templates monorepo
+	tempDirectory, err := searchTemplates(templatePath)
+	if err != nil {
+		return "", false, err
+	}
+	return tempDirectory, true, nil
 }
 
 func cloneRepository(url string) (string, error) {
@@ -42,10 +48,6 @@ func cloneRepository(url string) (string, error) {
 }
 
 func searchTemplates(templateName string) (string, error) {
-	tempDirectory, err := ioutil.TempDir("", "kettle-templates")
-	if err != nil {
-		return "", err
-	}
 	rootDir, err := os.Getwd()
 	if err != nil {
 		return "", err
@@ -54,6 +56,11 @@ func searchTemplates(templateName string) (string, error) {
 		// Return to the original root directory
 		os.Chdir(rootDir)
 	}()
+
+	tempDirectory, err := ioutil.TempDir("", "kettle-templates")
+	if err != nil {
+		return "", err
+	}
 
 	// Sparse checkout, to avoid cloning the entire kettle-templates
 	// repository. This will return empty if the templateName does
