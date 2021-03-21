@@ -63,11 +63,8 @@ func runCreate(cmd *cobra.Command, args []string) error {
 	// Create the directory where the template will be populated
 	projectName, directoryPath, err := createProjectDirectory()
 	if err != nil {
-		if strings.HasPrefix(err.Error(), "directory already") {
-			fmt.Println(fmt.Sprintf("\n❌ %s", err.Error()))
-			return nil
-		}
-		return err
+		fmt.Println(fmt.Sprintf("\n❌ %s", err.Error()))
+		return nil
 	}
 
 	// Ask the user for any input that is required

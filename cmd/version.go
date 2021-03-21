@@ -13,8 +13,8 @@ import (
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Installed version of operator",
-	Long:  `🔢 Prints and installed version of the operator CLI tool.`,
+	Short: "Installed version of kettle",
+	Long:  `🔢 Prints the installed version of the kettle CLI.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(config.Version)
 	},

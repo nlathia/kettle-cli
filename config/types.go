@@ -23,7 +23,7 @@ type TemplateConfig struct {
 
 	Settings *Settings `yaml:"settings"`
 
-	// operator create values
+	// template create values
 	Name         string `yaml:"name"`
 	FunctionName string `yaml:"entrypoint"`
 

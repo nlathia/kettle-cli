@@ -36,7 +36,6 @@ func validateDeployArgs(cmd *cobra.Command, args []string) error {
 		return errors.New("please specify a path or directory name")
 	}
 
-	// @TODO future -- deploy from git PR
 	// Validate that the function path exists
 	var err error
 	deploymentPath, err = getDeploymentPath(args)
@@ -101,7 +100,6 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 }
 
 func getDeploymentPath(args []string) (string, error) {
-	// operator deploy .
 	// Deploys from the current working directory
 	rootDir, err := os.Getwd()
 	if err != nil {
@@ -116,7 +114,6 @@ func getDeploymentPath(args []string) (string, error) {
 		return rootDir, nil
 	}
 
-	// operator deploy some-directory
 	// Deploys from a directory relative to the current working directory
 	deploymentPath, err := templates.GetRelativeDirectory(args[0])
 	exists, err = directoryHasConfigFile(deploymentPath)
