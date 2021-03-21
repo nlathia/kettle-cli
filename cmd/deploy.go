@@ -75,6 +75,10 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
+	defer func() {
+		// Return to the original root directory
+		os.Chdir(rootDir)
+	}()
 
 	// Change to the directory where the function to deploy is implemented
 	// and run the deployment command
@@ -93,9 +97,6 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 
 	// Write the settings back (they may have been changed)
 	_ = config.WriteSettings(deploymentConfig.Settings)
-
-	// Return to the original root directory
-	os.Chdir(rootDir)
 
 	fmt.Println("✅  Deployed!")
 	return nil

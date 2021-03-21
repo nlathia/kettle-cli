@@ -22,7 +22,7 @@ import (
 var createCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Create a new project from a template.",
-	Long: `The operator CLI tool automatically creates a directory
+	Long: `The kettle CLI tool automatically creates a directory
  with all of the boiler plate that you need from a template.
 	
 The create command will create a directory with all the code to get you started.`,
@@ -39,23 +39,15 @@ func validateCreateArgs(cmd *cobra.Command, args []string) error {
 	if len(args) == 0 {
 		return errors.New("please specify a template")
 	}
-	if !strings.HasSuffix(args[0], ".git") {
-		exists, err := templates.PathExists(args[0])
-		if err != nil {
-			return err
-		}
-		if !exists {
-			return fmt.Errorf(fmt.Sprintf("not found: %s", args[0]))
-		}
-	}
 	return nil
 }
 
 func runCreate(cmd *cobra.Command, args []string) error {
 	// Get the directory where the template is (or has been cloned to)
-	templatePath, isTempDir, err := getTemplateDirectory(args[0])
+	templatePath, isTempDir, err := templates.GetTemplate(args[0])
 	if err != nil {
-		return err
+		fmt.Println(fmt.Sprintf("\n❌ %s", err.Error()))
+		return nil
 	}
 	if isTempDir {
 		defer os.RemoveAll(templatePath)
@@ -64,7 +56,8 @@ func runCreate(cmd *cobra.Command, args []string) error {
 	// Read the template config
 	templateConfig, err := templates.ReadConfig(templatePath)
 	if err != nil {
-		return err
+		fmt.Println(fmt.Sprintf("\n❌ %s", err.Error()))
+		return nil
 	}
 
 	// Create the directory where the template will be populated
@@ -154,28 +147,6 @@ func createProjectDirectory() (string, string, error) {
 		return "", "", err
 	}
 	return directoryName, directoryPath, nil
-}
-
-func getTemplateDirectory(templatePath string) (string, bool, error) {
-	// templatePath can be a local directory or git repo URL
-	if strings.HasSuffix(templatePath, ".git") {
-		// Git repos will be cloned into a temporary directory
-		tempDirectory, err := ioutil.TempDir("", "operator")
-		if err != nil {
-			return "", false, err
-		}
-
-		err = command.Execute("git", []string{
-			"clone",
-			templatePath,
-			tempDirectory,
-		}, "Cloning template...")
-		if err != nil {
-			return "", false, err
-		}
-		return tempDirectory, true, nil
-	}
-	return templatePath, false, nil
 }
 
 func createFile(targetPath, filePath string, templateValues interface{}) error {
