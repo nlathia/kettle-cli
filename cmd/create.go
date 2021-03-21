@@ -22,7 +22,7 @@ import (
 var createCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Create a new project from a template.",
-	Long: `The kettle CLI tool automatically creates a directory
+	Long: `🆕 The kettle CLI tool automatically creates a directory
  with all of the boiler plate that you need from a template.
 	
 The create command will create a directory with all the code to get you started.`,

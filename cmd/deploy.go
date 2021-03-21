@@ -17,10 +17,8 @@ import (
 var deployCmd = &cobra.Command{
 	Use:   "deploy",
 	Short: "Ship a function you have created",
-	Long: `The operator CLI tool can automatically deploy
- a cloud function or GCP run project that you created with this tool.
-	   
- The deploy command wraps the gsutil commands to simplify deployment.`,
+	Long: `🚢 The kettle CLI tool can automatically deploy
+ your projects to your cloud provider.`,
 	Args: validateDeployArgs,
 	RunE: runDeploy,
 }

@@ -14,7 +14,7 @@ import (
 var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Installed version of operator",
-	Long:  `Prints and installed version of the operator CLI tool.`,
+	Long:  `🔢 Prints and installed version of the operator CLI tool.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(config.Version)
 	},
