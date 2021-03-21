@@ -75,11 +75,8 @@ func searchTemplates(templateName string) (string, error) {
 	}, "Searching for template..."); err != nil {
 		return "", err
 	}
-	if err := command.Execute("cd", []string{
-		tempDirectory,
-	}, "Searching for template..."); err != nil {
-		return "", err
-	}
+
+	os.Chdir(tempDirectory)
 	if err := command.Execute("git", []string{
 		"sparse-checkout",
 		"init",
