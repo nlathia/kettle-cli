@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/operatorai/kettle/config"
+	"github.com/operatorai/kettle-cli/config"
 )
 
 // rootCmd represents the base command when called without any subcommands

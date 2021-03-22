@@ -6,8 +6,9 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/operatorai/kettle/config"
 	"github.com/spf13/cobra"
+
+	"github.com/operatorai/kettle-cli/config"
 )
 
 // versionCmd represents the version command

@@ -6,8 +6,8 @@ import (
 	"path"
 	"strings"
 
-	"github.com/operatorai/kettle/command"
-	"github.com/operatorai/kettle/config"
+	"github.com/operatorai/kettle-cli/command"
+	"github.com/operatorai/kettle-cli/config"
 )
 
 const (

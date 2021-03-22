@@ -13,9 +13,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/operatorai/kettle/command"
-	"github.com/operatorai/kettle/config"
-	"github.com/operatorai/kettle/templates"
+	"github.com/operatorai/kettle-cli/command"
+	"github.com/operatorai/kettle-cli/config"
+	"github.com/operatorai/kettle-cli/templates"
 )
 
 // createCmd represents the create command

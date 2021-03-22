@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os/exec"
 
-	"github.com/operatorai/kettle/clouds/gcloud"
-	"github.com/operatorai/kettle/config"
+	"github.com/operatorai/kettle-cli/clouds/gcloud"
+	"github.com/operatorai/kettle-cli/config"
 )
 
 type GoogleCloud struct{}
