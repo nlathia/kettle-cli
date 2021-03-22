@@ -1,11 +1,9 @@
 
-.PHONY: get install full-install
-
-full-install: get rebuild install
+.PHONY: get install
 
 get:
 	go get ./...
 
 install:
-	go install .
+	go build -o ${GOPATH}/bin/kettle
 
