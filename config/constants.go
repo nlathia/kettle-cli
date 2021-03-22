@@ -3,7 +3,7 @@ package config
 const (
 	// Shared constants
 	Version                 = "v0.0.3"
-	DeploymentConfig        = "operator.config"
+	DeploymentConfig        = "operator.json"
 	PromptNoneOfTheseOption = "None of these (create a new one)"
 
 	// Cloud providers
