@@ -7,7 +7,7 @@ import (
 	"os"
 	"path"
 
-	"github.com/operatorai/kettle/command"
+	"github.com/operatorai/kettle-cli/command"
 )
 
 func GetTemplate(templatePath string) (string, bool, error) {

@@ -9,9 +9,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/operatorai/kettle/clouds"
-	"github.com/operatorai/kettle/config"
-	"github.com/operatorai/kettle/templates"
+	"github.com/operatorai/kettle-cli/clouds"
+	"github.com/operatorai/kettle-cli/config"
+	"github.com/operatorai/kettle-cli/templates"
 )
 
 var deployCmd = &cobra.Command{
