@@ -11,7 +11,7 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "operator",
+	Use:   "kettle",
 	Short: "A CLI tool for creating http functions or services",
 	Long: "\n🎯 The kettle CLI creates machine learning pipelines" +
 		"\n or microservices from templates.",
