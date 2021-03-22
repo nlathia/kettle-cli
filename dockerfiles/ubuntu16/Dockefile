@@ -12,13 +12,14 @@ RUN wget https://golang.org/dl/go1.16.2.linux-amd64.tar.gz \
 
 # Configure Go root, path, bin
 ENV GOROOT="/usr/local/go"
-ENV GOPATH="${HOME}/"
+ENV GOPATH="${HOME}"
 ENV GOBIN="${GOPATH}/bin"
 ENV PATH="${GOPATH}/bin:$GOROOT/bin:${PATH}"
+RUN go env -w GO111MODULE=auto
 
 # [Optional] for deployments to GCP, install the Google Cloud CLI 
 # Note: gcloud init will still need to be run manually
-RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg  add - && apt-get update -y && apt-get install google-cloud-sdk -y
+# RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg  add - && apt-get update -y && apt-get install google-cloud-sdk -y
 
 # Install the operator CLI from source
 ARG TARGET="${GOPATH}/src/github.com/operatorai/"
