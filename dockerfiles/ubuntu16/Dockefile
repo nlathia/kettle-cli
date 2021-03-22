@@ -25,7 +25,7 @@ RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.c
 ARG TARGET="${GOPATH}/src/github.com/operatorai/"
 RUN mkdir -p "${TARGET}" \
 	&& cd "${TARGET}" \
-	&& git clone https://github.com/operatorai/kettle.git \
-	&& cd kettle \
+	&& git clone https://github.com/operatorai/kettle-cli.git \
+	&& cd kettle-cli \
 	&& make get \
 	&& make install 
