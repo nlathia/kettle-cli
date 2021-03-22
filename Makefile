@@ -5,5 +5,5 @@ get:
 	go get ./...
 
 install:
-	go build -o $GOPATH/bin/kettle
+	go build -o ${GOPATH}/bin/kettle
 
