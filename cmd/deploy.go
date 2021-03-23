@@ -9,6 +9,7 @@ import (
 
 	"github.com/operatorai/kettle-cli/clouds"
 	"github.com/operatorai/kettle-cli/config"
+	"github.com/operatorai/kettle-cli/settings"
 	"github.com/operatorai/kettle-cli/templates"
 )
 
@@ -47,9 +48,18 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 		return formatError(err)
 	}
 
+	// Read global settings
+	cloudSettings, err := settings.ReadSettings()
+	if err != nil {
+		return formatError(err)
+	}
+
 	// Get the cloud provider & service type
 	cloudProvider, err := clouds.GetCloudProvider(templateConfig.Config.CloudProvider)
 	if err != nil {
+		return formatError(err)
+	}
+	if err := cloudProvider.Setup(cloudSettings); err != nil {
 		return formatError(err)
 	}
 
@@ -73,13 +83,12 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 	}()
 
 	// Deploy
-	if err := service.Deploy(deploymentPath, templateConfig); err != nil {
+	if err := service.Deploy(deploymentPath, templateConfig, cloudSettings); err != nil {
 		return formatError(err)
 	}
 
 	// Write the settings back (they may have been changed)
-	// @TODO
-	// _ = config.WriteSettings(deploymentConfig.Settings)
+	_ = settings.WriteSettings(cloudSettings)
 
 	fmt.Println("✅  Deployed!")
 	return nil

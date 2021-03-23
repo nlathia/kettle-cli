@@ -1,7 +1,7 @@
 package settings
 
 const (
-	settingsFileName = "kettle.yaml"
+	settingsFileName = "~/.kettle.yaml"
 )
 
 // Debug mode (kettle <command> --debug)
