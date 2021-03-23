@@ -16,10 +16,11 @@ type GoogleCloudSettings struct {
 }
 
 type AWSSettings struct {
-	AccountID     string `yaml:"account_id,omitempty"`
-	RoleArn       string `yaml:"role_arn,omitempty"`
-	RestApiID     string `yaml:"rest_api_id,omitempty"`
-	RestApiRootID string `yaml:"rest_api_root_id,omitempty"`
+	AccountID        string `yaml:"account_id,omitempty"`
+	RoleArn          string `yaml:"role_arn,omitempty"`
+	RestApiID        string `yaml:"rest_api_id,omitempty"`
+	RestApiRootID    string `yaml:"rest_api_root_id,omitempty"`
+	DeploymentRegion string `yaml:"region,omitempty"`
 }
 
 type Settings struct {
