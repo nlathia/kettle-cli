@@ -13,6 +13,10 @@ import (
 	"github.com/operatorai/kettle-cli/config"
 )
 
+const (
+	PromptNoneOfTheseOption = "None of these (create a new one)"
+)
+
 func getSpinner(statusMessage string) *spinner.Spinner {
 	s := spinner.New(spinner.CharSets[39], 100*time.Millisecond)
 	s.Suffix = fmt.Sprintf("  %s...", statusMessage)
@@ -51,7 +55,7 @@ func PromptForValue(label string, values map[string]string, addNoneOfThese bool)
 	}
 	sort.Strings(valueLabels)
 	if addNoneOfThese {
-		valueLabels = append(valueLabels, config.PromptNoneOfTheseOption)
+		valueLabels = append(valueLabels, PromptNoneOfTheseOption)
 	}
 
 	prompt := promptui.Select{
@@ -63,7 +67,7 @@ func PromptForValue(label string, values map[string]string, addNoneOfThese bool)
 		return "", err
 	}
 
-	if addNoneOfThese && result == config.PromptNoneOfTheseOption {
+	if addNoneOfThese && result == PromptNoneOfTheseOption {
 		return "", nil
 	}
 	return values[result], nil

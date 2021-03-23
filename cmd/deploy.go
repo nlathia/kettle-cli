@@ -5,12 +5,10 @@ import (
 	"fmt"
 	"os"
 	"path"
-	"time"
 
 	"github.com/spf13/cobra"
 
 	"github.com/operatorai/kettle-cli/clouds"
-	"github.com/operatorai/kettle-cli/config"
 	"github.com/operatorai/kettle-cli/templates"
 )
 
@@ -23,9 +21,6 @@ var deployCmd = &cobra.Command{
 	RunE: runDeploy,
 }
 
-var deploymentConfig *config.TemplateConfig
-var deploymentPath string
-
 func init() {
 	rootCmd.AddCommand(deployCmd)
 }
@@ -35,34 +30,30 @@ func validateDeployArgs(cmd *cobra.Command, args []string) error {
 	if len(args) == 0 {
 		return errors.New("please specify a path or directory name")
 	}
-
-	// Validate that the function path exists
-	var err error
-	deploymentPath, err = getDeploymentPath(args)
-	if err != nil {
-		return err
-	}
-
-	// Read the config
-	deploymentConfig, err = config.ReadConfig(deploymentPath)
-	if err != nil {
-		return err
-	}
-
-	// Store the settings for future re-use
-	config.WriteSettings(deploymentConfig.Settings)
 	return nil
 }
 
 // runDeploy creates or updates a cloud function
 func runDeploy(cmd *cobra.Command, args []string) error {
-	// Get the cloud provider & service type
-	cloudProvider, err := clouds.GetCloudProvider(deploymentConfig.CloudProvider)
+	// Construct the path we want to deploy from
+	deploymentPath, err := getDeploymentPath(args)
 	if err != nil {
 		return err
 	}
 
-	service, err := cloudProvider.GetService(deploymentConfig.DeploymentType)
+	// Read the template's config
+	templateConfig, err := templates.ReadConfig(deploymentPath)
+	if err != nil {
+		return err
+	}
+
+	// Get the cloud provider & service type
+	cloudProvider, err := clouds.GetCloudProvider(templateConfig.Config.CloudProvider)
+	if err != nil {
+		return err
+	}
+
+	service, err := cloudProvider.GetService(templateConfig.Config.DeploymentType)
 	if err != nil {
 		return err
 	}
@@ -72,28 +63,24 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
+
+	// Change to the directory where the function to deploy is implemented
+	// and run the deployment command
+	os.Chdir(deploymentPath)
 	defer func() {
 		// Return to the original root directory
 		os.Chdir(rootDir)
 	}()
 
-	// Change to the directory where the function to deploy is implemented
-	// and run the deployment command
-	os.Chdir(deploymentPath)
+	// Deploy
 	if err := service.Deploy(deploymentPath, deploymentConfig); err != nil {
 		fmt.Println(err)
 		return err
 	}
 
-	// Write the config back, as it may have been updated
-	deploymentConfig.Deployed = time.Now().UTC().String()
-	err = config.WriteConfig(deploymentConfig, deploymentPath)
-	if err != nil {
-		return err
-	}
-
 	// Write the settings back (they may have been changed)
-	_ = config.WriteSettings(deploymentConfig.Settings)
+	// @TODO
+	// _ = config.WriteSettings(deploymentConfig.Settings)
 
 	fmt.Println("✅  Deployed!")
 	return nil
@@ -105,8 +92,9 @@ func getDeploymentPath(args []string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
 	rootDir = path.Clean(rootDir)
-	exists, err := directoryHasConfigFile(rootDir)
+	exists, err := templates.HasConfigFile(rootDir)
 	if err != nil {
 		return "", err
 	}
@@ -116,7 +104,7 @@ func getDeploymentPath(args []string) (string, error) {
 
 	// Deploys from a directory relative to the current working directory
 	deploymentPath, err := templates.GetRelativeDirectory(args[0])
-	exists, err = directoryHasConfigFile(deploymentPath)
+	exists, err = templates.HasConfigFile(deploymentPath)
 	if err != nil {
 		return "", err
 	}
@@ -124,25 +112,5 @@ func getDeploymentPath(args []string) (string, error) {
 		return deploymentPath, nil
 	}
 
-	return "", fmt.Errorf("could not find %s file in %s", config.DeploymentConfig, args[0])
-}
-
-func directoryHasConfigFile(directory string) (bool, error) {
-	exists, err := templates.PathExists(directory)
-	if err != nil {
-		return false, err
-	}
-	if !exists {
-		return false, nil
-	}
-
-	configFilePath := config.GetConfigFilePath(directory)
-	exists, err = templates.PathExists(configFilePath)
-	if err != nil {
-		return false, err
-	}
-	if exists {
-		return true, nil
-	}
-	return false, nil
+	return "", fmt.Errorf("could not find template config file in %s", args[0])
 }

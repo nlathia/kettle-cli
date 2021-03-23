@@ -17,17 +17,17 @@ type Settings struct {
 }
 
 // Values that are specific to each deployment
-type TemplateConfig struct {
-	CloudProvider  string `yaml:"cloud_provider"`
-	DeploymentType string `yaml:"deployment_type"`
+// type TemplateConfig struct {
+// 	CloudProvider  string `yaml:"cloud_provider"`
+// 	DeploymentType string `yaml:"deployment_type"`
 
-	Settings *Settings `yaml:"settings"`
+// 	Settings *Settings `yaml:"settings"`
 
-	// template create values
-	Name         string `yaml:"name"`
-	FunctionName string `yaml:"entrypoint"`
+// 	// template create values
+// 	Name         string `yaml:"name"`
+// 	FunctionName string `yaml:"entrypoint"`
 
-	// AWS variables
-	Deployed          string `yaml:"deployed_utc,omitempty"`
-	RestApiResourceID string `yaml:"rest_api_resource_id,omitempty"`
-}
+// 	// AWS variables
+// 	Deployed          string `yaml:"deployed_utc,omitempty"`
+// 	RestApiResourceID string `yaml:"rest_api_resource_id,omitempty"`
+// }

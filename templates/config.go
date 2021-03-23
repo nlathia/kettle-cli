@@ -50,3 +50,15 @@ func WriteConfig(projectPath string, config *Template) error {
 	configPath := path.Join(projectPath, configFileName)
 	return ioutil.WriteFile(configPath, data, 0644)
 }
+
+func HasConfigFile(directory string) (bool, error) {
+	configFilePath := path.Join(directory, configFileName)
+	exists, err := PathExists(configFilePath)
+	if err != nil {
+		return false, err
+	}
+	if !exists {
+		return false, nil
+	}
+	return true, nil
+}
