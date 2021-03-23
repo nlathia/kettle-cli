@@ -1,4 +1,4 @@
-package config
+package settings
 
 // Values that do not change across multiple deployments
 type Settings struct {
