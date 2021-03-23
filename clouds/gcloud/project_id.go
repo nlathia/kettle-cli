@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/operatorai/kettle-cli/command"
-	"github.com/operatorai/kettle-cli/config"
+	"github.com/operatorai/kettle-cli/cli"
+	"github.com/operatorai/kettle-cli/settings"
 )
 
-func SetProjectID(settings *config.Settings) error {
+func SetProjectID(settings *settings.GoogleCloudSettings) error {
 	if settings.ProjectName != "" && settings.ProjectID != "" {
 		return nil
 	}
@@ -18,7 +18,7 @@ func SetProjectID(settings *config.Settings) error {
 		return err
 	}
 
-	projectName, projectID, err := command.PromptForKeyValue("Google Cloud Project", projects)
+	projectName, projectID, err := cli.PromptForKeyValue("Google Cloud Project", projects)
 	if err != nil {
 		return err
 	}
@@ -30,12 +30,11 @@ func SetProjectID(settings *config.Settings) error {
 
 func getGoogleCloudProjects() (map[string]string, error) {
 	// gcloud projects list --format="json"
-	projectListLimit := 50
-	output, err := command.ExecuteWithResult("gcloud", []string{
+	output, err := cli.ExecuteWithResult("gcloud", []string{
 		"projects",
 		"list",
 		"--format=\"json\"",
-		fmt.Sprintf("--limit=%d", projectListLimit),
+		fmt.Sprintf("--limit=%d", 50),
 	}, "Collecting gcloud projects")
 	if err != nil {
 		return nil, err

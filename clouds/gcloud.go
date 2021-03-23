@@ -6,31 +6,33 @@ import (
 	"os/exec"
 
 	"github.com/operatorai/kettle-cli/clouds/gcloud"
-	"github.com/operatorai/kettle-cli/config"
+	"github.com/operatorai/kettle-cli/settings"
 )
 
 type GoogleCloud struct{}
 
 func (GoogleCloud) GetService(deploymentType string) (Service, error) {
 	switch deploymentType {
-	case config.GoogleCloudFunction:
+	case "function":
 		return gcloud.GoogleCloudFunction{}, nil
-	case config.GoogleCloudRun:
+	case "run":
 		return gcloud.GoogleCloudRun{}, nil
 	}
 	return nil, errors.New(fmt.Sprintf("unimplemented service: %s", deploymentType))
 }
 
-func (GoogleCloud) Setup(settings *config.Settings) error {
+func (GoogleCloud) Setup(stg *settings.Settings) error {
 	_, err := exec.LookPath("gcloud")
 	if err != nil {
 		return errors.New(fmt.Sprintf("please install the gcloud cli: %s", err))
 	}
-
-	if err := gcloud.SetProjectID(settings); err != nil {
+	if stg.GoogleCloud == nil {
+		stg.GoogleCloud = &settings.GoogleCloudSettings{}
+	}
+	if err := gcloud.SetProjectID(stg.GoogleCloud); err != nil {
 		return err
 	}
-	if err := gcloud.SetDeploymentRegion(settings); err != nil {
+	if err := gcloud.SetDeploymentRegion(stg.GoogleCloud); err != nil {
 		return err
 	}
 	return nil

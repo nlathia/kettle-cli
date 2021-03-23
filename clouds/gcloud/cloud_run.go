@@ -5,32 +5,26 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/operatorai/kettle-cli/command"
+	"github.com/operatorai/kettle-cli/cli"
 	"github.com/operatorai/kettle-cli/config"
+	"github.com/operatorai/kettle-cli/settings"
 )
 
 type GoogleCloudRun struct{}
 
-func (GoogleCloudRun) Deploy(directory string, cfg *config.TemplateConfig) error {
-	if strings.Contains(cfg.Settings.Runtime, "go") {
-		_ = command.Execute("go", []string{
+func (GoogleCloudRun) Deploy(directory string, cfg *config.Config, stg *settings.Settings) error {
+	if strings.Contains(cfg.Config.Runtime, "go") {
+		_ = cli.Execute("go", []string{
 			"mod",
 			"init",
 		}, "Running go mod init")
 	}
 
-	fmt.Println("🏭  Building: ", cfg.Name, "as a Cloud Run container")
-	if err := SetProjectID(cfg.Settings); err != nil {
-		return err
-	}
-	if err := SetDeploymentRegion(cfg.Settings); err != nil {
-		return err
-	}
-
-	containerTag := fmt.Sprintf("gcr.io/%s/%s", cfg.Settings.ProjectID, cfg.Name)
+	fmt.Println("🏭  Building: ", cfg.ProjectName, "as a Cloud Run container")
+	containerTag := fmt.Sprintf("gcr.io/%s/%s", stg.GoogleCloud.ProjectID, cfg.ProjectName)
 	// Build the docker container
 	// gcloud builds submit --tag gcr.io/PROJECT-ID/helloworld
-	err := command.Execute("gcloud", []string{
+	err := cli.Execute("gcloud", []string{
 		"builds",
 		"submit",
 		"--tag", containerTag,
@@ -41,27 +35,27 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.TemplateConfig) error
 
 	// Deploy the docker container
 	// gcloud run deploy --image gcr.io/PROJECT-ID/helloworld
-	fmt.Println("🚢  Deploying ", cfg.Name, "as a Cloud Run container")
-	err = command.Execute("gcloud", []string{
+	fmt.Println("🚢  Deploying ", cfg.ProjectName, "as a Cloud Run container")
+	err = cli.Execute("gcloud", []string{
 		"run",
 		"deploy",
-		cfg.Name,
+		cfg.ProjectName,
 		"--image", containerTag,
 		"--platform", "managed",
 		"--allow-unauthenticated",
-		fmt.Sprintf("--region=%s", cfg.Settings.DeploymentRegion),
+		fmt.Sprintf("--region=%s", stg.GoogleCloud.DeploymentRegion),
 	}, "Deploying Cloud Run container")
 	if err != nil {
 		return err
 	}
 
 	// Get the URL
-	output, err := command.ExecuteWithResult("gcloud", []string{
+	output, err := cli.ExecuteWithResult("gcloud", []string{
 		"run",
 		"services",
-		"describe", cfg.Name,
+		"describe", cfg.ProjectName,
 		"--platform", "managed",
-		"--region", cfg.Settings.DeploymentRegion,
+		"--region", stg.GoogleCloud.DeploymentRegion,
 		"--format", "json",
 	}, "Querying for Cloud Run URL")
 	if err != nil {
