@@ -14,7 +14,7 @@ import (
 
 var deployCmd = &cobra.Command{
 	Use:   "deploy",
-	Short: "Ship a function you have created",
+	Short: "Ship a project you have created from a kettle template",
 	Long: `🚢 The kettle CLI tool can automatically deploy
  your projects to your cloud provider.`,
 	Args: validateDeployArgs,
@@ -38,30 +38,30 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 	// Construct the path we want to deploy from
 	deploymentPath, err := getDeploymentPath(args)
 	if err != nil {
-		return err
+		return formatError(err)
 	}
 
 	// Read the template's config
 	templateConfig, err := templates.ReadConfig(deploymentPath)
 	if err != nil {
-		return err
+		return formatError(err)
 	}
 
 	// Get the cloud provider & service type
 	cloudProvider, err := clouds.GetCloudProvider(templateConfig.Config.CloudProvider)
 	if err != nil {
-		return err
+		return formatError(err)
 	}
 
 	service, err := cloudProvider.GetService(templateConfig.Config.DeploymentType)
 	if err != nil {
-		return err
+		return formatError(err)
 	}
 
 	// Store the current directory before changing away from it
 	rootDir, err := os.Getwd()
 	if err != nil {
-		return err
+		return formatError(err)
 	}
 
 	// Change to the directory where the function to deploy is implemented
@@ -74,8 +74,7 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 
 	// Deploy
 	if err := service.Deploy(deploymentPath, deploymentConfig); err != nil {
-		fmt.Println(err)
-		return err
+		return formatError(err)
 	}
 
 	// Write the settings back (they may have been changed)

@@ -46,8 +46,7 @@ func runCreate(cmd *cobra.Command, args []string) error {
 	// Get the directory where the template is (or has been cloned to)
 	templatePath, isTempDir, err := templates.GetTemplate(args[0])
 	if err != nil {
-		fmt.Println(fmt.Sprintf("\n❌ %s", err.Error()))
-		return nil
+		return formatError(err)
 	}
 	if isTempDir {
 		defer os.RemoveAll(templatePath)
@@ -56,15 +55,13 @@ func runCreate(cmd *cobra.Command, args []string) error {
 	// Read the template config
 	templateConfig, err := templates.ReadConfig(templatePath)
 	if err != nil {
-		fmt.Println(fmt.Sprintf("\n❌ %s", err.Error()))
-		return nil
+		return formatError(err)
 	}
 
 	// Create the directory where the template will be populated
 	projectName, directoryPath, err := createProjectDirectory()
 	if err != nil {
-		fmt.Println(fmt.Sprintf("\n❌ %s", err.Error()))
-		return nil
+		return formatError(err)
 	}
 
 	// Ask the user for any input that is required

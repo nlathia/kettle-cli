@@ -41,3 +41,8 @@ func init() {
 	// when this action is called directly.
 	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
+
+func formatError(err error) error {
+	fmt.Println(fmt.Sprintf("\n❌ %s", err.Error()))
+	return nil
+}
