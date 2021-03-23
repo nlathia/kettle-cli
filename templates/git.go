@@ -8,7 +8,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/operatorai/kettle-cli/command"
+	"github.com/operatorai/kettle-cli/cli"
 )
 
 func isGitRepository(templatePath string) bool {
@@ -25,7 +25,7 @@ func cloneRepository(url string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	err = command.Execute("git", []string{
+	err = cli.Execute("git", []string{
 		"clone",
 		url,
 		tempDirectory,
@@ -41,7 +41,7 @@ func searchTemplates(templateName string) (string, error) {
 
 	// Sparse checkout, to avoid cloning the entire kettle-templates
 	// repository
-	if err := command.Execute("git", []string{
+	if err := cli.Execute("git", []string{
 		"clone",
 		"--depth", "1",
 		"--filter=blob:none",
@@ -62,14 +62,14 @@ func searchTemplates(templateName string) (string, error) {
 		os.Chdir(rootDir)
 	}()
 
-	if err := command.Execute("git", []string{
+	if err := cli.Execute("git", []string{
 		"sparse-checkout",
 		"init",
 		"--cone",
 	}, "Searching for template..."); err != nil {
 		return "", err
 	}
-	if err := command.Execute("git", []string{
+	if err := cli.Execute("git", []string{
 		"sparse-checkout",
 		"set",
 		templateName,
