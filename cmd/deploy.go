@@ -4,11 +4,11 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"path"
 
 	"github.com/spf13/cobra"
 
 	"github.com/operatorai/kettle-cli/clouds"
+	"github.com/operatorai/kettle-cli/config"
 	"github.com/operatorai/kettle-cli/templates"
 )
 
@@ -36,13 +36,13 @@ func validateDeployArgs(cmd *cobra.Command, args []string) error {
 // runDeploy creates or updates a cloud function
 func runDeploy(cmd *cobra.Command, args []string) error {
 	// Construct the path we want to deploy from
-	deploymentPath, err := getDeploymentPath(args)
+	deploymentPath, err := templates.GetProject(args)
 	if err != nil {
 		return formatError(err)
 	}
 
 	// Read the template's config
-	templateConfig, err := templates.ReadConfig(deploymentPath)
+	templateConfig, err := config.ReadConfig(deploymentPath)
 	if err != nil {
 		return formatError(err)
 	}
@@ -83,33 +83,4 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 
 	fmt.Println("✅  Deployed!")
 	return nil
-}
-
-func getDeploymentPath(args []string) (string, error) {
-	// Deploys from the current working directory
-	rootDir, err := os.Getwd()
-	if err != nil {
-		return "", err
-	}
-
-	rootDir = path.Clean(rootDir)
-	exists, err := templates.HasConfigFile(rootDir)
-	if err != nil {
-		return "", err
-	}
-	if exists {
-		return rootDir, nil
-	}
-
-	// Deploys from a directory relative to the current working directory
-	deploymentPath, err := templates.GetRelativeDirectory(args[0])
-	exists, err = templates.HasConfigFile(deploymentPath)
-	if err != nil {
-		return "", err
-	}
-	if exists {
-		return deploymentPath, nil
-	}
-
-	return "", fmt.Errorf("could not find template config file in %s", args[0])
 }

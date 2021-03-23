@@ -5,8 +5,7 @@ import (
 	"path"
 )
 
-// Returns a path that is relative to the current working directory
-func GetRelativeDirectory(directoryName string) (string, error) {
+func getRelativeDirectory(directoryName string) (string, error) {
 	root, err := os.Getwd()
 	if err != nil {
 		return "", err
@@ -14,7 +13,7 @@ func GetRelativeDirectory(directoryName string) (string, error) {
 	return path.Join(root, directoryName), nil
 }
 
-func PathExists(path string) (bool, error) {
+func pathExists(path string) (bool, error) {
 	if _, err := os.Stat(path); err != nil {
 		if os.IsNotExist(err) {
 			return false, nil

@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/operatorai/kettle-cli/settings"
 	"github.com/spf13/cobra"
-
-	"github.com/operatorai/kettle-cli/config"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -18,7 +17,7 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.PersistentFlags().BoolVar(&config.DebugMode, "debug", false, "Enable debug mode")
+	rootCmd.PersistentFlags().BoolVar(&settings.DebugMode, "debug", false, "Enable debug mode")
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.

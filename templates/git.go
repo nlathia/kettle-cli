@@ -79,7 +79,7 @@ func searchTemplates(templateName string) (string, error) {
 
 	// Sparse checkout returns empty if a directory does not exist
 	tempDirectory = path.Join(tempDirectory, templateName)
-	exists, err := PathExists(tempDirectory)
+	exists, err := pathExists(tempDirectory)
 	if err != nil {
 		return "", err
 	}

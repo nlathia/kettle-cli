@@ -13,8 +13,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/operatorai/kettle-cli/command"
+	"github.com/operatorai/kettle-cli/cli"
 	"github.com/operatorai/kettle-cli/config"
+	"github.com/operatorai/kettle-cli/settings"
 	"github.com/operatorai/kettle-cli/templates"
 )
 
@@ -53,7 +54,7 @@ func runCreate(cmd *cobra.Command, args []string) error {
 	}
 
 	// Read the template config
-	templateConfig, err := templates.ReadConfig(templatePath)
+	templateConfig, err := config.ReadConfig(templatePath)
 	if err != nil {
 		return formatError(err)
 	}
@@ -70,7 +71,7 @@ func runCreate(cmd *cobra.Command, args []string) error {
 		"ProjectName": projectName,
 	}
 	for i, templateEntry := range templateConfig.Template {
-		userInput, err := command.PromptForString(templateEntry.Prompt)
+		userInput, err := cli.PromptForString(templateEntry.Prompt)
 		if err != nil {
 			return cleanUp(directoryPath, err)
 		}
@@ -82,7 +83,7 @@ func runCreate(cmd *cobra.Command, args []string) error {
 	templateDirectory := path.Join(templatePath, "template")
 	err = filepath.Walk(templateDirectory, func(filePath string, info fs.FileInfo, err error) error {
 		if err != nil {
-			if config.DebugMode {
+			if settings.DebugMode {
 				fmt.Printf("error accessing a path %q: %v\n", filePath, err)
 				return err
 			}
@@ -108,7 +109,7 @@ func runCreate(cmd *cobra.Command, args []string) error {
 		return cleanUp(directoryPath, err)
 	}
 
-	err = templates.WriteConfig(directoryPath, templateConfig)
+	err = config.WriteConfig(directoryPath, templateConfig)
 	if err != nil {
 		return cleanUp(directoryPath, err)
 	}
@@ -117,26 +118,19 @@ func runCreate(cmd *cobra.Command, args []string) error {
 }
 
 func createProjectDirectory() (string, string, error) {
-	directoryName, err := command.PromptForString("Directory name")
+	// Prompt the user for a project name
+	directoryName, err := cli.PromptForString("Directory name")
 	if err != nil {
 		return "", "", err
 	}
 
-	directoryPath, err := templates.GetRelativeDirectory(directoryName)
+	// Validate that the path does not exist
+	directoryPath, err := templates.NewProjectPath(directoryName)
 	if err != nil {
 		return "", "", err
 	}
 
-	// Validate that the function path does *not* already exist
-	exists, err := templates.PathExists(directoryPath)
-	if err != nil {
-		return "", "", err
-	}
-	if exists {
-		return "", "", fmt.Errorf("directory already exists: %s", directoryPath)
-	}
-
-	// Create a directory with the function name
+	// Create a directory with the project name
 	if err := os.Mkdir(directoryPath, os.ModePerm); err != nil {
 		return "", "", err
 	}
