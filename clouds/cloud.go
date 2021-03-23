@@ -5,10 +5,11 @@ import (
 	"fmt"
 
 	"github.com/operatorai/kettle-cli/config"
+	"github.com/operatorai/kettle-cli/templates"
 )
 
 type Service interface {
-	Deploy(directory string, config *config.TemplateConfig) error
+	Deploy(directory string, config *templates.Template) error
 }
 
 type Cloud interface {

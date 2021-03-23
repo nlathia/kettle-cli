@@ -73,7 +73,7 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 	}()
 
 	// Deploy
-	if err := service.Deploy(deploymentPath, deploymentConfig); err != nil {
+	if err := service.Deploy(deploymentPath, templateConfig); err != nil {
 		return formatError(err)
 	}
 
