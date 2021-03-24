@@ -11,6 +11,7 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/iancoleman/strcase"
 	"github.com/spf13/cobra"
 
 	"github.com/operatorai/kettle-cli/cli"
@@ -68,12 +69,15 @@ func runCreate(cmd *cobra.Command, args []string) error {
 	// Ask the user for any input that is required
 	templateConfig.ProjectName = projectName
 	templateValues := map[string]string{
-		"ProjectName": projectName, // @TODO format this
+		"ProjectName": strcase.ToKebab(projectName),
 	}
 	for i, templateEntry := range templateConfig.Template {
 		userInput, err := cli.PromptForString(templateEntry.Prompt)
 		if err != nil {
 			return cleanUp(directoryPath, err)
+		}
+		if templateEntry.Style == "camel" {
+			userInput = strcase.ToCamel(userInput)
 		}
 		templateConfig.Template[i].Value = userInput
 		templateValues[templateEntry.Key] = userInput
@@ -119,7 +123,7 @@ func runCreate(cmd *cobra.Command, args []string) error {
 
 func createProjectDirectory() (string, string, error) {
 	// Prompt the user for a project name
-	directoryName, err := cli.PromptForString("Directory name")
+	directoryName, err := cli.PromptForString("Project name")
 	if err != nil {
 		return "", "", err
 	}

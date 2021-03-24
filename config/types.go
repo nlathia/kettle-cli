@@ -22,5 +22,6 @@ type Config struct {
 		Type   string `json:"type"`
 		Key    string `json:"key"`
 		Value  string `json:"value"`
+		Style  string `json:"format,omitempty"`
 	} `json:"template,omitempty"`
 }
