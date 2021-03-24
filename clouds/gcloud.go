@@ -26,9 +26,6 @@ func (GoogleCloud) Setup(stg *settings.Settings) error {
 	if err != nil {
 		return errors.New(fmt.Sprintf("please install the gcloud cli: %s", err))
 	}
-	if stg.GoogleCloud == nil {
-		stg.GoogleCloud = &settings.GoogleCloudSettings{}
-	}
 	if err := gcloud.SetProjectID(stg.GoogleCloud); err != nil {
 		return err
 	}

@@ -8,10 +8,12 @@ import (
 )
 
 func ReadSettings() (*Settings, error) {
-	stg := &Settings{}
 	if _, err := os.Stat(settingsFileName); os.IsNotExist(err) {
 		// Return empty settings
-		return stg, nil
+		return &Settings{
+			GoogleCloud: &GoogleCloudSettings{},
+			AWS:         &AWSSettings{},
+		}, nil
 	}
 
 	contents, err := ioutil.ReadFile(settingsFileName)
@@ -19,6 +21,7 @@ func ReadSettings() (*Settings, error) {
 		return nil, err
 	}
 
+	stg := &Settings{}
 	if err := yaml.Unmarshal(contents, &stg); err != nil {
 		return nil, err
 	}
