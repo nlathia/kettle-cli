@@ -7,7 +7,8 @@ const (
 // Debug mode (kettle <command> --debug)
 var DebugMode bool
 
-// Settings are values that do not change (often) across multiple deployments
+// Settings are values that do not change across multiple deployments
+// and are therefore stored in a settings file
 
 type GoogleCloudSettings struct {
 	ProjectName      string `yaml:"project_name,omitempty"`
@@ -27,17 +28,3 @@ type Settings struct {
 	GoogleCloud *GoogleCloudSettings `yaml:"gcloud,omitempty"`
 	AWS         *AWSSettings         `yaml:"aws,omitempty"`
 }
-
-// Values that are specific to each deployment
-// type TemplateConfig struct {
-
-// 	Settings *Settings `yaml:"settings"`
-
-// 	// template create values
-// 	Name         string `yaml:"name"`
-// 	FunctionName string `yaml:"entrypoint"`
-
-// 	// AWS variables
-//
-// 	RestApiResourceID string `yaml:"rest_api_resource_id,omitempty"`
-// }
