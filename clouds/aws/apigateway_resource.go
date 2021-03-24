@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/operatorai/kettle-cli/command"
-	"github.com/operatorai/kettle-cli/config"
+	"github.com/operatorai/kettle-cli/cli"
+	"github.com/operatorai/kettle-cli/settings"
 )
 
 type RestApiResource struct {
@@ -16,11 +16,11 @@ type RestApiResource struct {
 	HasPostMethod bool
 }
 
-func getRestApiResources(cfg *config.TemplateConfig) ([]*RestApiResource, error) {
-	output, err := command.ExecuteWithResult("aws", []string{
+func getRestApiResources(stg *settings.Settings) ([]*RestApiResource, error) {
+	output, err := cli.ExecuteWithResult("aws", []string{
 		"apigateway",
 		"get-resources",
-		"--rest-api-id", cfg.Settings.RestApiID,
+		"--rest-api-id", stg.AWS.RestApiID,
 	}, "Collecting API resources")
 	if err != nil {
 		return nil, err
@@ -59,8 +59,8 @@ func getResourceWithPath(resources []*RestApiResource, pathPart string) *RestApi
 	return nil
 }
 
-func setRestApiResourceID(resources []*RestApiResource, cfg *config.TemplateConfig) error {
-	if cfg.RestApiResourceID != "" {
+func setRestApiResourceID(resources []*RestApiResource, stg *settings.Settings) error {
+	if stg.AWS.RestApiResourceID != "" {
 		return nil
 	}
 
@@ -71,7 +71,7 @@ func setRestApiResourceID(resources []*RestApiResource, cfg *config.TemplateConf
 		cfg.RestApiResourceID = restApiResource.ID
 	} else {
 		// Not found: create a resource in the API
-		output, err := command.ExecuteWithResult("aws", []string{
+		output, err := cli.ExecuteWithResult("aws", []string{
 			"apigateway",
 			"create-resource",
 			"--rest-api-id", cfg.Settings.RestApiID,
@@ -103,11 +103,11 @@ func setRestApiResourceID(resources []*RestApiResource, cfg *config.TemplateConf
 	return nil
 }
 
-func setRestApiRootResourceID(resources []*RestApiResource, settings *config.Settings) error {
-	if settings.RestApiRootID != "" {
+func setRestApiRootResourceID(resources []*RestApiResource, stg *settings.Settings) error {
+	if stg.AWS.RestApiRootID != "" {
 		return nil
 	}
-	if settings.RestApiID == "" {
+	if stg.AWS.RestApiID == "" {
 		return errors.New("rest api id not set")
 	}
 
@@ -116,17 +116,17 @@ func setRestApiRootResourceID(resources []*RestApiResource, settings *config.Set
 		return errors.New("did not find root apigateway resource")
 	}
 
-	settings.RestApiRootID = resource.ID
+	stg.AWS.RestApiRootID = resource.ID
 	return nil
 }
 
-func addResourcePOSTMethod(resource *RestApiResource, cfg *config.TemplateConfig) error {
+func addResourcePOSTMethod(resource *RestApiResource, stg *settings.Settings) error {
 	if resource.HasPostMethod {
 		return nil
 	}
 
 	apiKeySetting := "--no-api-key-required"
-	if command.PromptToConfirm("Require an API key to call the URL") {
+	if cli.PromptToConfirm("Require an API key to call the URL") {
 		apiKeySetting = "--api-key-required"
 		// Note: if an api key is required, then there is more set up to do:
 
@@ -140,11 +140,11 @@ func addResourcePOSTMethod(resource *RestApiResource, cfg *config.TemplateConfig
 	}
 
 	// Create the method
-	err := command.Execute("aws", []string{
+	err := cli.Execute("aws", []string{
 		"apigateway",
 		"put-method",
-		"--rest-api-id", cfg.Settings.RestApiID,
-		"--resource-id", cfg.RestApiResourceID,
+		"--rest-api-id", stg.AWS.RestApiID,
+		"--resource-id", stg.AWS.RestApiResourceID, // @TODO
 		"--http-method", "POST",
 		"--authorization-type", "NONE",
 		apiKeySetting,
@@ -154,11 +154,11 @@ func addResourcePOSTMethod(resource *RestApiResource, cfg *config.TemplateConfig
 	}
 
 	// Set the method response to JSON
-	err = command.Execute("aws", []string{
+	err = cli.Execute("aws", []string{
 		"apigateway",
 		"put-method-response",
-		"--rest-api-id", cfg.Settings.RestApiID,
-		"--resource-id", cfg.RestApiResourceID,
+		"--rest-api-id", stg.AWS.RestApiID,
+		"--resource-id", stg.AWS.RestApiResourceID, // @TODO
 		"--http-method", "POST",
 		"--status-code", "200",
 		"--response-models", "application/json=Empty",

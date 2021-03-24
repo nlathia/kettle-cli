@@ -6,16 +6,16 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/operatorai/kettle-cli/command"
-	"github.com/operatorai/kettle-cli/config"
+	"github.com/operatorai/kettle-cli/cli"
+	"github.com/operatorai/kettle-cli/settings"
 )
 
 const (
 	operatorExecutionRole = "operator-lambda-role"
 )
 
-func setExecutionRole(cfg *config.TemplateConfig) error {
-	if cfg.Settings.RoleArn != "" {
+func setExecutionRole(stg *settings.Settings) error {
+	if stg.AWS.RoleArn != "" {
 		return nil
 	}
 
@@ -31,7 +31,7 @@ func setExecutionRole(cfg *config.TemplateConfig) error {
 			return err
 		}
 	} else {
-		role, err = command.PromptForValue("IAM Role", roles, !operatorExecutionRoleExists)
+		role, err = cli.PromptForValue("IAM Role", roles, !operatorExecutionRoleExists)
 		if err != nil {
 			return err
 		}
@@ -43,12 +43,12 @@ func setExecutionRole(cfg *config.TemplateConfig) error {
 		}
 	}
 
-	cfg.Settings.RoleArn = role
+	stg.AWS.RoleArn = role
 	return nil
 }
 
 func getExecutionRoles() (map[string]string, bool, error) {
-	output, err := command.ExecuteWithResult("aws", []string{
+	output, err := cli.ExecuteWithResult("aws", []string{
 		"iam",
 		"list-roles",
 		"--output", "json",
@@ -113,7 +113,7 @@ func createExecutionRole() (string, error) {
 		return "", err
 	}
 
-	output, err := command.ExecuteWithResult("aws", []string{
+	output, err := cli.ExecuteWithResult("aws", []string{
 		"iam",
 		"create-role",
 		"--role-name", operatorExecutionRole,
