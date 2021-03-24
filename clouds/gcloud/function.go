@@ -1,7 +1,6 @@
 package gcloud
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/operatorai/kettle-cli/cli"
@@ -13,7 +12,7 @@ type GoogleCloudFunction struct{}
 
 // https://cloud.google.com/sdk/gcloud/reference/functions/deploy
 func (GoogleCloudFunction) Deploy(directory string, cfg *config.Config, stg *settings.Settings) error {
-	functionName, err := getFunctionName(cfg)
+	functionName, err := config.GetKey(cfg, "FunctionName")
 	if err != nil {
 		return err
 	}
@@ -36,13 +35,4 @@ func (GoogleCloudFunction) Deploy(directory string, cfg *config.Config, stg *set
 		fmt.Sprintf("--region=%s", stg.GoogleCloud.DeploymentRegion),
 		"--allow-unauthenticated",
 	}, "Deploying Cloud Function")
-}
-
-func getFunctionName(cfg *config.Config) (string, error) {
-	for _, template := range cfg.Template {
-		if template.Key == "FunctionName" {
-			return template.Value, nil
-		}
-	}
-	return "", errors.New("this template has not defined a 'FunctionName'")
 }

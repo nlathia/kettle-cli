@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
@@ -52,4 +53,13 @@ func pathExists(path string) (bool, error) {
 		return false, err
 	}
 	return true, nil
+}
+
+func GetKey(cfg *Config, key string) (string, error) {
+	for _, template := range cfg.Template {
+		if template.Key == key {
+			return template.Value, nil
+		}
+	}
+	return "", fmt.Errorf("this template has not defined a '%s'", key)
 }
