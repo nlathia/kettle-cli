@@ -68,7 +68,7 @@ func runCreate(cmd *cobra.Command, args []string) error {
 	// Ask the user for any input that is required
 	templateConfig.ProjectName = projectName
 	templateValues := map[string]string{
-		"ProjectName": projectName,
+		"ProjectName": projectName, // @TODO format this
 	}
 	for i, templateEntry := range templateConfig.Template {
 		userInput, err := cli.PromptForString(templateEntry.Prompt)

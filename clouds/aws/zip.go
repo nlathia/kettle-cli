@@ -78,6 +78,7 @@ func addPythonLambdaToArchive(deploymentFile string, cfg *config.Config) error {
 	}
 
 	// Python builds need to add the site-packages contents
+	// @TODO: this only works for pyenv templates right now
 	sitePackages, err := getPyenvSitePackagesDirectory(cfg.Config.Runtime)
 	if err != nil {
 		return err
