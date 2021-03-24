@@ -2,11 +2,10 @@ package apigateway
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
-	"strings"
 
 	"github.com/operatorai/kettle-cli/cli"
+	"github.com/operatorai/kettle-cli/config"
 	"github.com/operatorai/kettle-cli/settings"
 )
 
@@ -16,68 +15,22 @@ type RestApiResource struct {
 	HasPostMethod bool
 }
 
-func getRestApiResources(stg *settings.Settings) ([]*RestApiResource, error) {
-	output, err := cli.ExecuteWithResult("aws", []string{
-		"apigateway",
-		"get-resources",
-		"--rest-api-id", stg.AWS.RestApiID,
-	}, "Collecting API resources")
-	if err != nil {
-		return nil, err
-	}
-
-	var results struct {
-		Items []struct {
-			Path            string `json:"path"`
-			ID              string `json:"id"`
-			ResourceMethods struct {
-				POST *struct{} `json:"POST"`
-			} `json:"resourceMethods"`
-		} `json:"items"`
-	}
-	if err := json.Unmarshal(output, &results); err != nil {
-		return nil, err
-	}
-
-	resources := []*RestApiResource{}
-	for _, result := range results.Items {
-		resources = append(resources, &RestApiResource{
-			Path:          result.Path,
-			ID:            result.ID,
-			HasPostMethod: (result.ResourceMethods.POST != nil),
-		})
-	}
-	return resources, nil
-}
-
-func getResourceWithPath(resources []*RestApiResource, pathPart string) *RestApiResource {
-	for _, resource := range resources {
-		if resource.Path == strings.Join([]string{"/", pathPart}, "") {
-			return resource
-		}
-	}
-	return nil
-}
-
-func setRestApiResourceID(resources []*RestApiResource, stg *settings.Settings) error {
-	if stg.AWS.RestApiResourceID != "" {
+func SetResourceID(resources []*RestApiResource, cfg *config.Config, stg *settings.Settings) error {
+	if cfg.Config.AWS.RestApiResourceID != "" {
 		return nil
 	}
 
 	// Look for existing resource ID
-	restApiResource := getResourceWithPath(resources, cfg.Name)
-	if restApiResource != nil {
-		// Use the existing resource ID
-		cfg.RestApiResourceID = restApiResource.ID
-	} else {
+	restApiResource := getResourceWithPath(resources, cfg.ProjectName)
+	if restApiResource == nil {
 		// Not found: create a resource in the API
 		output, err := cli.ExecuteWithResult("aws", []string{
 			"apigateway",
 			"create-resource",
-			"--rest-api-id", cfg.Settings.RestApiID,
-			"--path-part", cfg.Name,
-			"--parent-id", cfg.Settings.RestApiRootID,
-		}, fmt.Sprintf("Creating /%s API resource", cfg.Name))
+			"--rest-api-id", stg.AWS.RestApiID,
+			"--path-part", cfg.ProjectName,
+			"--parent-id", stg.AWS.RestApiRootID,
+		}, fmt.Sprintf("Creating /%s API resource", cfg.ProjectName))
 		if err != nil {
 			return err
 		}
@@ -88,39 +41,22 @@ func setRestApiResourceID(resources []*RestApiResource, stg *settings.Settings) 
 		if err := json.Unmarshal(output, &result); err != nil {
 			return err
 		}
-		cfg.RestApiResourceID = result.ID
 		restApiResource = &RestApiResource{
-			Path:          cfg.Name,
+			Path:          cfg.ProjectName,
 			ID:            result.ID,
 			HasPostMethod: false,
 		}
 	}
 
+	cfg.Config.AWS.RestApiResourceID = restApiResource.ID
 	// Check for POST method
-	if err := addResourcePOSTMethod(restApiResource, cfg); err != nil {
+	if err := addResourcePOSTMethod(restApiResource, stg.AWS.RestApiID, cfg.Config.AWS.RestApiResourceID); err != nil {
 		return err
 	}
 	return nil
 }
 
-func setRestApiRootResourceID(resources []*RestApiResource, stg *settings.Settings) error {
-	if stg.AWS.RestApiRootID != "" {
-		return nil
-	}
-	if stg.AWS.RestApiID == "" {
-		return errors.New("rest api id not set")
-	}
-
-	resource := getResourceWithPath(resources, "")
-	if resource == nil {
-		return errors.New("did not find root apigateway resource")
-	}
-
-	stg.AWS.RestApiRootID = resource.ID
-	return nil
-}
-
-func addResourcePOSTMethod(resource *RestApiResource, stg *settings.Settings) error {
+func addResourcePOSTMethod(resource *RestApiResource, apiID, resourceID string) error {
 	if resource.HasPostMethod {
 		return nil
 	}
@@ -143,8 +79,8 @@ func addResourcePOSTMethod(resource *RestApiResource, stg *settings.Settings) er
 	err := cli.Execute("aws", []string{
 		"apigateway",
 		"put-method",
-		"--rest-api-id", stg.AWS.RestApiID,
-		"--resource-id", stg.AWS.RestApiResourceID, // @TODO
+		"--rest-api-id", apiID,
+		"--resource-id", resourceID,
 		"--http-method", "POST",
 		"--authorization-type", "NONE",
 		apiKeySetting,
@@ -157,8 +93,8 @@ func addResourcePOSTMethod(resource *RestApiResource, stg *settings.Settings) er
 	err = cli.Execute("aws", []string{
 		"apigateway",
 		"put-method-response",
-		"--rest-api-id", stg.AWS.RestApiID,
-		"--resource-id", stg.AWS.RestApiResourceID, // @TODO
+		"--rest-api-id", apiID,
+		"--resource-id", resourceID,
 		"--http-method", "POST",
 		"--status-code", "200",
 		"--response-models", "application/json=Empty",

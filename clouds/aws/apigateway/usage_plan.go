@@ -51,6 +51,5 @@ func getUsagePlans(stg *settings.Settings) (map[string]string, bool, error) {
 			}
 		}
 	}
-
 	return usagePlans, operatorUsagePlanExists, nil
 }

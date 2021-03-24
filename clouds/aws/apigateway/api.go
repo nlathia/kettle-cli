@@ -11,7 +11,7 @@ const (
 	operatorApiName = "operator-apigateway"
 )
 
-func setRestApiID(stg *settings.Settings) error {
+func SetRestApiID(stg *settings.Settings) error {
 	if stg.AWS.RestApiID != "" {
 		return nil
 	}
@@ -46,6 +46,15 @@ func setRestApiID(stg *settings.Settings) error {
 
 	stg.AWS.RestApiID = restApiID
 	return nil
+}
+
+func Deploy(stg *settings.Settings) error {
+	return cli.Execute("aws", []string{
+		"apigateway",
+		"create-deployment",
+		"--rest-api-id", stg.AWS.RestApiID,
+		"--stage-name", "prod", // @TODO add support for different stages
+	}, "Deploying the REST API")
 }
 
 func getRestApis() (map[string]string, bool, error) {
@@ -98,13 +107,4 @@ func createRestApi() (string, error) {
 		return "", err
 	}
 	return result.ApiID, nil
-}
-
-func deployRestApi(stg *settings.Settings) error {
-	return cli.Execute("aws", []string{
-		"apigateway",
-		"create-deployment",
-		"--rest-api-id", stg.AWS.RestApiID,
-		"--stage-name", "prod", // @TODO add support for different stages
-	}, "Deploying the REST API")
 }
