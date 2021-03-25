@@ -1,18 +1,16 @@
 package templates
 
 import (
-	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 
-	"github.com/operatorai/kettle-cli/command"
+	"github.com/operatorai/kettle-cli/config"
 )
 
 func GetTemplate(templatePath string) (string, bool, error) {
 	// Match on a local path first
-	exists, err := PathExists(templatePath)
+	exists, err := pathExists(templatePath)
 	if err != nil {
 		return "", false, err
 	}
@@ -34,71 +32,48 @@ func GetTemplate(templatePath string) (string, bool, error) {
 	return tempDirectory, true, nil
 }
 
-func cloneRepository(url string) (string, error) {
-	tempDirectory, err := ioutil.TempDir("", "kettle")
-	if err != nil {
-		return "", err
-	}
-	err = command.Execute("git", []string{
-		"clone",
-		url,
-		tempDirectory,
-	}, "Cloning template...")
-	return tempDirectory, err
-}
-
-func searchTemplates(templateName string) (string, error) {
+func GetProject(args []string) (string, error) {
+	// Deploys from the current working directory
 	rootDir, err := os.Getwd()
 	if err != nil {
 		return "", err
 	}
-	defer func() {
-		// Return to the original root directory
-		os.Chdir(rootDir)
-	}()
 
-	tempDirectory, err := ioutil.TempDir("", "kettle-templates")
+	rootDir = path.Clean(rootDir)
+	exists, err := config.HasConfigFile(rootDir)
+	if err != nil {
+		return "", err
+	}
+	if exists {
+		return rootDir, nil
+	}
+
+	// Deploys from a directory relative to the current working directory
+	deploymentPath, err := getRelativeDirectory(args[0])
+	exists, err = config.HasConfigFile(deploymentPath)
+	if err != nil {
+		return "", err
+	}
+	if exists {
+		return deploymentPath, nil
+	}
+
+	return "", fmt.Errorf("could not find template config file in %s", args[0])
+}
+
+func NewProjectPath(path string) (string, error) {
+	directoryPath, err := getRelativeDirectory(path)
 	if err != nil {
 		return "", err
 	}
 
-	// Sparse checkout, to avoid cloning the entire kettle-templates
-	// repository. This will return empty if the templateName does
-	// not exist
-	if err := command.Execute("git", []string{
-		"clone",
-		"--depth", "1",
-		"--filter=blob:none",
-		"--sparse",
-		"https://github.com/operatorai/kettle-templates",
-		tempDirectory,
-	}, "Searching for template..."); err != nil {
-		return "", err
-	}
-
-	os.Chdir(tempDirectory)
-	if err := command.Execute("git", []string{
-		"sparse-checkout",
-		"init",
-		"--cone",
-	}, "Searching for template..."); err != nil {
-		return "", err
-	}
-	if err := command.Execute("git", []string{
-		"sparse-checkout",
-		"set",
-		templateName,
-	}, "Searching for template..."); err != nil {
-		return "", err
-	}
-
-	tempDirectory = path.Join(tempDirectory, templateName)
-	exists, err := PathExists(tempDirectory)
+	// Validate that the function path does *not* already exist
+	exists, err := pathExists(directoryPath)
 	if err != nil {
 		return "", err
 	}
-	if !exists {
-		return "", errors.New(fmt.Sprintf("%s not found", templateName))
+	if exists {
+		return "", fmt.Errorf("directory already exists: %s", directoryPath)
 	}
-	return tempDirectory, nil
+	return directoryPath, nil
 }

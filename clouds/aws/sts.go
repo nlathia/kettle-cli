@@ -3,16 +3,16 @@ package aws
 import (
 	"encoding/json"
 
-	"github.com/operatorai/kettle-cli/command"
-	"github.com/operatorai/kettle-cli/config"
+	"github.com/operatorai/kettle-cli/cli"
+	"github.com/operatorai/kettle-cli/settings"
 )
 
-func SetAccountID(settings *config.Settings) error {
-	if settings.AccountID != "" {
+func SetAccountID(stg *settings.AWSSettings) error {
+	if stg.AccountID != "" {
 		return nil
 	}
 
-	output, err := command.ExecuteWithResult("aws", []string{
+	output, err := cli.ExecuteWithResult("aws", []string{
 		"sts",
 		"get-caller-identity",
 		"--output", "json",
@@ -28,6 +28,6 @@ func SetAccountID(settings *config.Settings) error {
 		return err
 	}
 
-	settings.AccountID = result.Account
+	stg.AccountID = result.Account
 	return nil
 }

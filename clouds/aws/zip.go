@@ -6,7 +6,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/operatorai/kettle-cli/command"
+	"github.com/operatorai/kettle-cli/cli"
 	"github.com/operatorai/kettle-cli/config"
 )
 
@@ -15,7 +15,7 @@ const (
 	goBuildFileName       = "main"
 )
 
-func createDeploymentArchive(cfg *config.TemplateConfig) (string, error) {
+func createDeploymentArchive(cfg *config.Config) (string, error) {
 	// Remove any existing deployment package
 	if err := removeDeploymentArchive(cfg); err != nil {
 		return "", err
@@ -29,12 +29,12 @@ func createDeploymentArchive(cfg *config.TemplateConfig) (string, error) {
 	deploymentFile := path.Join(rootDir, deploymentArchiveName)
 
 	switch {
-	case strings.HasPrefix(cfg.Settings.Runtime, "python"):
+	case strings.HasPrefix(cfg.Config.Runtime, "python"):
 		// https://docs.aws.amazon.com/lambda/latest/dg/python-package.html
 		if err := addPythonLambdaToArchive(deploymentFile, cfg); err != nil {
 			return "", err
 		}
-	case strings.HasPrefix(cfg.Settings.Runtime, "go"):
+	case strings.HasPrefix(cfg.Config.Runtime, "go"):
 		// https://docs.aws.amazon.com/lambda/latest/dg/golang-package.html
 		if err := addGoLambdaToArchive(deploymentFile, cfg); err != nil {
 			return "", err
@@ -43,11 +43,11 @@ func createDeploymentArchive(cfg *config.TemplateConfig) (string, error) {
 	return deploymentFile, nil
 }
 
-func removeDeploymentArchive(cfg *config.TemplateConfig) error {
+func removeDeploymentArchive(cfg *config.Config) error {
 	if err := removeFile(deploymentArchiveName); err != nil {
 		return err
 	}
-	if strings.HasPrefix(cfg.Settings.Runtime, "go") {
+	if strings.HasPrefix(cfg.Config.Runtime, "go") {
 		if err := removeFile(goBuildFileName); err != nil {
 			return err
 		}
@@ -65,9 +65,9 @@ func removeFile(fileName string) error {
 	return os.Remove(fileName)
 }
 
-func addPythonLambdaToArchive(deploymentFile string, cfg *config.TemplateConfig) error {
+func addPythonLambdaToArchive(deploymentFile string, cfg *config.Config) error {
 	// Add the contents of the lambda function directory
-	err := command.Execute("zip", []string{
+	err := cli.Execute("zip", []string{
 		"-g",
 		deploymentArchiveName,
 		"-r",
@@ -78,7 +78,8 @@ func addPythonLambdaToArchive(deploymentFile string, cfg *config.TemplateConfig)
 	}
 
 	// Python builds need to add the site-packages contents
-	sitePackages, err := getPyenvSitePackagesDirectory(cfg.Settings.Runtime)
+	// @TODO: this only works for pyenv templates right now
+	sitePackages, err := getPyenvSitePackagesDirectory(cfg.Config.Runtime)
 	if err != nil {
 		return err
 	}
@@ -91,7 +92,7 @@ func addPythonLambdaToArchive(deploymentFile string, cfg *config.TemplateConfig)
 		}
 
 		os.Chdir(sitePackages)
-		err = command.Execute("zip", []string{
+		err = cli.Execute("zip", []string{
 			"-r",
 			deploymentFile,
 			".",
@@ -107,14 +108,14 @@ func addPythonLambdaToArchive(deploymentFile string, cfg *config.TemplateConfig)
 }
 
 func getPyenvSitePackagesDirectory(pythonVersion string) (string, error) {
-	pyenvRoot, err := command.ExecuteWithResult("pyenv", []string{
+	pyenvRoot, err := cli.ExecuteWithResult("pyenv", []string{
 		"root",
 	}, "Finding pyenv root")
 	if err != nil {
 		return "", err
 	}
 
-	pyenvLocal, err := command.ExecuteWithResult("pyenv", []string{
+	pyenvLocal, err := cli.ExecuteWithResult("pyenv", []string{
 		"local",
 	}, "Finding pyenv local version")
 	if err != nil {
@@ -128,9 +129,9 @@ func getPyenvSitePackagesDirectory(pythonVersion string) (string, error) {
 	), nil
 }
 
-func addGoLambdaToArchive(deploymentFile string, cfg *config.TemplateConfig) error {
+func addGoLambdaToArchive(deploymentFile string, cfg *config.Config) error {
 	// go get github.com/aws/aws-lambda-go/lambda
-	err := command.Execute("go", []string{
+	err := cli.Execute("go", []string{
 		"get",
 		"./...",
 	}, "Running go get ./...")
@@ -139,7 +140,7 @@ func addGoLambdaToArchive(deploymentFile string, cfg *config.TemplateConfig) err
 	}
 
 	// Build the function for linux
-	err = command.Execute("env", []string{
+	err = cli.Execute("env", []string{
 		"GOOS=linux",
 		"go",
 		"build",
@@ -151,7 +152,7 @@ func addGoLambdaToArchive(deploymentFile string, cfg *config.TemplateConfig) err
 	}
 
 	// zip function.zip main
-	return command.Execute("zip", []string{
+	return cli.Execute("zip", []string{
 		deploymentFile,
 		"main",
 	}, "Adding Go binary to deployment archive")

@@ -1,18 +1,18 @@
-package aws
+package apigateway
 
 import (
 	"encoding/json"
 
-	"github.com/operatorai/kettle-cli/command"
-	"github.com/operatorai/kettle-cli/config"
+	"github.com/operatorai/kettle-cli/cli"
+	"github.com/operatorai/kettle-cli/settings"
 )
 
 const (
 	operatorUsagePlanName = "operator-apigateway-usage-plan"
 )
 
-func getUsagePlans(cfg *config.TemplateConfig) (map[string]string, bool, error) {
-	output, err := command.ExecuteWithResult("aws", []string{
+func getUsagePlans(stg *settings.Settings) (map[string]string, bool, error) {
+	output, err := cli.ExecuteWithResult("aws", []string{
 		"apigateway",
 		"get-usage-plans",
 		"--output", "json",
@@ -42,7 +42,7 @@ func getUsagePlans(cfg *config.TemplateConfig) (map[string]string, bool, error) 
 	usagePlans := map[string]string{}
 	for _, result := range results.Items {
 		for _, stage := range result.ApiStages {
-			if stage.ID == cfg.Settings.RestApiID && stage.Stage == "prod" {
+			if stage.ID == stg.AWS.RestApiID && stage.Stage == "prod" {
 				usagePlans[result.Name] = result.ID
 				if result.Name == operatorUsagePlanName {
 					operatorUsagePlanExists = true
@@ -51,6 +51,5 @@ func getUsagePlans(cfg *config.TemplateConfig) (map[string]string, bool, error) 
 			}
 		}
 	}
-
 	return usagePlans, operatorUsagePlanExists, nil
 }

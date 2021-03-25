@@ -3,33 +3,36 @@ package gcloud
 import (
 	"fmt"
 
-	"github.com/operatorai/kettle-cli/command"
+	"github.com/operatorai/kettle-cli/cli"
 	"github.com/operatorai/kettle-cli/config"
+	"github.com/operatorai/kettle-cli/settings"
 )
 
 type GoogleCloudFunction struct{}
 
 // https://cloud.google.com/sdk/gcloud/reference/functions/deploy
-func (GoogleCloudFunction) Deploy(directory string, cfg *config.TemplateConfig) error {
-	fmt.Println("🚢  Deploying ", cfg.Name, "as a Google Cloud function")
-	fmt.Println("⏭  Entry point: ", cfg.FunctionName, fmt.Sprintf("(%s)", cfg.Settings.Runtime))
-	if err := SetDeploymentRegion(cfg.Settings); err != nil {
+func (GoogleCloudFunction) Deploy(directory string, cfg *config.Config, stg *settings.Settings) error {
+	functionName, err := config.GetKey(cfg, "FunctionName")
+	if err != nil {
 		return err
 	}
 
+	fmt.Println("🚢  Deploying ", cfg.ProjectName, "as a Google Cloud function")
+	fmt.Println("⏭  Entry point: ", functionName, fmt.Sprintf("(%s)", cfg.Config.Runtime))
+
 	fmt.Println(fmt.Sprintf("🔍  https://%s-%s.cloudfunctions.net/%s",
-		cfg.Settings.DeploymentRegion,
-		cfg.Settings.ProjectID,
-		cfg.Name,
+		stg.GoogleCloud.DeploymentRegion,
+		stg.GoogleCloud.ProjectID,
+		cfg.ProjectName,
 	))
-	return command.Execute("gcloud", []string{
+	return cli.Execute("gcloud", []string{
 		"functions",
 		"deploy",
-		cfg.Name,
-		"--runtime", cfg.Settings.Runtime,
+		cfg.ProjectName,
+		"--runtime", cfg.Config.Runtime,
 		"--trigger-http",
-		fmt.Sprintf("--entry-point=%s", cfg.FunctionName),
-		fmt.Sprintf("--region=%s", cfg.Settings.DeploymentRegion),
+		fmt.Sprintf("--entry-point=%s", functionName),
+		fmt.Sprintf("--region=%s", stg.GoogleCloud.DeploymentRegion),
 		"--allow-unauthenticated",
 	}, "Deploying Cloud Function")
 }

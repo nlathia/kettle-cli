@@ -1,18 +1,18 @@
-package aws
+package apigateway
 
 import (
 	"encoding/json"
 
-	"github.com/operatorai/kettle-cli/command"
-	"github.com/operatorai/kettle-cli/config"
+	"github.com/operatorai/kettle-cli/cli"
+	"github.com/operatorai/kettle-cli/settings"
 )
 
 const (
 	operatorApiName = "operator-apigateway"
 )
 
-func setRestApiID(settings *config.Settings) error {
-	if settings.RestApiID != "" {
+func SetRestApiID(stg *settings.Settings) error {
+	if stg.AWS.RestApiID != "" {
 		return nil
 	}
 
@@ -32,7 +32,7 @@ func setRestApiID(settings *config.Settings) error {
 	} else {
 		// Allow the user to create a new REST API
 		// if the operator one doesn't alredy exist
-		restApiID, err = command.PromptForValue("AWS REST API", apis, !operatorApiExists)
+		restApiID, err = cli.PromptForValue("AWS REST API", apis, !operatorApiExists)
 		if err != nil {
 			return err
 		}
@@ -44,12 +44,21 @@ func setRestApiID(settings *config.Settings) error {
 		}
 	}
 
-	settings.RestApiID = restApiID
+	stg.AWS.RestApiID = restApiID
 	return nil
 }
 
+func Deploy(stg *settings.Settings) error {
+	return cli.Execute("aws", []string{
+		"apigateway",
+		"create-deployment",
+		"--rest-api-id", stg.AWS.RestApiID,
+		"--stage-name", "prod", // @TODO add support for different stages
+	}, "Deploying the REST API")
+}
+
 func getRestApis() (map[string]string, bool, error) {
-	output, err := command.ExecuteWithResult("aws", []string{
+	output, err := cli.ExecuteWithResult("aws", []string{
 		"apigateway",
 		"get-rest-apis",
 	}, "Collecting available REST APIs")
@@ -82,7 +91,7 @@ func getRestApis() (map[string]string, bool, error) {
 }
 
 func createRestApi() (string, error) {
-	output, err := command.ExecuteWithResult("aws", []string{
+	output, err := cli.ExecuteWithResult("aws", []string{
 		"apigateway",
 		"create-rest-api",
 		"--name", operatorApiName,
@@ -98,13 +107,4 @@ func createRestApi() (string, error) {
 		return "", err
 	}
 	return result.ApiID, nil
-}
-
-func deployRestApi(cfg *config.TemplateConfig) error {
-	return command.Execute("aws", []string{
-		"apigateway",
-		"create-deployment",
-		"--rest-api-id", cfg.Settings.RestApiID,
-		"--stage-name", "prod", // @TODO add support for different stages
-	}, "Deploying the REST API")
 }

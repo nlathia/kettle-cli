@@ -1,40 +1,65 @@
 package config
 
 import (
+	"encoding/json"
+	"fmt"
 	"io/ioutil"
+	"os"
 	"path"
-
-	"gopkg.in/yaml.v2"
 )
 
-func GetConfigFilePath(directoryPath string) string {
-	return path.Join(directoryPath, DeploymentConfig)
-}
-
-func WriteConfig(cfg *TemplateConfig, directoryPath string) error {
-	data, err := yaml.Marshal(cfg)
-	if err != nil {
-		return err
-	}
-
-	filePath := GetConfigFilePath(directoryPath)
-	err = ioutil.WriteFile(filePath, []byte(data), 0644)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func ReadConfig(directoryPath string) (*TemplateConfig, error) {
-	filePath := GetConfigFilePath(directoryPath)
-	contents, err := ioutil.ReadFile(filePath)
+func ReadConfig(templatePath string) (*Config, error) {
+	configPath := path.Join(templatePath, configFileName)
+	data, err := ioutil.ReadFile(configPath)
 	if err != nil {
 		return nil, err
 	}
 
-	values := TemplateConfig{}
-	if err := yaml.Unmarshal(contents, &values); err != nil {
+	template := &Config{}
+	err = json.Unmarshal(data, template)
+	if err != nil {
 		return nil, err
 	}
-	return &values, nil
+	return template, nil
+}
+
+func WriteConfig(projectPath string, config *Config) error {
+	data, err := json.MarshalIndent(config, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	configPath := path.Join(projectPath, configFileName)
+	return ioutil.WriteFile(configPath, data, 0644)
+}
+
+func HasConfigFile(directory string) (bool, error) {
+	configFilePath := path.Join(directory, configFileName)
+	exists, err := pathExists(configFilePath)
+	if err != nil {
+		return false, err
+	}
+	if !exists {
+		return false, nil
+	}
+	return true, nil
+}
+
+func pathExists(path string) (bool, error) {
+	if _, err := os.Stat(path); err != nil {
+		if os.IsNotExist(err) {
+			return false, nil
+		}
+		return false, err
+	}
+	return true, nil
+}
+
+func GetKey(cfg *Config, key string) (string, error) {
+	for _, template := range cfg.Template {
+		if template.Key == key {
+			return template.Value, nil
+		}
+	}
+	return "", fmt.Errorf("this template has not defined a '%s'", key)
 }

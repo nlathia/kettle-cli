@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/operatorai/kettle-cli/command"
-	"github.com/operatorai/kettle-cli/config"
+	"github.com/operatorai/kettle-cli/cli"
+	"github.com/operatorai/kettle-cli/settings"
 )
 
-func SetDeploymentRegion(settings *config.Settings) error {
-	if settings.DeploymentRegion != "" {
+func SetDeploymentRegion(stg *settings.GoogleCloudSettings) error {
+	if stg.DeploymentRegion != "" {
 		return nil
 	}
 
@@ -18,18 +18,18 @@ func SetDeploymentRegion(settings *config.Settings) error {
 		return err
 	}
 
-	region, err := command.PromptForValue("Deployment region", regions, false)
+	region, err := cli.PromptForValue("Deployment region", regions, false)
 	if err != nil {
 		return err
 	}
 
-	settings.DeploymentRegion = region
+	stg.DeploymentRegion = region
 	return nil
 }
 
 // gcloud functions regions list --format="json"
 func getGoogleCloudRegions() (map[string]string, error) {
-	output, err := command.ExecuteWithResult("gcloud", []string{
+	output, err := cli.ExecuteWithResult("gcloud", []string{
 		"functions",
 		"regions",
 		"list",

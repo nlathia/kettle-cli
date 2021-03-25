@@ -5,23 +5,24 @@ import (
 	"fmt"
 
 	"github.com/operatorai/kettle-cli/config"
+	"github.com/operatorai/kettle-cli/settings"
 )
 
 type Service interface {
-	Deploy(directory string, config *config.TemplateConfig) error
+	Deploy(directory string, cfg *config.Config, stg *settings.Settings) error
 }
 
 type Cloud interface {
-	Setup(settings *config.Settings) error
+	Setup(settings *settings.Settings) error
 
 	GetService(deploymentType string) (Service, error)
 }
 
 func GetCloudProvider(cloudType string) (Cloud, error) {
 	switch cloudType {
-	case config.GoogleCloud:
+	case "gcloud":
 		return GoogleCloud{}, nil
-	case config.AWS:
+	case "aws":
 		return AmazonWebServices{}, nil
 	}
 	return nil, errors.New(fmt.Sprintf("unimplemented cloud: %s", cloudType))

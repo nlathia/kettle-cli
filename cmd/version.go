@@ -7,8 +7,10 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+)
 
-	"github.com/operatorai/kettle-cli/config"
+const (
+	Version = "v0.0.3"
 )
 
 // versionCmd represents the version command
@@ -17,7 +19,7 @@ var versionCmd = &cobra.Command{
 	Short: "Installed version of kettle",
 	Long:  `🔢 Prints the installed version of the kettle CLI.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(config.Version)
+		fmt.Println(Version)
 	},
 }
 

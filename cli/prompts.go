@@ -1,49 +1,16 @@
-package command
+package cli
 
 import (
-	"fmt"
-	"os"
-	"os/exec"
 	"sort"
 	"strings"
-	"time"
 
-	"github.com/briandowns/spinner"
 	"github.com/manifoldco/promptui"
-	"github.com/operatorai/kettle-cli/config"
 )
 
-func getSpinner(statusMessage string) *spinner.Spinner {
-	s := spinner.New(spinner.CharSets[39], 100*time.Millisecond)
-	s.Suffix = fmt.Sprintf("  %s...", statusMessage)
-	s.Start()
-	return s
-}
+const (
+	PromptNoneOfTheseOption = "None of these (create a new one)"
+)
 
-func Execute(command string, args []string, statusMessage string) error {
-	_, err := ExecuteWithResult(command, args, statusMessage)
-	return err
-}
-
-func ExecuteWithResult(command string, args []string, statusMessage string) ([]byte, error) {
-	osCmd := exec.Command(command, args...)
-	if config.DebugMode {
-		fmt.Println("\n", command, strings.Join(args, " "))
-		osCmd.Stderr = os.Stderr
-	} else {
-		s := getSpinner(statusMessage)
-		defer s.Stop()
-	}
-
-	output, err := osCmd.Output()
-	if err != nil {
-		return nil, err
-	}
-	return output, nil
-}
-
-// PromptForValue shows a prompt (using a map's keys) to the user and returns
-// the value that is indexed at that key
 func PromptForValue(label string, values map[string]string, addNoneOfThese bool) (string, error) {
 	valueLabels := []string{}
 	for valueLabel, _ := range values {
@@ -51,7 +18,7 @@ func PromptForValue(label string, values map[string]string, addNoneOfThese bool)
 	}
 	sort.Strings(valueLabels)
 	if addNoneOfThese {
-		valueLabels = append(valueLabels, config.PromptNoneOfTheseOption)
+		valueLabels = append(valueLabels, PromptNoneOfTheseOption)
 	}
 
 	prompt := promptui.Select{
@@ -63,7 +30,7 @@ func PromptForValue(label string, values map[string]string, addNoneOfThese bool)
 		return "", err
 	}
 
-	if addNoneOfThese && result == config.PromptNoneOfTheseOption {
+	if addNoneOfThese && result == PromptNoneOfTheseOption {
 		return "", nil
 	}
 	return values[result], nil

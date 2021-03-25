@@ -1,33 +1,27 @@
 package config
 
-// Values that do not change across multiple deployments
-type Settings struct {
-	Runtime          string `yaml:"runtime"`
-	DeploymentRegion string `yaml:"region"`
+const (
+	configFileName = "kettle.json"
+)
 
-	// GCP Variables
-	ProjectName string `yaml:"project_name,omitempty"`
-	ProjectID   string `yaml:"project_id,omitempty"`
+// Config are values that are specific to individual projects
+// and are therefore stored in a config file, one per project
 
-	// AWS Variables
-	AccountID     string `yaml:"account_id,omitempty"`
-	RoleArn       string `yaml:"role_arn,omitempty"`
-	RestApiID     string `yaml:"rest_api_id,omitempty"`
-	RestApiRootID string `yaml:"rest_api_root_id,omitempty"`
-}
-
-// Values that are specific to each deployment
-type TemplateConfig struct {
-	CloudProvider  string `yaml:"cloud_provider"`
-	DeploymentType string `yaml:"deployment_type"`
-
-	Settings *Settings `yaml:"settings"`
-
-	// template create values
-	Name         string `yaml:"name"`
-	FunctionName string `yaml:"entrypoint"`
-
-	// AWS variables
-	Deployed          string `yaml:"deployed_utc,omitempty"`
-	RestApiResourceID string `yaml:"rest_api_resource_id,omitempty"`
+type Config struct {
+	ProjectName string `json:"name"`
+	Config      struct {
+		Runtime        string `json:"runtime"`
+		CloudProvider  string `json:"cloud_provider"`
+		DeploymentType string `json:"deployment_type"`
+		AWS            struct {
+			RestApiResourceID string `json:"rest_api_resource_id,omitempty"`
+		} `json:"deploy_settings,omitempty"`
+	} `json:"config"`
+	Template []struct {
+		Prompt string `json:"prompt"`
+		Type   string `json:"type"`
+		Key    string `json:"key"`
+		Value  string `json:"value"`
+		Style  string `json:"format,omitempty"`
+	} `json:"template,omitempty"`
 }
