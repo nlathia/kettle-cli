@@ -24,10 +24,7 @@ func ReadSettings() (*Settings, error) {
 	}
 	if _, err := os.Stat(settingsFile); os.IsNotExist(err) {
 		// Return empty settings
-		return &Settings{
-			GoogleCloud: &GoogleCloudSettings{},
-			AWS:         &AWSSettings{},
-		}, nil
+		return &Settings{}, nil
 	}
 
 	contents, err := ioutil.ReadFile(settingsFile)

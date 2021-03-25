@@ -24,6 +24,9 @@ func (AmazonWebServices) Setup(stg *settings.Settings) error {
 	if err != nil {
 		return errors.New(fmt.Sprintf("please install the aws cli: %s", err))
 	}
+	if stg.AWS == nil {
+		stg.AWS = &settings.AWSSettings{}
+	}
 	if err := aws.SetAccountID(stg.AWS); err != nil {
 		return err
 	}
