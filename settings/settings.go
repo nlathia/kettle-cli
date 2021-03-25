@@ -3,12 +3,26 @@ package settings
 import (
 	"io/ioutil"
 	"os"
+	"path"
 
+	"github.com/mitchellh/go-homedir"
 	"gopkg.in/yaml.v2"
 )
 
+func getSettingsFilePath() (string, error) {
+	home, err := homedir.Dir()
+	if err != nil {
+		return "", err
+	}
+	return path.Join(home, ".kettle.yaml"), nil
+}
+
 func ReadSettings() (*Settings, error) {
-	if _, err := os.Stat(settingsFileName); os.IsNotExist(err) {
+	settingsFile, err := getSettingsFilePath()
+	if err != nil {
+		return nil, err
+	}
+	if _, err := os.Stat(settingsFile); os.IsNotExist(err) {
 		// Return empty settings
 		return &Settings{
 			GoogleCloud: &GoogleCloudSettings{},
@@ -16,7 +30,7 @@ func ReadSettings() (*Settings, error) {
 		}, nil
 	}
 
-	contents, err := ioutil.ReadFile(settingsFileName)
+	contents, err := ioutil.ReadFile(settingsFile)
 	if err != nil {
 		return nil, err
 	}
@@ -29,12 +43,17 @@ func ReadSettings() (*Settings, error) {
 }
 
 func WriteSettings(stg *Settings) error {
+	settingsFile, err := getSettingsFilePath()
+	if err != nil {
+		return err
+	}
+
 	data, err := yaml.Marshal(stg)
 	if err != nil {
 		return err
 	}
 
-	err = ioutil.WriteFile(settingsFileName, []byte(data), 0644)
+	err = ioutil.WriteFile(settingsFile, []byte(data), 0644)
 	if err != nil {
 		return err
 	}
