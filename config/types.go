@@ -15,7 +15,7 @@ type Config struct {
 		DeploymentType string `json:"deployment_type"`
 		AWS            struct {
 			RestApiResourceID string `json:"rest_api_resource_id,omitempty"`
-		} `json:"aws,omitempty"`
+		} `json:"deploy_settings,omitempty"`
 	} `json:"config"`
 	Template []struct {
 		Prompt string `json:"prompt"`

@@ -68,9 +68,7 @@ func runCreate(cmd *cobra.Command, args []string) error {
 
 	// Ask the user for any input that is required
 	templateConfig.ProjectName = projectName
-	templateValues := map[string]string{
-		"ProjectName": strcase.ToKebab(projectName),
-	}
+	templateValues := map[string]string{}
 	for i, templateEntry := range templateConfig.Template {
 		userInput, err := cli.PromptForString(templateEntry.Prompt)
 		if err != nil {
@@ -127,6 +125,9 @@ func createProjectDirectory() (string, string, error) {
 	if err != nil {
 		return "", "", err
 	}
+
+	// Cast to kebab-case
+	directoryName = strcase.ToKebab(directoryName)
 
 	// Validate that the path does not exist
 	directoryPath, err := templates.NewProjectPath(directoryName)
