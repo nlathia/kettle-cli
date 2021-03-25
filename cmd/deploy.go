@@ -88,7 +88,12 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 	}
 
 	// Write the settings back (they may have been changed)
-	_ = settings.WriteSettings(cloudSettings)
+	err = settings.WriteSettings(cloudSettings)
+	if err != nil {
+		if settings.DebugMode {
+			fmt.Println(err.Error())
+		}
+	}
 
 	fmt.Println("✅  Deployed!")
 	return nil
