@@ -55,7 +55,7 @@ Kettle `deploy` currently supports the following
 
 You must have the [aws cli](https://aws.amazon.com/cli/) installed.
 
-### Google Cloud Functions & Google Cloud Run
+### Google Cloud Functions
 
 You must have the [gcloud](https://cloud.google.com/sdk/gcloud) SDK installed. You also need to have enabled the Cloud Functions API in the GCP console.
 
