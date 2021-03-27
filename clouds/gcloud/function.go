@@ -12,13 +12,8 @@ type GoogleCloudFunction struct{}
 
 // https://cloud.google.com/sdk/gcloud/reference/functions/deploy
 func (GoogleCloudFunction) Deploy(directory string, cfg *config.Config, stg *settings.Settings) error {
-	functionName, err := config.GetKey(cfg, "FunctionName")
-	if err != nil {
-		return err
-	}
-
 	fmt.Println("🚢  Deploying ", cfg.ProjectName, "as a Google Cloud function")
-	fmt.Println("⏭  Entry point: ", functionName, fmt.Sprintf("(%s)", cfg.Config.Runtime))
+	fmt.Println("⏭  Entry point: ", cfg.Config.EntryFunction, fmt.Sprintf("(%s)", cfg.Config.Runtime))
 
 	fmt.Println(fmt.Sprintf("🔍  https://%s-%s.cloudfunctions.net/%s",
 		stg.GoogleCloud.DeploymentRegion,
@@ -31,7 +26,7 @@ func (GoogleCloudFunction) Deploy(directory string, cfg *config.Config, stg *set
 		cfg.ProjectName,
 		"--runtime", cfg.Config.Runtime,
 		"--trigger-http",
-		fmt.Sprintf("--entry-point=%s", functionName),
+		fmt.Sprintf("--entry-point=%s", cfg.Config.EntryFunction),
 		fmt.Sprintf("--region=%s", stg.GoogleCloud.DeploymentRegion),
 		"--allow-unauthenticated",
 	}, "Deploying Cloud Function")

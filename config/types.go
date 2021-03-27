@@ -13,6 +13,7 @@ type Config struct {
 		Runtime        string `json:"runtime"`
 		CloudProvider  string `json:"cloud_provider"`
 		DeploymentType string `json:"deployment_type"`
+		EntryFunction  string `json:"entry_function"`
 		AWS            struct {
 			RestApiResourceID string `json:"rest_api_resource_id,omitempty"`
 		} `json:"deploy_settings,omitempty"`
