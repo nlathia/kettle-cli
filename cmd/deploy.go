@@ -87,9 +87,13 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 		return formatError(err)
 	}
 
-	// Write the settings back (they may have been changed)
-	err = settings.WriteSettings(cloudSettings)
-	if err != nil {
+	// Write the settings & config back (they may have been changed)
+	if err := settings.WriteSettings(cloudSettings); err != nil {
+		if settings.DebugMode {
+			fmt.Println(err.Error())
+		}
+	}
+	if err := config.WriteConfig(deploymentPath, templateConfig); err != nil {
 		if settings.DebugMode {
 			fmt.Println(err.Error())
 		}
