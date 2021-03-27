@@ -105,6 +105,13 @@ func runCreate(cmd *cobra.Command, args []string) error {
 		if err := createFile(targetPath, filePath, templateValues); err != nil {
 			return err
 		}
+		if strings.HasSuffix(targetPath, ".sh") {
+			if err := os.Chmod(targetPath, 0775); err != nil {
+				if settings.DebugMode {
+					fmt.Println(err.Error())
+				}
+			}
+		}
 		return nil
 	})
 	if err != nil {
