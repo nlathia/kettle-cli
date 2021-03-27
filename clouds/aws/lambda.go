@@ -14,13 +14,8 @@ import (
 type AWSLambdaFunction struct{}
 
 func (AWSLambdaFunction) Deploy(directory string, cfg *config.Config, stg *settings.Settings) error {
-	functionName, err := config.GetKey(cfg, "FunctionName")
-	if err != nil {
-		return err
-	}
-
 	fmt.Println("🚢  Deploying ", cfg.ProjectName, "as an AWS Lambda function")
-	fmt.Println("⏭  Entry point: ", functionName, fmt.Sprintf("(%s)", cfg.Config.Runtime))
+	fmt.Println("⏭  Entry point: ", cfg.Config.EntryFunction, fmt.Sprintf("(%s)", cfg.Config.Runtime))
 	// @TODO future - container-based deployments
 	deploymentArchive, err := createDeploymentArchive(cfg)
 	if err != nil {
@@ -48,7 +43,7 @@ func (AWSLambdaFunction) Deploy(directory string, cfg *config.Config, stg *setti
 	} else {
 		// Create the Lambda function
 		waitType = "function-active"
-		if err := createLambdaFunction(deploymentArchive, functionName, cfg, stg); err != nil {
+		if err := createLambdaFunction(deploymentArchive, cfg.Config.EntryFunction, cfg, stg); err != nil {
 			return err
 		}
 
