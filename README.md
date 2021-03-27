@@ -34,7 +34,7 @@ Create a new project by pointing `kettle create` to a template. Kettle supports 
 2. A git repo
 3. The [kettle-tempalates](https://github.com/operatorai/kettle-templates) repository
 
-### kettle-templates example
+### Example from kettle-templates
 
 In the example below, we use the [pyenv-aws-lambda](https://github.com/operatorai/kettle-templates/tree/main/pyenv-aws-lambda) template in the [kettle-templates](https://github.com/operatorai/kettle-templates) repository.
 
