@@ -30,9 +30,9 @@ You will be able to install `kettle` using `brew` and [the operatorai tap](https
 ## Usage
 
 Create a new project by pointing `kettle create` to a template. Kettle supports templates that are in:
-1. A local directory
-2. A git repo
-3. The [kettle-tempalates](https://github.com/operatorai/kettle-templates) repository
+1. A local directory, with `kettle create /path/to/template`
+2. A git repo, with `kettle create git@path/to/your/repo.git`
+3. A template in the [kettle-templates](https://github.com/operatorai/kettle-templates) repository, using its name
 
 ### Example from kettle-templates
 
