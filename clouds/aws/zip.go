@@ -149,6 +149,7 @@ func getCondaSitePackagesDirectory(pythonVersion string) (string, error) {
 		return "", err
 	}
 
+	// Assumes that the conda env is active
 	condaLocal, err := cli.ExecuteWithResult("echo", []string{
 		"$CONDA_DEFAULT_ENV",
 	}, "Finding local conda version")
