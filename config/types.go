@@ -11,6 +11,7 @@ type Config struct {
 	ProjectName string `json:"name"`
 	Config      struct {
 		Runtime        string `json:"runtime"`
+		PythonManager  string `json:"python_manager,omitempty"`
 		CloudProvider  string `json:"cloud_provider"`
 		DeploymentType string `json:"deployment_type"`
 		EntryFunction  string `json:"entry_function"`
