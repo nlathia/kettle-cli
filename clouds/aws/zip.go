@@ -78,11 +78,22 @@ func addPythonLambdaToArchive(deploymentFile string, cfg *config.Config) error {
 	}
 
 	// Python builds need to add the site-packages contents
-	// @TODO: this only works for pyenv templates right now
-	sitePackages, err := getPyenvSitePackagesDirectory(cfg.Config.Runtime)
-	if err != nil {
-		return err
+	var sitePackages string
+	switch cfg.Config.PythonManager {
+	case "pyenv":
+		sitePackages, err = getPyenvSitePackagesDirectory(cfg.Config.Runtime)
+		if err != nil {
+			return err
+		}
+	case "conda":
+		sitePackages, err = getCondaSitePackagesDirectory(cfg.Config.Runtime)
+		if err != nil {
+			return err
+		}
+	default:
+		return fmt.Errorf("unknown python_manager: %s", cfg.Config.PythonManager)
 	}
+
 	if _, err := os.Stat(sitePackages); !os.IsNotExist(err) {
 		// Change to the directory where the site-packages are stored
 		// So that we can add them to the zip file as a directory
@@ -125,6 +136,29 @@ func getPyenvSitePackagesDirectory(pythonVersion string) (string, error) {
 	return fmt.Sprintf("%s/versions/%s/lib/%s/site-packages/",
 		strings.Trim(string(pyenvRoot), "\n"),
 		strings.Trim(string(pyenvLocal), "\n"),
+		pythonVersion,
+	), nil
+}
+
+func getCondaSitePackagesDirectory(pythonVersion string) (string, error) {
+	condaRoot, err := cli.ExecuteWithResult("conda", []string{
+		"info",
+		"--base",
+	}, "Finding conda root")
+	if err != nil {
+		return "", err
+	}
+
+	condaLocal, err := cli.ExecuteWithResult("echo", []string{
+		"$CONDA_DEFAULT_ENV",
+	}, "Finding local conda version")
+	if err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf("%s/envs/%s/lib/%s/site-packages/",
+		strings.Trim(string(condaRoot), "\n"),
+		strings.Trim(string(condaLocal), "\n"),
 		pythonVersion,
 	), nil
 }
