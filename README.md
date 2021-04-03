@@ -13,11 +13,11 @@ Kettle supports three types of templates:
 
 1. Templates that are already on your computer, at a given path.
 2. Templates that are git repositories
-3. Templates that are in the `kettle-templates` monorepo.
+3. Templates that are in the `kettle-templates` [repository](https://github.com/operatorai/kettle-templates); browse that repo's [README](https://github.com/operatorai/kettle-templates/blob/main/README.md) to see the templates that it contains spanning AWS Lambda, GCP Functions, and GCP Run.
 
 ## Installing with brew
 
-You will be able to install `kettle` using `brew` and [the operatorai tap](https://github.com/operatorai/homebrew-tap).
+You can install `kettle` using `brew` and [the operatorai tap](https://github.com/operatorai/homebrew-tap).
 
 ```bash
 ❯ brew tap operatorai/tap
@@ -29,31 +29,36 @@ You will be able to install `kettle` using `brew` and [the operatorai tap](https
 
 ## Usage
 
-Create a new project by pointing `kettle create` to a template. Kettle supports templates that are in:
-1. A local directory, with `kettle create /path/to/template`
-2. A git repo, with `kettle create git@path/to/your/repo.git`
-3. A template in the [kettle-templates](https://github.com/operatorai/kettle-templates) repository, using its name
+Here's an example that takes you from a template to a deployed AWS Lambda.
 
 ### Example from kettle-templates
 
-In the example below, we use the [pyenv-aws-lambda](https://github.com/operatorai/kettle-templates/tree/main/pyenv-aws-lambda) template in the [kettle-templates](https://github.com/operatorai/kettle-templates) repository.
+In the example below, we use the [pyenv-aws-lambda](https://github.com/operatorai/kettle-templates/tree/main/pyenv-aws-lambda) template in the [kettle-templates](https://github.com/operatorai/kettle-templates) repository. Since we're using a `kettle-templates` template, we just need to use `kettle create <name>`, where `<name>` is the directory name in the templates repo:
 
 ```bash
 ❯ kettle create pyenv-aws-lambda
 Project name: hello-world
 
-✅  Created:  ~/hello-world
+✅  Created:  <path>/hello-world
 ```
 
-This will prompt you for a project name, and will then create that directory and add all the boiler plate you need to get going. 
+This will prompt you for a project name, and will then create that directory and add all the boiler plate you need to get going. This particular template comes with a `Makefile`, that we can use to set up the local environment:
+
+```bash
+❯ cd hello-world
+
+❯ make install
+```
 
 ## Kettle deploy
 
-Kettle `deploy` currently supports the following
+Kettle `deploy` is the command to deploy your project as a serverless function. It currently supports:
 
 ### AWS Lambdas
 
 You must have the [aws cli](https://aws.amazon.com/cli/) installed.
+
+For Python, `kettle` supports Lambdas where Python is managed with `pyenv` or `conda`.
 
 ### Google Cloud Functions
 
