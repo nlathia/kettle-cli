@@ -155,8 +155,8 @@ func getCondaSitePackagesDirectory(pythonVersion string) (string, error) {
 	condaLocal := os.Getenv("CONDA_DEFAULT_ENV")
 	fmt.Println(fmt.Sprintf("🔒  Adding site-packages from the conda '%s' environment.", condaLocal))
 	if condaLocal == "base" {
-		isActive := cli.PromptToConfirm("The conda base environment is active. Continue")
-		if !isActive {
+		useBaseConda := cli.PromptToConfirm("The conda base environment is active. Continue")
+		if !useBaseConda {
 			return "", errors.New("please activate the conda environment for your project before deploying")
 		}
 	}
