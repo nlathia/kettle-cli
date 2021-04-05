@@ -1,6 +1,7 @@
 package aws
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path"
@@ -133,6 +134,7 @@ func getPyenvSitePackagesDirectory(pythonVersion string) (string, error) {
 		return "", err
 	}
 
+	fmt.Println(fmt.Sprintf("🔒  Adding site-packages from the pyenv '%s' environment.", string(pyenvLocal)))
 	return fmt.Sprintf("%s/versions/%s/lib/%s/site-packages/",
 		strings.Trim(string(pyenvRoot), "\n"),
 		strings.Trim(string(pyenvLocal), "\n"),
@@ -150,16 +152,18 @@ func getCondaSitePackagesDirectory(pythonVersion string) (string, error) {
 	}
 
 	// Assumes that the conda env is active
-	condaLocal, err := cli.ExecuteWithResult("echo", []string{
-		"$CONDA_DEFAULT_ENV",
-	}, "Finding local conda version")
-	if err != nil {
-		return "", err
+	condaLocal := os.Getenv("CONDA_DEFAULT_ENV")
+	fmt.Println(fmt.Sprintf("🔒  Adding site-packages from the conda '%s' environment.", condaLocal))
+	if condaLocal == "base" {
+		useBaseConda := cli.PromptToConfirm("The conda base environment is active. Continue")
+		if !useBaseConda {
+			return "", errors.New("please activate the conda environment for your project before deploying")
+		}
 	}
 
 	return fmt.Sprintf("%s/envs/%s/lib/%s/site-packages/",
 		strings.Trim(string(condaRoot), "\n"),
-		strings.Trim(string(condaLocal), "\n"),
+		strings.Trim(condaLocal, "\n"),
 		pythonVersion,
 	), nil
 }
