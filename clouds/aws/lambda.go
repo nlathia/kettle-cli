@@ -24,8 +24,10 @@ func (AWSLambdaFunction) Deploy(directory string, cfg *config.Config, stg *setti
 	defer func() {
 		// Clean up deployment package (ignore errors)
 		err := removeDeploymentArchive(cfg)
-		if settings.DebugMode {
-			fmt.Println(err.Error())
+		if err != nil {
+			if settings.DebugMode {
+				fmt.Println(err.Error())
+			}
 		}
 	}()
 
