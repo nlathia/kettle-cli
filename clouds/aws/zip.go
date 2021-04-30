@@ -181,10 +181,10 @@ func addGoLambdaToArchive(deploymentFile string, cfg *config.Config) error {
 	// Build the function for linux
 	err = cli.Execute("env", []string{
 		"GOOS=linux",
+		"CGO_ENABLED=0",
 		"go",
 		"build",
 		"-o", goBuildFileName,
-		"./...",
 	}, "Building Go binary for GOOS=linux")
 	if err != nil {
 		return err
