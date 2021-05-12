@@ -1,7 +1,6 @@
 package aws
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 
@@ -121,6 +120,11 @@ func addLambdaToRestAPI(deploymentArchive string, cfg *config.Config, stg *setti
 		return err
 	}
 
+	// Set the response codes across the Lambda & API gateway
+	if err := addIntegrationResponses(cfg, stg); err != nil {
+		return err
+	}
+
 	// Deploy the API with the new resource & integration
 	if err := apigateway.Deploy(stg); err != nil {
 		return err
@@ -146,8 +150,7 @@ func createLambdaFunction(deploymentArchive string, functionName string, cfg *co
 
 	// The --handler option in the create-function command changes based on the
 	// programming language
-	var handler string
-	var runtime string
+	var handler, runtime string
 	switch {
 	case strings.HasPrefix(cfg.Config.Runtime, "python"):
 		handler = fmt.Sprintf("main.%s", functionName)
@@ -156,10 +159,10 @@ func createLambdaFunction(deploymentArchive string, functionName string, cfg *co
 		handler = "main"
 		runtime = "go1.x"
 	default:
-		return errors.New(fmt.Sprintf("unknown runtime: %s", cfg.Config.Runtime))
+		return fmt.Errorf("unknown runtime: %s", cfg.Config.Runtime)
 	}
 
-	// Create the function
+	// Create the Lambda function
 	return cli.Execute("aws", []string{
 		"lambda",
 		"create-function",
@@ -182,8 +185,8 @@ func waitForLambda(waitType string, cfg *config.Config) error {
 }
 
 func addFunctionIntegration(cfg *config.Config, stg *settings.Settings) error {
-	// Create the integration
-	err := cli.Execute("aws", []string{
+	// Create the integration between the API gateway and the Lambda
+	return cli.Execute("aws", []string{
 		"apigateway",
 		"put-integration",
 		"--rest-api-id", stg.AWS.RestApiID,
@@ -198,11 +201,38 @@ func addFunctionIntegration(cfg *config.Config, stg *settings.Settings) error {
 			cfg.ProjectName,
 		),
 	}, "Integrating the lambda function with the API resource")
+}
+
+func addIntegrationResponses(cfg *config.Config, stg *settings.Settings) error {
+	// Set any responses matching the ".*error.*" regex to have status 500
+	err := cli.Execute("aws", []string{
+		"apigateway",
+		"put-integration-response",
+		"--rest-api-id", stg.AWS.RestApiID,
+		"--resource-id", cfg.Config.AWS.RestApiResourceID,
+		"--http-method", "POST",
+		"--status-code", "500",
+		"--selection-pattern", ".*error.*", // .*error.*
+		"--region", stg.AWS.DeploymentRegion,
+	}, "Setting the integration error response")
+	if err != nil {
+		return err
+	}
+	// Add a 500 response to the gateway method, so that it can also return errors
+	err = cli.Execute("aws", []string{
+		"apigateway",
+		"put-method-response",
+		"--region", stg.AWS.DeploymentRegion,
+		"--rest-api-id", stg.AWS.RestApiID,
+		"--resource-id", cfg.Config.AWS.RestApiResourceID,
+		"--http-method", "POST",
+		"--status-code", "500",
+	}, "Setting the gateway error response")
 	if err != nil {
 		return err
 	}
 
-	// Set the integration response to JSON
+	// Set the default integration response to JSON
 	return cli.Execute("aws", []string{
 		"apigateway",
 		"put-integration-response",
@@ -211,7 +241,7 @@ func addFunctionIntegration(cfg *config.Config, stg *settings.Settings) error {
 		"--http-method", "POST",
 		"--status-code", "200",
 		"--response-templates", "application/json=\"\"",
-	}, "Setting the integration response to JSON")
+	}, "Setting the default integration response to JSON")
 }
 
 func addInvocationPermission(cfg *config.Config, stg *settings.Settings) error {
