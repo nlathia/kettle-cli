@@ -17,10 +17,10 @@ Kettle supports three types of templates:
 
 ## Installing with brew
 
-You can install `kettle` using `brew` and [the operatorai tap](https://github.com/operatorai/homebrew-tap).
+You can install `kettle` using `brew` and [this tap](https://github.com/nlathia/homebrew-tap).
 
 ```bash
-❯ brew tap operatorai/tap
+❯ brew tap nlathia/tap
 ❯ brew install kettle-cli
 
 # You can see that this works by running
