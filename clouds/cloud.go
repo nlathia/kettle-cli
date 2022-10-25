@@ -8,7 +8,7 @@ import (
 )
 
 type Service interface {
-	Deploy(directory string, cfg *config.Config, stg *settings.Settings) error
+	Deploy(directory string, cfg *config.Config, stg *settings.Settings, env string) error
 }
 
 type Cloud interface {

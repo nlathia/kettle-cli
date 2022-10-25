@@ -12,9 +12,13 @@ import (
 
 type AWSLambdaFunction struct{}
 
-func (AWSLambdaFunction) Deploy(directory string, cfg *config.Config, stg *settings.Settings) error {
-	fmt.Println("🚢  Deploying ", cfg.ProjectName, "as an AWS Lambda function")
-	fmt.Println("⏭  Entry point: ", cfg.Config.EntryFunction, fmt.Sprintf("(%s)", cfg.Config.Runtime))
+func (AWSLambdaFunction) Deploy(directory string, cfg *config.Config, stg *settings.Settings, env string) error {
+	if env != "" {
+		fmt.Printf("🚨  Environments for AWS Lambda functions are unimplemented (%s)\n", env)
+	}
+
+	fmt.Printf("🚢  Deploying: %s as an AWS Lambda function\n", cfg.ProjectName)
+	fmt.Printf("⏭  Entry point: %s (%s)\n", cfg.Config.EntryFunction, cfg.Config.Runtime)
 	// @TODO future - container-based deployments
 	deploymentArchive, err := createDeploymentArchive(cfg)
 	if err != nil {
