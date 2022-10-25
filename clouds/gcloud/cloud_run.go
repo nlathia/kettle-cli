@@ -21,7 +21,7 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.Config, stg *settings
 	}
 
 	fmt.Println("🏭  Building: ", cfg.ProjectName, "as a Cloud Run container")
-	containerTag := fmt.Sprintf("gcr.io/%s/%s", stg.GoogleCloud.ProjectID, cfg.ProjectName)
+	containerTag := fmt.Sprintf("gcr.io/%s/%s", stg.ProjectID, cfg.ProjectName)
 	// Build the docker container
 	// gcloud builds submit --tag gcr.io/PROJECT-ID/helloworld
 	err := cli.Execute("gcloud", []string{
@@ -43,7 +43,7 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.Config, stg *settings
 		"--image", containerTag,
 		"--platform", "managed",
 		"--allow-unauthenticated",
-		fmt.Sprintf("--region=%s", stg.GoogleCloud.DeploymentRegion),
+		fmt.Sprintf("--region=%s", stg.DeploymentRegion),
 	}, "Deploying Cloud Run container")
 	if err != nil {
 		return err
@@ -55,7 +55,7 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.Config, stg *settings
 		"services",
 		"describe", cfg.ProjectName,
 		"--platform", "managed",
-		"--region", stg.GoogleCloud.DeploymentRegion,
+		"--region", stg.DeploymentRegion,
 		"--format", "json",
 	}, "Querying for Cloud Run URL")
 	if err != nil {

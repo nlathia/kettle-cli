@@ -12,7 +12,7 @@ type Service interface {
 }
 
 type Cloud interface {
-	Setup(settings *settings.Settings) error
+	Setup(settings *settings.Settings, overwrite bool) error
 
 	GetService(deploymentType string) (Service, error)
 }
@@ -25,4 +25,11 @@ func GetCloudProvider(cloudType string) (Cloud, error) {
 		return AmazonWebServices{}, nil
 	}
 	return nil, fmt.Errorf("unimplemented cloud: %s", cloudType)
+}
+
+func SupportedClouds() map[string]string {
+	return map[string]string{
+		"gcloud": "",
+		"aws":    "",
+	}
 }

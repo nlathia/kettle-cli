@@ -20,7 +20,7 @@ func (GoogleCloud) GetService(deploymentType string) (Service, error) {
 	return nil, fmt.Errorf("unimplemented service: %s", deploymentType)
 }
 
-func (GoogleCloud) Setup(stg *settings.Settings) error {
+func (GoogleCloud) Setup(stg *settings.Settings, overwrite bool) error {
 	_, err := exec.LookPath("gcloud")
 	if err != nil {
 		return fmt.Errorf("please install the gcloud cli: %s", err)
@@ -28,10 +28,7 @@ func (GoogleCloud) Setup(stg *settings.Settings) error {
 	if stg.GoogleCloud == nil {
 		stg.GoogleCloud = &settings.GoogleCloudSettings{}
 	}
-	if err := gcloud.SetProjectID(stg.GoogleCloud); err != nil {
-		return err
-	}
-	if err := gcloud.SetDeploymentRegion(stg.GoogleCloud); err != nil {
+	if err := gcloud.SetProjects(stg.GoogleCloud, overwrite); err != nil {
 		return err
 	}
 	return nil

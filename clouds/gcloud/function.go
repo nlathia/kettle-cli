@@ -16,8 +16,8 @@ func (GoogleCloudFunction) Deploy(directory string, cfg *config.Config, stg *set
 	fmt.Println("⏭  Entry point: ", cfg.Config.EntryFunction, fmt.Sprintf("(%s)", cfg.Config.Runtime))
 
 	fmt.Printf("🔍  https://%s-%s.cloudfunctions.net/%s\n",
-		stg.GoogleCloud.DeploymentRegion,
-		stg.GoogleCloud.ProjectID,
+		stg.DeploymentRegion,
+		stg.ProjectID,
 		cfg.ProjectName,
 	)
 	return cli.Execute("gcloud", []string{
@@ -27,7 +27,7 @@ func (GoogleCloudFunction) Deploy(directory string, cfg *config.Config, stg *set
 		"--runtime", cfg.Config.Runtime,
 		"--trigger-http",
 		fmt.Sprintf("--entry-point=%s", cfg.Config.EntryFunction),
-		fmt.Sprintf("--region=%s", stg.GoogleCloud.DeploymentRegion),
+		fmt.Sprintf("--region=%s", stg.DeploymentRegion),
 		"--allow-unauthenticated",
 	}, "Deploying Cloud Function")
 }

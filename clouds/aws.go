@@ -19,7 +19,7 @@ func (AmazonWebServices) GetService(deploymentType string) (Service, error) {
 	return nil, errors.New(fmt.Sprintf("unimplemented service: %s", deploymentType))
 }
 
-func (AmazonWebServices) Setup(stg *settings.Settings) error {
+func (AmazonWebServices) Setup(stg *settings.Settings, overwrite bool) error {
 	_, err := exec.LookPath("aws")
 	if err != nil {
 		return errors.New(fmt.Sprintf("please install the aws cli: %s", err))
