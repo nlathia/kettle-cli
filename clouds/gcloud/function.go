@@ -12,7 +12,10 @@ type GoogleCloudFunction struct{}
 
 // https://cloud.google.com/sdk/gcloud/reference/functions/deploy
 func (GoogleCloudFunction) Deploy(directory string, cfg *config.Config, stg *settings.Settings, env string) error {
-	environment := getEnvironment(stg, env)
+	environment, err := getEnvironment(stg, env)
+	if err != nil {
+		return err
+	}
 
 	fmt.Printf("🚢  Deploying %s as a Google Cloud function to %s (%s)\n",
 		cfg.ProjectName,

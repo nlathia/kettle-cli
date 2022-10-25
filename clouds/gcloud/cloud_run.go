@@ -13,7 +13,10 @@ import (
 type GoogleCloudRun struct{}
 
 func (GoogleCloudRun) Deploy(directory string, cfg *config.Config, stg *settings.Settings, env string) error {
-	environment := getEnvironment(stg, env)
+	environment, err := getEnvironment(stg, env)
+	if err != nil {
+		return err
+	}
 
 	if strings.Contains(cfg.Config.Runtime, "go") {
 		_ = cli.Execute("go", []string{
@@ -30,7 +33,7 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.Config, stg *settings
 	containerTag := fmt.Sprintf("gcr.io/%s/%s", environment.ProjectID, cfg.ProjectName)
 	// Build the docker container
 	// gcloud builds submit --tag gcr.io/PROJECT-ID/helloworld
-	err := cli.Execute("gcloud", []string{
+	err = cli.Execute("gcloud", []string{
 		"builds",
 		"submit",
 		"--tag", containerTag,

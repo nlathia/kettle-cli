@@ -136,9 +136,12 @@ func getGoogleCloudRegions() (map[string]string, error) {
 	return regions, nil
 }
 
-func getEnvironment(stg *settings.Settings, env string) *settings.GoogleCloudProject {
-	if env == "prod" || env == "production" {
-		return stg.GoogleCloud.ProdProject
+func getEnvironment(stg *settings.Settings, env string) (*settings.GoogleCloudProject, error) {
+	if env == "" {
+		return nil, fmt.Errorf("please specify --env=<value> (prod/dev)")
 	}
-	return stg.GoogleCloud.DevProject
+	if env == "prod" || env == "production" {
+		return stg.GoogleCloud.ProdProject, nil
+	}
+	return stg.GoogleCloud.DevProject, nil
 }
