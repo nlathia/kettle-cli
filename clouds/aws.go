@@ -27,10 +27,10 @@ func (AmazonWebServices) Setup(stg *settings.Settings, overwrite bool) error {
 	if stg.AWS == nil {
 		stg.AWS = &settings.AWSSettings{}
 	}
-	if err := aws.SetAccountID(stg.AWS); err != nil {
+	if err := aws.SetAccountID(stg.AWS, overwrite); err != nil {
 		return err
 	}
-	if err := aws.SetDeploymentRegion(stg.AWS); err != nil {
+	if err := aws.SetDeploymentRegion(stg.AWS, overwrite); err != nil {
 		return err
 	}
 	return nil

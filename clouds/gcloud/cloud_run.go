@@ -13,6 +13,7 @@ import (
 type GoogleCloudRun struct{}
 
 func (GoogleCloudRun) Deploy(directory string, cfg *config.Config, stg *settings.Settings) error {
+	env := stg.GoogleCloud.ProdProject
 	if strings.Contains(cfg.Config.Runtime, "go") {
 		_ = cli.Execute("go", []string{
 			"mod",
@@ -21,7 +22,7 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.Config, stg *settings
 	}
 
 	fmt.Println("🏭  Building: ", cfg.ProjectName, "as a Cloud Run container")
-	containerTag := fmt.Sprintf("gcr.io/%s/%s", stg.ProjectID, cfg.ProjectName)
+	containerTag := fmt.Sprintf("gcr.io/%s/%s", env.ProjectID, cfg.ProjectName)
 	// Build the docker container
 	// gcloud builds submit --tag gcr.io/PROJECT-ID/helloworld
 	err := cli.Execute("gcloud", []string{
@@ -43,7 +44,7 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.Config, stg *settings
 		"--image", containerTag,
 		"--platform", "managed",
 		"--allow-unauthenticated",
-		fmt.Sprintf("--region=%s", stg.DeploymentRegion),
+		fmt.Sprintf("--region=%s", env.DeploymentRegion),
 	}, "Deploying Cloud Run container")
 	if err != nil {
 		return err
@@ -55,7 +56,7 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.Config, stg *settings
 		"services",
 		"describe", cfg.ProjectName,
 		"--platform", "managed",
-		"--region", stg.DeploymentRegion,
+		"--region", env.DeploymentRegion,
 		"--format", "json",
 	}, "Querying for Cloud Run URL")
 	if err != nil {
