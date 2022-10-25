@@ -24,6 +24,7 @@ var deployCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(deployCmd)
+	rootCmd.Flags().String("env", "", "The environment to deploy in (GCP only)")
 }
 
 func validateDeployArgs(cmd *cobra.Command, args []string) error {
@@ -59,7 +60,9 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return formatError(err)
 	}
-	if err := cloudProvider.Setup(cloudSettings); err != nil {
+
+	// Set up the provider (if not done so already)
+	if err := cloudProvider.Setup(cloudSettings, false); err != nil {
 		return formatError(err)
 	}
 
