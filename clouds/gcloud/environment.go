@@ -50,6 +50,12 @@ func SetProjects(sts *settings.GoogleCloudSettings, overwrite bool) error {
 	if err != nil {
 		return err
 	}
+
+	// @TODO: consider enabling APIs that may be required
+	// e.g. (Cloud Run, Cloud Functions) or at least checking whether they
+	// are enabled with:
+	// gcloud services list --project whatsapp-speech-to-text-dev --format="json"
+
 	return nil
 }
 
