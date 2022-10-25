@@ -1,7 +1,6 @@
 package clouds
 
 import (
-	"errors"
 	"fmt"
 	"os/exec"
 
@@ -18,13 +17,13 @@ func (GoogleCloud) GetService(deploymentType string) (Service, error) {
 	case "run":
 		return gcloud.GoogleCloudRun{}, nil
 	}
-	return nil, errors.New(fmt.Sprintf("unimplemented service: %s", deploymentType))
+	return nil, fmt.Errorf("unimplemented service: %s", deploymentType)
 }
 
 func (GoogleCloud) Setup(stg *settings.Settings) error {
 	_, err := exec.LookPath("gcloud")
 	if err != nil {
-		return errors.New(fmt.Sprintf("please install the gcloud cli: %s", err))
+		return fmt.Errorf("please install the gcloud cli: %s", err)
 	}
 	if stg.GoogleCloud == nil {
 		stg.GoogleCloud = &settings.GoogleCloudSettings{}

@@ -1,7 +1,6 @@
 package clouds
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/operatorai/kettle-cli/config"
@@ -25,5 +24,5 @@ func GetCloudProvider(cloudType string) (Cloud, error) {
 	case "aws":
 		return AmazonWebServices{}, nil
 	}
-	return nil, errors.New(fmt.Sprintf("unimplemented cloud: %s", cloudType))
+	return nil, fmt.Errorf("unimplemented cloud: %s", cloudType)
 }

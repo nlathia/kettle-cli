@@ -1,6 +1,6 @@
 # kettle
 
-Kettle is a command line tool for creating and deploying machine learning pipelines and microservices, starting from from best-in-class templates.
+Kettle is a command line tool for creating and deploying serverless services, starting from from simple templates.
 
 This CLI has two primary commands:
 

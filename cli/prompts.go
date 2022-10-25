@@ -16,6 +16,7 @@ func PromptForValue(label string, values map[string]string, addNoneOfThese bool)
 	for valueLabel, _ := range values {
 		valueLabels = append(valueLabels, valueLabel)
 	}
+
 	sort.Strings(valueLabels)
 	if addNoneOfThese {
 		valueLabels = append(valueLabels, PromptNoneOfTheseOption)

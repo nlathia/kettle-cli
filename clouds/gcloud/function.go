@@ -15,11 +15,11 @@ func (GoogleCloudFunction) Deploy(directory string, cfg *config.Config, stg *set
 	fmt.Println("🚢  Deploying ", cfg.ProjectName, "as a Google Cloud function")
 	fmt.Println("⏭  Entry point: ", cfg.Config.EntryFunction, fmt.Sprintf("(%s)", cfg.Config.Runtime))
 
-	fmt.Println(fmt.Sprintf("🔍  https://%s-%s.cloudfunctions.net/%s",
+	fmt.Printf("🔍  https://%s-%s.cloudfunctions.net/%s\n",
 		stg.GoogleCloud.DeploymentRegion,
 		stg.GoogleCloud.ProjectID,
 		cfg.ProjectName,
-	))
+	)
 	return cli.Execute("gcloud", []string{
 		"functions",
 		"deploy",
