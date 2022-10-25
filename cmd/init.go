@@ -47,10 +47,6 @@ func runInit(cmd *cobra.Command, args []string) error {
 		return formatError(err)
 	}
 
-	if cloudSettings.GoogleCloud.ProdProject == nil {
-		panic("Prod project is nil")
-	}
-
 	// Write them back
 	if err := settings.WriteSettings(cloudSettings); err != nil {
 		return formatError(err)

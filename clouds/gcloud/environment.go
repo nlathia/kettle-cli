@@ -50,8 +50,6 @@ func SetProjects(sts *settings.GoogleCloudSettings, overwrite bool) error {
 	if err != nil {
 		return err
 	}
-
-	fmt.Println(sts)
 	return nil
 }
 
