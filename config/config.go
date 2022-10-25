@@ -2,14 +2,13 @@ package config
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"os"
 	"path"
 )
 
 func ReadConfig(templatePath string) (*Config, error) {
 	configPath := path.Join(templatePath, configFileName)
-	data, err := ioutil.ReadFile(configPath)
+	data, err := os.ReadFile(configPath)
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +28,7 @@ func WriteConfig(projectPath string, config *Config) error {
 	}
 
 	configPath := path.Join(projectPath, configFileName)
-	return ioutil.WriteFile(configPath, data, 0644)
+	return os.WriteFile(configPath, data, 0644)
 }
 
 func HasConfigFile(directory string) (bool, error) {
@@ -53,12 +52,3 @@ func pathExists(path string) (bool, error) {
 	}
 	return true, nil
 }
-
-// func GetKey(cfg *Config, key string) (string, error) {
-// 	for _, template := range cfg.Template {
-// 		if template.Key == key {
-// 			return template.Value, nil
-// 		}
-// 	}
-// 	return "", fmt.Errorf("this template has not defined a '%s'", key)
-// }

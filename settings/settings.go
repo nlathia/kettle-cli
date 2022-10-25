@@ -1,7 +1,6 @@
 package settings
 
 import (
-	"io/ioutil"
 	"os"
 	"path"
 
@@ -27,7 +26,7 @@ func ReadSettings() (*Settings, error) {
 		return &Settings{}, nil
 	}
 
-	contents, err := ioutil.ReadFile(settingsFile)
+	contents, err := os.ReadFile(settingsFile)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +49,7 @@ func WriteSettings(stg *Settings) error {
 		return err
 	}
 
-	err = ioutil.WriteFile(settingsFile, []byte(data), 0644)
+	err = os.WriteFile(settingsFile, []byte(data), 0644)
 	if err != nil {
 		return err
 	}
