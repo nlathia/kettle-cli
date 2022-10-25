@@ -34,6 +34,7 @@ func (GoogleCloudFunction) Deploy(directory string, cfg *config.Config, stg *set
 		"deploy",
 		cfg.ProjectName,
 		"--runtime", cfg.Config.Runtime,
+		"--project", environment.ProjectName,
 		"--trigger-http",
 		fmt.Sprintf("--entry-point=%s", cfg.Config.EntryFunction),
 		fmt.Sprintf("--region=%s", environment.DeploymentRegion),

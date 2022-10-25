@@ -37,6 +37,7 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.Config, stg *settings
 		"builds",
 		"submit",
 		"--tag", containerTag,
+		"--project", environment.ProjectName,
 	}, "Building docker container")
 	if err != nil {
 		return err
@@ -55,6 +56,7 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.Config, stg *settings
 		cfg.ProjectName,
 		"--image", containerTag,
 		"--platform", "managed",
+		"--project", environment.ProjectName,
 		"--allow-unauthenticated",
 		fmt.Sprintf("--region=%s", environment.DeploymentRegion),
 	}, "Deploying Cloud Run container")
@@ -68,6 +70,7 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.Config, stg *settings
 		"services",
 		"describe", cfg.ProjectName,
 		"--platform", "managed",
+		"--project", environment.ProjectName,
 		"--region", environment.DeploymentRegion,
 		"--format", "json",
 	}, "Querying for Cloud Run URL")
