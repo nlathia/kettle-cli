@@ -6,10 +6,13 @@ import (
 	"github.com/operatorai/kettle-cli/settings"
 )
 
-func SetRootResourceID(resources []*RestApiResource, stg *settings.Settings) error {
-	if stg.AWS.RestApiRootID != "" {
-		return nil
+func SetRootResourceID(resources []*RestApiResource, stg *settings.Settings, overwrite bool) error {
+	if !overwrite {
+		if stg.AWS.RestApiRootID != "" {
+			return nil
+		}
 	}
+
 	if stg.AWS.RestApiID == "" {
 		return errors.New("rest api id not set")
 	}

@@ -14,9 +14,11 @@ const (
 	operatorExecutionRole = "operator-lambda-role"
 )
 
-func setExecutionRole(stg *settings.Settings) error {
-	if stg.AWS.RoleArn != "" {
-		return nil
+func setExecutionRole(stg *settings.Settings, overwrite bool) error {
+	if !overwrite {
+		if stg.AWS.RoleArn != "" {
+			return nil
+		}
 	}
 
 	roles, operatorExecutionRoleExists, err := getExecutionRoles()

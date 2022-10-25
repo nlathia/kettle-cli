@@ -7,9 +7,11 @@ import (
 	"github.com/operatorai/kettle-cli/settings"
 )
 
-func SetDeploymentRegion(stg *settings.AWSSettings) error {
-	if stg.DeploymentRegion != "" {
-		return nil
+func SetDeploymentRegion(stg *settings.AWSSettings, overwrite bool) error {
+	if !overwrite {
+		if stg.DeploymentRegion != "" {
+			return nil
+		}
 	}
 
 	regions, err := getAWSRegions()

@@ -11,9 +11,11 @@ const (
 	operatorApiName = "operator-apigateway"
 )
 
-func SetRestApiID(stg *settings.Settings) error {
-	if stg.AWS.RestApiID != "" {
-		return nil
+func SetRestApiID(stg *settings.Settings, overwrite bool) error {
+	if !overwrite {
+		if stg.AWS.RestApiID != "" {
+			return nil
+		}
 	}
 
 	// Look for existing REST APIs
