@@ -9,7 +9,7 @@ import (
 )
 
 func SetProjects(sts *settings.GoogleCloudSettings, overwrite bool) error {
-	environments := map[string]settings.GoogleCloudProject{
+	environments := map[string]*settings.GoogleCloudProject{
 		"development": sts.DevProject,
 		"production":  sts.ProdProject,
 	}
@@ -17,6 +17,10 @@ func SetProjects(sts *settings.GoogleCloudSettings, overwrite bool) error {
 	if !overwrite {
 		valuesSet := true
 		for _, environment := range environments {
+			if environment == nil {
+				valuesSet = false
+				break
+			}
 			if environment.ProjectName == "" || environment.ProjectID == "" {
 				valuesSet = false
 				break
@@ -37,24 +41,39 @@ func SetProjects(sts *settings.GoogleCloudSettings, overwrite bool) error {
 		return err
 	}
 
-	for name, environment := range environments {
-		prompt := fmt.Sprintf("Google Cloud %s Project", name)
-		projectName, projectID, err := cli.PromptForKeyValue(prompt, projects)
-		if err != nil {
-			return err
-		}
-
-		prompt = fmt.Sprintf("Google Cloud %s deployment region", name)
-		region, err := cli.PromptForValue(prompt, regions, false)
-		if err != nil {
-			return err
-		}
-
-		environment.ProjectName = projectName
-		environment.ProjectID = projectID
-		environment.DeploymentRegion = region
+	sts.ProdProject, err = setupEnvironment("production", projects, regions)
+	if err != nil {
+		return err
 	}
+
+	sts.DevProject, err = setupEnvironment("development", projects, regions)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(sts)
 	return nil
+}
+
+func setupEnvironment(name string, projects, regions map[string]string) (*settings.GoogleCloudProject, error) {
+	fmt.Printf("\n🔎 Set up a Google Cloud environment: %s\n", name)
+	prompt := fmt.Sprintf("Select your project for \"%s\"", name)
+	projectName, projectID, err := cli.PromptForKeyValue(prompt, projects)
+	if err != nil {
+		return nil, err
+	}
+
+	prompt = fmt.Sprintf("Select your deployment region for \"%s\"", name)
+	region, err := cli.PromptForValue(prompt, regions, false)
+	if err != nil {
+		return nil, err
+	}
+
+	return &settings.GoogleCloudProject{
+		ProjectName:      projectName,
+		ProjectID:        projectID,
+		DeploymentRegion: region,
+	}, nil
 }
 
 func getGoogleCloudProjects() (map[string]string, error) {
@@ -119,8 +138,8 @@ func getGoogleCloudRegions() (map[string]string, error) {
 	return regions, nil
 }
 
-func getEnvironment(stg *settings.Settings, env string) settings.GoogleCloudProject {
-	if env == "prod" {
+func getEnvironment(stg *settings.Settings, env string) *settings.GoogleCloudProject {
+	if env == "prod" || env == "production" {
 		return stg.GoogleCloud.ProdProject
 	}
 	return stg.GoogleCloud.DevProject

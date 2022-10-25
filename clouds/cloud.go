@@ -29,7 +29,7 @@ func GetCloudProvider(cloudType string) (Cloud, error) {
 
 func SupportedClouds() map[string]string {
 	return map[string]string{
-		"gcloud": "",
-		"aws":    "",
+		"Google Cloud":        "gcloud",
+		"Amazon Web Services": "aws",
 	}
 }

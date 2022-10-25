@@ -13,8 +13,8 @@ type GoogleCloudProject struct {
 }
 
 type GoogleCloudSettings struct {
-	DevProject  GoogleCloudProject `yaml:"dev_environment,omitempty"`
-	ProdProject GoogleCloudProject `yaml:"prod_environment,omitempty"`
+	DevProject  *GoogleCloudProject `yaml:"dev_environment,omitempty"`
+	ProdProject *GoogleCloudProject `yaml:"prod_environment,omitempty"`
 }
 
 type AWSSettings struct {
