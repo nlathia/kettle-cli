@@ -1,7 +1,7 @@
 package settings
 
 import (
-	"io/ioutil"
+	"fmt"
 	"os"
 	"path"
 
@@ -23,11 +23,13 @@ func ReadSettings() (*Settings, error) {
 		return nil, err
 	}
 	if _, err := os.Stat(settingsFile); os.IsNotExist(err) {
-		// Return empty settings
+		if DebugMode {
+			fmt.Println("\tSettings file does not exist")
+		}
 		return &Settings{}, nil
 	}
 
-	contents, err := ioutil.ReadFile(settingsFile)
+	contents, err := os.ReadFile(settingsFile)
 	if err != nil {
 		return nil, err
 	}
@@ -35,6 +37,9 @@ func ReadSettings() (*Settings, error) {
 	stg := &Settings{}
 	if err := yaml.Unmarshal(contents, &stg); err != nil {
 		return nil, err
+	}
+	if DebugMode {
+		fmt.Printf("\tLoaded settings from: %s\n", settingsFile)
 	}
 	return stg, nil
 }
@@ -50,9 +55,14 @@ func WriteSettings(stg *Settings) error {
 		return err
 	}
 
-	err = ioutil.WriteFile(settingsFile, []byte(data), 0644)
+	err = os.WriteFile(settingsFile, []byte(data), 0644)
 	if err != nil {
 		return err
+	}
+
+	if DebugMode {
+		fmt.Printf("\tSettings written to: %s\n", settingsFile)
+		fmt.Println(string(data))
 	}
 	return nil
 }

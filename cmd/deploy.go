@@ -13,17 +13,22 @@ import (
 	"github.com/operatorai/kettle-cli/templates"
 )
 
-var deployCmd = &cobra.Command{
-	Use:   "deploy",
-	Short: "Ship a project you have created from a kettle template",
-	Long: `🚢 The kettle CLI tool can automatically deploy
+var (
+	environment string
+
+	deployCmd = &cobra.Command{
+		Use:   "deploy",
+		Short: "Ship a project you have created from a kettle template",
+		Long: `🚢 The kettle CLI tool can automatically deploy
  your projects to your cloud provider.`,
-	Args: validateDeployArgs,
-	RunE: runDeploy,
-}
+		Args: validateDeployArgs,
+		RunE: runDeploy,
+	}
+)
 
 func init() {
 	rootCmd.AddCommand(deployCmd)
+	deployCmd.Flags().StringVarP(&environment, "env", "e", "", "Environment to deploy to (GCP only)")
 }
 
 func validateDeployArgs(cmd *cobra.Command, args []string) error {
@@ -59,7 +64,9 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return formatError(err)
 	}
-	if err := cloudProvider.Setup(cloudSettings); err != nil {
+
+	// Set up the provider (if not done so already)
+	if err := cloudProvider.Setup(cloudSettings, false); err != nil {
 		return formatError(err)
 	}
 
@@ -83,7 +90,7 @@ func runDeploy(cmd *cobra.Command, args []string) error {
 	}()
 
 	// Deploy
-	if err := service.Deploy(deploymentPath, templateConfig, cloudSettings); err != nil {
+	if err := service.Deploy(deploymentPath, templateConfig, cloudSettings, environment); err != nil {
 		return formatError(err)
 	}
 

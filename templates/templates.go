@@ -50,6 +50,10 @@ func GetProject(args []string) (string, error) {
 
 	// Deploys from a directory relative to the current working directory
 	deploymentPath, err := getRelativeDirectory(args[0])
+	if err != nil {
+		return "", err
+	}
+
 	exists, err = config.HasConfigFile(deploymentPath)
 	if err != nil {
 		return "", err

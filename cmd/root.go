@@ -42,6 +42,6 @@ func init() {
 }
 
 func formatError(err error) error {
-	fmt.Println(fmt.Sprintf("\n❌ %s", err.Error()))
+	fmt.Printf("\n❌ %s\n", err.Error())
 	return nil
 }

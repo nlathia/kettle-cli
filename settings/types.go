@@ -6,10 +6,15 @@ var DebugMode bool
 // Settings are values that do not change across multiple deployments
 // and are therefore stored in a settings file
 
-type GoogleCloudSettings struct {
+type GoogleCloudProject struct {
 	ProjectName      string `yaml:"project_name,omitempty"`
 	ProjectID        string `yaml:"project_id,omitempty"`
 	DeploymentRegion string `yaml:"region,omitempty"`
+}
+
+type GoogleCloudSettings struct {
+	DevProject  *GoogleCloudProject `yaml:"dev_environment,omitempty"`
+	ProdProject *GoogleCloudProject `yaml:"prod_environment,omitempty"`
 }
 
 type AWSSettings struct {

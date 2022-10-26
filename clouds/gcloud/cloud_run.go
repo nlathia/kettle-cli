@@ -12,7 +12,12 @@ import (
 
 type GoogleCloudRun struct{}
 
-func (GoogleCloudRun) Deploy(directory string, cfg *config.Config, stg *settings.Settings) error {
+func (GoogleCloudRun) Deploy(directory string, cfg *config.Config, stg *settings.Settings, env string) error {
+	environment, err := getEnvironment(stg, env)
+	if err != nil {
+		return err
+	}
+
 	if strings.Contains(cfg.Config.Runtime, "go") {
 		_ = cli.Execute("go", []string{
 			"mod",
@@ -20,14 +25,19 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.Config, stg *settings
 		}, "Running go mod init")
 	}
 
-	fmt.Println("🏭  Building: ", cfg.ProjectName, "as a Cloud Run container")
-	containerTag := fmt.Sprintf("gcr.io/%s/%s", stg.GoogleCloud.ProjectID, cfg.ProjectName)
+	fmt.Printf("🏭  Building: %s as a Cloud Run container in %s (%s)\n",
+		cfg.ProjectName,
+		environment.ProjectName,
+		env,
+	)
+	containerTag := fmt.Sprintf("gcr.io/%s/%s", environment.ProjectID, cfg.ProjectName)
 	// Build the docker container
 	// gcloud builds submit --tag gcr.io/PROJECT-ID/helloworld
-	err := cli.Execute("gcloud", []string{
+	err = cli.Execute("gcloud", []string{
 		"builds",
 		"submit",
 		"--tag", containerTag,
+		"--project", environment.ProjectName,
 	}, "Building docker container")
 	if err != nil {
 		return err
@@ -35,15 +45,20 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.Config, stg *settings
 
 	// Deploy the docker container
 	// gcloud run deploy --image gcr.io/PROJECT-ID/helloworld
-	fmt.Println("🚢  Deploying ", cfg.ProjectName, "as a Cloud Run container")
+	fmt.Printf("🚢  Deploying: %s as a Cloud Run container in %s (%s)\n",
+		cfg.ProjectName,
+		environment.ProjectName,
+		env,
+	)
 	err = cli.Execute("gcloud", []string{
 		"run",
 		"deploy",
 		cfg.ProjectName,
 		"--image", containerTag,
 		"--platform", "managed",
+		"--project", environment.ProjectName,
 		"--allow-unauthenticated",
-		fmt.Sprintf("--region=%s", stg.GoogleCloud.DeploymentRegion),
+		fmt.Sprintf("--region=%s", environment.DeploymentRegion),
 	}, "Deploying Cloud Run container")
 	if err != nil {
 		return err
@@ -55,7 +70,8 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.Config, stg *settings
 		"services",
 		"describe", cfg.ProjectName,
 		"--platform", "managed",
-		"--region", stg.GoogleCloud.DeploymentRegion,
+		"--project", environment.ProjectName,
+		"--region", environment.DeploymentRegion,
 		"--format", "json",
 	}, "Querying for Cloud Run URL")
 	if err != nil {

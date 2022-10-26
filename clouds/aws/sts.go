@@ -7,9 +7,11 @@ import (
 	"github.com/operatorai/kettle-cli/settings"
 )
 
-func SetAccountID(stg *settings.AWSSettings) error {
-	if stg.AccountID != "" {
-		return nil
+func SetAccountID(stg *settings.AWSSettings, overwrite bool) error {
+	if !overwrite {
+		if stg.AccountID != "" {
+			return nil
+		}
 	}
 
 	output, err := cli.ExecuteWithResult("aws", []string{

@@ -12,9 +12,13 @@ import (
 
 type AWSLambdaFunction struct{}
 
-func (AWSLambdaFunction) Deploy(directory string, cfg *config.Config, stg *settings.Settings) error {
-	fmt.Println("🚢  Deploying ", cfg.ProjectName, "as an AWS Lambda function")
-	fmt.Println("⏭  Entry point: ", cfg.Config.EntryFunction, fmt.Sprintf("(%s)", cfg.Config.Runtime))
+func (AWSLambdaFunction) Deploy(directory string, cfg *config.Config, stg *settings.Settings, env string) error {
+	if env != "" {
+		fmt.Printf("🚨  Environments for AWS Lambda functions are unimplemented (%s)\n", env)
+	}
+
+	fmt.Printf("🚢  Deploying: %s as an AWS Lambda function\n", cfg.ProjectName)
+	fmt.Printf("⏭  Entry point: %s (%s)\n", cfg.Config.EntryFunction, cfg.Config.Runtime)
 	// @TODO future - container-based deployments
 	deploymentArchive, err := createDeploymentArchive(cfg)
 	if err != nil {
@@ -95,7 +99,7 @@ func updateLambda(deploymentArchive string, cfg *config.Config) error {
 // https://docs.aws.amazon.com/lambda/latest/dg/services-apigateway-tutorial.html
 func addLambdaToRestAPI(deploymentArchive string, cfg *config.Config, stg *settings.Settings) error {
 	// Create or set the REST API
-	if err := apigateway.SetRestApiID(stg); err != nil {
+	if err := apigateway.SetRestApiID(stg, false); err != nil {
 		return err
 	}
 
@@ -106,7 +110,7 @@ func addLambdaToRestAPI(deploymentArchive string, cfg *config.Config, stg *setti
 	}
 
 	// Set the root resource ID
-	if err := apigateway.SetRootResourceID(resources, stg); err != nil {
+	if err := apigateway.SetRootResourceID(resources, stg, false); err != nil {
 		return err
 	}
 
@@ -139,12 +143,12 @@ func addLambdaToRestAPI(deploymentArchive string, cfg *config.Config, stg *setti
 
 func createLambdaFunction(deploymentArchive string, functionName string, cfg *config.Config, stg *settings.Settings) error {
 	// Get the current AWS account ID
-	if err := SetAccountID(stg.AWS); err != nil {
+	if err := SetAccountID(stg.AWS, false); err != nil {
 		return err
 	}
 
 	// Select or create the execution role
-	if err := setExecutionRole(stg); err != nil {
+	if err := setExecutionRole(stg, false); err != nil {
 		return err
 	}
 
