@@ -19,7 +19,6 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.Config, stg *settings
 	}
 
 	// @TODO check if the current build already exists
-
 	if strings.Contains(cfg.Config.Runtime, "go") {
 		_ = cli.Execute("go", []string{
 			"mod",
@@ -72,7 +71,7 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.Config, stg *settings
 		"services",
 		"describe", cfg.ProjectName,
 		"--platform", "managed",
-		"--project", environment.ProjectName,
+		"--project", environment.ProjectID,
 		"--region", environment.DeploymentRegion,
 		"--format", "json",
 	}, "Querying for Cloud Run URL")
