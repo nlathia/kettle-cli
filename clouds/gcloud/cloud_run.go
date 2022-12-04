@@ -18,6 +18,8 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.Config, stg *settings
 		return err
 	}
 
+	// @TODO check if the current build already exists
+
 	if strings.Contains(cfg.Config.Runtime, "go") {
 		_ = cli.Execute("go", []string{
 			"mod",
@@ -37,7 +39,7 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.Config, stg *settings
 		"builds",
 		"submit",
 		"--tag", containerTag,
-		"--project", environment.ProjectName,
+		"--project", environment.ProjectID,
 	}, "Building docker container")
 	if err != nil {
 		return err
@@ -56,7 +58,7 @@ func (GoogleCloudRun) Deploy(directory string, cfg *config.Config, stg *settings
 		cfg.ProjectName,
 		"--image", containerTag,
 		"--platform", "managed",
-		"--project", environment.ProjectName,
+		"--project", environment.ProjectID,
 		"--allow-unauthenticated",
 		fmt.Sprintf("--region=%s", environment.DeploymentRegion),
 	}, "Deploying Cloud Run container")
